@@ -93,7 +93,7 @@ body {
 
 .ai-image-card {
     flex: 0.8;
-    background-color: #e8e7e7; 
+    background-color: #efeded; 
     border-radius: 30px;
     padding: 30px;
     display: flex;
@@ -106,7 +106,9 @@ body {
 .ai-content {
     flex: 1.2;
     border-left: 4px solid #1A2238; 
-    padding-left: 30px; 
+    padding-left: 40px;
+    padding-top: 20px;
+    padding-bottom: 20px; 
 }
 
 .ai-content h2 {
