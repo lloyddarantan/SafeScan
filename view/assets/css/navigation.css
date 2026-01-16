@@ -76,7 +76,7 @@
 }
 
 .btn-chat {
-    background: linear-gradient(90deg, #Fcb064 0%, #F89b42 100%);
+    background: #F89b42 100%;
     color: white;
     text-decoration: none;
     padding: 12px 35px;
@@ -88,7 +88,7 @@
 
 .btn-chat:hover {
     transform: translateY(-1px);
-    box-shadow: 0 6px 15px rgba(248, 155, 66, 0.4);
+    box-shadow: 0 6px 15px rgba(117, 117, 117, 0.4);
 }
 
 @media (max-width: 768px) {
