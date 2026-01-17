@@ -9,7 +9,7 @@
 </head>
 <body>
 
-    <?php include 'navigation.php'; ?>
+    <?php include 'others/navigation.php'; ?>
 
     <section class="hero-section">
         <div class="hero-content">
@@ -45,5 +45,6 @@
     </div>
 
     <?php include 'others/footer.php'; ?>
+
 </body>
 </html>
