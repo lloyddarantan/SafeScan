@@ -24,7 +24,7 @@
             <a href="works.php" class="<?= ($page == 'works') ? 'active' : ''; ?>">How it Works</a>
         </li>
         <li>
-            <a href="account.php" class="<?= ($page == 'account') ? 'active' : ''; ?>">Account</a>
+            <a href="profile.php" class="<?= ($page == 'profile') ? 'active' : ''; ?>">Profile</a>
         </li>
     </ul>
 
