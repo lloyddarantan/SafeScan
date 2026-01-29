@@ -6,7 +6,7 @@ class AuthController {
 
     public function __construct() {
         session_start();
-        $this->userModel = new User();
+        $this->userModel = new users();
     }
 
     public function register() {
@@ -27,10 +27,10 @@ class AuthController {
     public function login() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-            $user = $this->userModel->findByEmail($_POST['email']);
+            $users = $this->userModel->findByEmail($_POST['email']);
 
-            if ($user && password_verify($_POST['password'], $user['password'])) {
-                $_SESSION['user_id'] = $user['id'];
+            if ($users && password_verify($_POST['password'], $users['password'])) {
+                $_SESSION['user_id'] = $users['id'];
                 header("Location: index.php?page=profile");
                 exit;
             }

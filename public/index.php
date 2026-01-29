@@ -3,52 +3,46 @@
 
 session_start();
 
-// Load core router
 require_once __DIR__ . '/../app/Router.php';
-
-// Load controllers
 require_once __DIR__ . '/../app/controllers/HomeController.php';
 require_once __DIR__ . '/../app/controllers/ProfileController.php';
 require_once __DIR__ . '/../app/controllers/AuthController.php';
 
-// Create router instance
 $router = new Router();
 
-// Define routes
-$router->get('/', function() {
-    $controller = new HomeController();
-    $controller->index();
-});
-
+// Routes
 $router->get('home', function() {
-    $controller = new HomeController();
-    $controller->index();
+    (new HomeController())->index();
 });
 
 $router->get('profile', function() {
-    $controller = new ProfileController();
-    $controller->index();
+    (new ProfileController())->index();
+});
+
+$router->get('about', function() {
+    echo "<h1>About Page</h1>";
+});
+
+$router->get('works', function() {
+    echo "<h1>How it Works Page</h1>";
 });
 
 // Auth routes
 $router->get('login', function() {
-    $controller = new AuthController();
-    $controller->login();
+    (new AuthController())->login();
 });
 
 $router->post('login', function() {
-    $controller = new AuthController();
-    $controller->login();
+    (new AuthController())->login();
 });
 
 $router->get('signup', function() {
-    $controller = new AuthController();
-    $controller->register();
+    (new AuthController())->register();
 });
 
 $router->post('signup', function() {
-    $controller = new AuthController();
-    $controller->register();
+    (new AuthController())->register();
 });
 
+// Handle the request
 $router->resolve();

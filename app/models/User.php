@@ -33,9 +33,9 @@ class User {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // ❗ THIS IS WHAT PROFILE NEEDS
     public function getById($id) {
-        $stmt = $this->conn->prepare("SELECT * FROM users WHERE id = ?");
+        $sql = "SELECT * FROM users WHERE user_id = ?";
+        $stmt = $this->conn->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }

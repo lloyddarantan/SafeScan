@@ -1,6 +1,6 @@
 <?php
-// Set the base URL dynamically depending on your project folder
-$baseUrl = '/SafeScan/public'; // <-- replace SafeScan/public with your actual project folder in XAMPP
+$baseUrl = '/SafeScan/public';
+$page = $_GET['url'] ?? 'home'; // highlight active link
 ?>
 
 <link rel="stylesheet" href="<?= $baseUrl ?>/assets/css/navigation.css">
