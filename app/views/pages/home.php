@@ -1,15 +1,7 @@
 <?php $page = 'home'; ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Safe Scan - Home</title>
-    <link rel="stylesheet" href="../view/assets/css/index.css">
-</head>
-<body>
+<?php require __DIR__ . '/../others/navigation.php'; ?>
 
-    <?php include 'others/navigation.php'; ?>
+<link rel="stylesheet" href="<?= $baseUrl ?>/assets/css/index.css">
 
     <section class="hero-section">
         <div class="hero-content">
@@ -22,14 +14,14 @@
         </div>
         
         <div class="hero-image-container">
-            <img src="../view/assets/img/appliances.png" alt="Appliances" class="hero-img">
+            <img src="<?= $baseUrl ?>/assets/img/appliances.png" alt="Appliances" class="hero-img">
         </div>
     </section>
 
     <div class="bottom-section-wrapper">
         <section class="ai-section">
             <div class="ai-image-card">
-                <img src="../view/assets/img/api-appliances.png" alt="AI Detection" class="ai-img">
+                <img src="<?= $baseUrl ?>/assets/img/api-appliances.png" alt="AI Detection" class="ai-img">
             </div>
 
             <div class="ai-content">
@@ -44,7 +36,4 @@
         </section>
     </div>
 
-    <?php include 'others/footer.php'; ?>
-
-</body>
-</html>
+    <?php require __DIR__ . '/../others/footer.php'; ?>
