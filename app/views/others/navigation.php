@@ -1,12 +1,12 @@
 <?php
-$baseUrl = '/SafeScan/public';
-$page = $_GET['url'] ?? 'home'; // highlight active link
+    $baseUrl = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
+    $page = $_GET['url'] ?? 'home'; // highlight active link
 ?>
 
-<link rel="stylesheet" href="<?= $baseUrl ?>/assets/css/navigation.css">
-<link rel="stylesheet" href="<?= $baseUrl ?>/assets/css/footer.css">
-<link rel="stylesheet" href="<?= $baseUrl ?>https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="<?= $baseUrl ?>https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/navigation.css">
+<link rel="stylesheet" href="../assets/css/footer.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500&display=swap" rel="stylesheet">
 
 <nav class="navbar">
     <div class="logo-container">

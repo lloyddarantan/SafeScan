@@ -3,10 +3,10 @@ class Database {
     private static $instance = null;
     private $conn;
 
-    private $host = "localhost";
-    private $db = "safescan_db";
-    private $user = "root";
-    private $pass = "";
+    private $host = "localhost:3306";
+    private $db = "mikealla_safescan_db";
+    private $user = "mikealla_safescan";
+    private $pass = "Lloydmika123";
 
     private function __construct() {
         try {

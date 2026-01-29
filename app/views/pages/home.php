@@ -1,4 +1,8 @@
-<?php $page = 'home'; ?>
+<?php 
+    $baseUrl = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
+    $page = 'home';   
+?>
+
 <?php require __DIR__ . '/../others/navigation.php'; ?>
 
 <link rel="stylesheet" href="<?= $baseUrl ?>/assets/css/index.css">
