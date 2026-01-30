@@ -18,22 +18,32 @@ class Router
     }
 
     // Resolve the current request
+    // app/Router.php
+
     public function resolve()
-    {
-        $method = $_SERVER['REQUEST_METHOD'];
+        {
+            $method = $_SERVER['REQUEST_METHOD'];
 
-        // Use query string ?url= if present
-        $path = trim($_GET['url'] ?? 'home', '/');
+            // 1. Get the URL, default to empty string if missing
+            $url = $_GET['url'] ?? '';
+            
+            // 2. Trim slashes
+            $path = trim($url, '/');
 
-        $callback = $this->routes[$method][$path] ?? null;
+            // 3. IF path is empty (root domain), force it to 'home'
+            if ($path === '') {
+                $path = 'home';
+            }
 
-        if ($callback) {
-            call_user_func($callback);
-        } else {
-            http_response_code(404);
-            echo "<h1>404 Not Found</h1>";
+            $callback = $this->routes[$method][$path] ?? null;
+
+            if ($callback) {
+                call_user_func($callback);
+            } else {
+                http_response_code(404);
+                echo "<h1>404 Not Found</h1>";
+            }
         }
-    }
 
     // Normalize path (remove slashes)
     protected function normalize($path)

@@ -5,7 +5,7 @@
 
 <?php require __DIR__ . '/../others/navigation.php'; ?>
 
-<link rel="stylesheet" href="<?= $baseUrl ?>/assets/css/profile.css">
+<link rel="stylesheet" href="/assets/css/profile.css">
 
 <div class="dashboard-container">
 
@@ -188,4 +188,4 @@
 </div>
 
 <?php require __DIR__ . '/../others/footer.php'; ?>
-<script src="<?= $baseUrl ?>/assets/js/profile.js"></script>
+<script src="/assets/js/profile.js"></script>

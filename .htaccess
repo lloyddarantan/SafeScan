@@ -1,20 +1,31 @@
-# Enable mod_rewrite
+# 1. DISABLE DIRECTORY LISTING
+# Prevents users from seeing a list of files if they open a folder.
+Options -Indexes
+
 RewriteEngine On
 
-# Set default document
+# ----------------------------------------------------------------------
+# 2. SECURITY: PROTECT THE "APP" FOLDER
+# ----------------------------------------------------------------------
+# If someone tries to go to safescan.helioho.st/app, redirect them to Home.
+RewriteRule ^app/(.*)$ /home [R=301,L]
+
+# ----------------------------------------------------------------------
+# 3. ASSET HANDLING
+# ----------------------------------------------------------------------
+# Allows your HTML to ask for "assets/css/..." and invisibly finds it in "public/assets/"
+RewriteRule ^assets/(.*)$ public/assets/$1 [L,QSA]
+
+# ----------------------------------------------------------------------
+# 4. CLEAN URLS (The Router)
+# ----------------------------------------------------------------------
+# Set default file
 DirectoryIndex public/index.php
 
-# Redirect all requests to public/index.php if not a file or directory
+# If the request is NOT a real file and NOT a real directory...
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ public/index.php [L,QSA]
 
-# Force HTTPS (optional, if your HelioHost supports it)
-# RewriteCond %{HTTPS} !=on
-# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-# Handle static assets paths
-# If you put assets outside public/, adjust paths accordingly
-# Example: allow direct access to /assets/css, /assets/js, /assets/img
-RewriteCond %{REQUEST_URI} ^/assets/ [NC]
-RewriteRule ^ - [L]
+# ...send it to index.php invisibly. 
+# The user sees "/home", but PHP sees "index.php?url=home"
+RewriteRule ^(.*)$ public/index.php?url=$1 [L,QSA]

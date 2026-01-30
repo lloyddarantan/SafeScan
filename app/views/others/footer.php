@@ -3,8 +3,8 @@ $baseUrl = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
 ?>
 
 
-<link rel="stylesheet" href="<?= $baseUrl ?>/assets/css/navigation.css">
-<link rel="stylesheet" href="<?= $baseUrl ?>/assets/css/footer.css">
+<link rel="stylesheet" href="/assets/css/navigation.css">
+<link rel="stylesheet" href="/assets/css/footer.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500&display=swap" rel="stylesheet">
 
@@ -29,6 +29,6 @@ $baseUrl = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
     </div>
 </footer>
 
-<script src="../assets/js/loginvalidation.js"></script>
+<script src="/assets/js/loginvalidation.js"></script>
 </body>
 </html>

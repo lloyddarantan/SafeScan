@@ -1,5 +1,4 @@
 <?php
-    $baseUrl = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
     $page = $_GET['url'] ?? 'home'; // highlight active link
 ?>
 
@@ -24,16 +23,16 @@
 
     <ul class="nav-links">
         <li>
-            <a href="<?= $baseUrl ?>?url=home" class="<?= ($page ?? '') == 'home' ? 'active' : '' ?>">Home</a>
+            <a href="/home" class="<?= ($page ?? '') == 'home' ? 'active' : '' ?>">Home</a>
         </li>
         <li>
-            <a href="<?= $baseUrl ?>?url=about" class="<?= ($page ?? '') == 'about' ? 'active' : '' ?>">About</a>
+            <a href="/about" class="<?= ($page ?? '') == 'about' ? 'active' : '' ?>">About</a>
         </li>
         <li>
-            <a href="<?= $baseUrl ?>?url=works" class="<?= ($page ?? '') == 'works' ? 'active' : '' ?>">How it Works</a>
+            <a href="/works" class="<?= ($page ?? '') == 'works' ? 'active' : '' ?>">How it Works</a>
         </li>
         <li>
-            <a href="<?= $baseUrl ?>?url=profile" class="<?= ($page ?? '') == 'profile' ? 'active' : '' ?>">Profile</a>
+            <a href="/profile" class="<?= ($page ?? '') == 'profile' ? 'active' : '' ?>">Profile</a>
         </li>
     </ul>
 

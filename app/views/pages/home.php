@@ -5,7 +5,7 @@
 
 <?php require __DIR__ . '/../others/navigation.php'; ?>
 
-<link rel="stylesheet" href="<?= $baseUrl ?>/assets/css/index.css">
+<link rel="stylesheet" href="/assets/css/index.css">
 
     <section class="hero-section">
         <div class="hero-content">
@@ -18,14 +18,14 @@
         </div>
         
         <div class="hero-image-container">
-            <img src="<?= $baseUrl ?>/assets/img/appliances.png" alt="Appliances" class="hero-img">
+            <img src="/assets/img/appliances.png" alt="Appliances" class="hero-img">
         </div>
     </section>
 
     <div class="bottom-section-wrapper">
         <section class="ai-section">
             <div class="ai-image-card">
-                <img src="<?= $baseUrl ?>/assets/img/api-appliances.png" alt="AI Detection" class="ai-img">
+                <img src="/assets/img/api-appliances.png" alt="AI Detection" class="ai-img">
             </div>
 
             <div class="ai-content">
