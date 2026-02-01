@@ -43,7 +43,7 @@
 <!-- righ side --> 
         <div class="login-right">
 
-            <a href="home.php" class="close-btn">
+            <a href="/home" class="close-btn">
                 <i class="fa-solid fa-xmark"></i>
             </a>
 
@@ -83,7 +83,7 @@
 
 <!-- sign up links -->
                     <div class="signup-links">
-                        <p>Have no account? <a href="signup.php">Create <span class="role-admin">ACCOUNT</span>.</a></p>
+                        <p>Have no account? <a href="/signup">Create <span class="role-admin">ACCOUNT</span>.</a></p>
                     </div>
                 </form>
 
