@@ -167,3 +167,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Function to return to Step 1
+function showPreviousStep() {
+    const step1Div = document.getElementById('step-1');
+    const step2Div = document.getElementById('step-2');
+
+    if (step1Div && step2Div) {
+        // Hide Step 2
+        step2Div.style.display = 'none';
+        // Show Step 1
+        step1Div.style.display = 'block';
+    }
+}
