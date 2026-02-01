@@ -44,7 +44,7 @@
 
         <div class="login-right">
 
-            <a href="home.php" class="close-btn">
+            <a href="/home" class="close-btn">
                 <i class="fa-solid fa-xmark"></i>
             </a>
 
@@ -129,7 +129,7 @@
                     </div> <div class="signup-links" style="text-align: center; margin-top: 10px;">
                         <p style="color: #555;">
                             Have an account? 
-                            <a href="login.php" style="color: #F89b42; font-weight: 500;">Log in.</a>
+                            <a href="/login" style="color: #F89b42; font-weight: 500;">Log in.</a>
                         </p>
                     </div>
                 </form>
