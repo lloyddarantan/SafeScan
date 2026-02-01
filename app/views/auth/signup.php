@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Safe Scan - Admin Create Account</title>
-    <link rel="stylesheet" href="public/assets/css/logincss/signup.css">
+    <title>Safe Scan - Create Account</title>
+    <link rel="stylesheet" href="/assets/css/logincss/signup.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
@@ -135,7 +135,7 @@
                 </form>
 
 <!-- js script path -->
-                <script src="../Safe Scan/loginvalidation.js"></script>
+                <script src="/assets/js/loginvalidation.js"></script>
             </div>
         </div>
 
