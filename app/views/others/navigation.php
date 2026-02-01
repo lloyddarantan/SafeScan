@@ -1,7 +1,6 @@
 <?php
     $page = $_GET['url'] ?? 'home';
 
-// if logged in or not
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
@@ -40,7 +39,7 @@
         </li>
         <li>
             <?php if ($isLoggedIn): ?>
-                <a href="pages/profile.php" class="<?= ($page ?? '') == 'profile' ? 'active' : '' ?>">Profile</a>
+                <a href="/profile" class="<?= ($page ?? '') == 'profile' ? 'active' : '' ?>">Profile</a>
             <?php else: ?>
                 <a href="#" id="loginTrigger">Profile</a>
             <?php endif; ?>

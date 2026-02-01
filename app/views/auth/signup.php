@@ -1,3 +1,9 @@
+<?php 
+    $page = 'signup';      
+?>
+
+<link rel="stylesheet" href="/assets/css/logincss/universallogin.css">
+<link rel="stylesheet" href="/assets/css/logincss/adminlogin.css">
 
 <div class="login-container">
 
@@ -51,5 +57,5 @@
             </form>
         </div>
     </div>
-
 </div>
+<script src="/assets/js/loginvalidation.js"></script>

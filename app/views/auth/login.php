@@ -1,5 +1,11 @@
-<div class="login-container">
+<?php 
+    $page = 'login';      
+?>
 
+<link rel="stylesheet" href="/assets/css/logincss/universallogin.css">
+<link rel="stylesheet" href="/assets/css/logincss/adminlogin.css">
+
+<div class="login-container">
     <div class="login-left">
         <div class="brand-logo">
             <span>Safe Scan</span>
@@ -31,5 +37,8 @@
             </form>
         </div>
     </div>
-
 </div>
+
+<script src="/assets/js/loginvalidation.js"></script>
+
+

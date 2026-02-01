@@ -5,8 +5,14 @@ class AuthController {
     private $userModel;
 
     public function __construct() {
-        session_start();
-        $this->userModel = new users();
+        // REMOVE session_start() here if it is already in index.php
+        // (Calling it twice causes a warning)
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        // FIX 1: Use "new User()" (Singular, Capitalized) to match the class name
+        $this->userModel = new User();
     }
 
     public function register() {
@@ -17,11 +23,14 @@ class AuthController {
             }
 
             $this->userModel->create($_POST);
-            header("Location: index.php?page=login");
+            
+            // FIX 2: Use Clean URL for redirect
+            header("Location: /login"); 
             exit;
         }
 
-        require '../app/views/login/register.php';
+        // FIX 3: Correct path to view (views/auth/ instead of views/login/)
+        require __DIR__ . '/../views/auth/signup.php';
     }
 
     public function login() {
@@ -31,19 +40,24 @@ class AuthController {
 
             if ($users && password_verify($_POST['password'], $users['password'])) {
                 $_SESSION['user_id'] = $users['id'];
-                header("Location: index.php?page=profile");
+                
+                // FIX 2: Use Clean URL for redirect
+                header("Location: /profile");
                 exit;
             }
 
             $error = "Invalid credentials";
         }
 
-        require '../app/views/login/login.php';
+        // FIX 3: Correct path to view
+        require __DIR__ . '/../views/auth/login.php';
     }
 
     public function logout() {
         session_destroy();
-        header("Location: index.php?page=home");
+        
+        // FIX 2: Use Clean URL for redirect
+        header("Location: /home");
         exit;
     }
 }
