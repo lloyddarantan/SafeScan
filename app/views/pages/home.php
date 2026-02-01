@@ -1,11 +1,13 @@
 <?php 
     $baseUrl = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
     $page = 'home';   
+
+    
 ?>
 
 <?php require __DIR__ . '/../others/navigation.php'; ?>
 
-<link rel="stylesheet" href="/assets/css/index.css">
+<link rel="stylesheet" href="<?= $baseUrl ?>/assets/css/index.css">
 
     <section class="hero-section">
         <div class="hero-content">
@@ -14,7 +16,11 @@
                 energy in <span class="highlight">real time.</span>
             </h1>
             <p>Upload your appliance now</p>
-            <a href="#" class="btn-upload">Upload</a>
+            <?php if (isset($isLoggedIn) && $isLoggedIn): ?>
+                <a href="/upload" class="btn-upload">Upload</a>
+            <?php else: ?>
+                <a href="#" class="btn-upload login-trigger">Upload</a>
+            <?php endif; ?>
         </div>
         
         <div class="hero-image-container">
@@ -38,6 +44,25 @@
                 </p>
             </div>
         </section>
+    </div>
+
+<!-- login and signup modal -->
+
+    <div id="authModal" class="modal-overlay">
+        <div class="modal-box">
+            <span class="close-modal">&times;</span>
+            
+            <div class="modal-content">
+                <i class="fa-solid fa-lock" style="font-size: 3rem; color: orange; margin-bottom: 15px;"></i>
+                <h3>Login Required</h3>
+                <p>You need to sign in to view your profile, use the chat, or upload appliances.</p>
+                
+                <div class="modal-actions">
+                    <a href="<?= dirname($baseUrl) ?>/views/auth/login.php" class="btn-login">Log In</a>
+                    <a href="<?= dirname($baseUrl) ?>/views/auth/signup.php" class="btn-signup">Sign Up</a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <?php require __DIR__ . '/../others/footer.php'; ?>
