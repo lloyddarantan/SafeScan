@@ -7,6 +7,7 @@
 
 <?php require __DIR__ . '/../others/navigation.php'; ?>
 
+<title>Safe Scan - Home</title>
 <link rel="stylesheet" href="<?= $baseUrl ?>/assets/css/index.css">
 
     <section class="hero-section">
