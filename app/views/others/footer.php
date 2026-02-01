@@ -29,6 +29,7 @@ $baseUrl = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
     </div>
 </footer>
 
+<script src="<?= isset($baseUrl) ? $baseUrl : '' ?>/assets/js/modal.js"></script>
 <script src="/assets/js/loginvalidation.js"></script>
 </body>
 </html>
