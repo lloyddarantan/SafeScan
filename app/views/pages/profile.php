@@ -4,6 +4,7 @@
 
 <?php require __DIR__ . '/../others/navigation.php'; ?>
 
+<title>Safe Scan - Profile</title>
 <link rel="stylesheet" href="/assets/css/profile.css">
 
 <div class="dashboard-container">
