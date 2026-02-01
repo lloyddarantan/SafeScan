@@ -128,7 +128,20 @@ document.addEventListener('DOMContentLoaded', function() {
     if (signupForm) {
         signupForm.addEventListener('submit', function(event) {
             let isValid = true;
+            
+// validate Email
+            const emailInput = signupForm.querySelector('input[type="email"]');
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+                if (emailInput) {
+                    if (emailInput.value.trim() === "") {
+                        isValid = false;
+                        markError(emailInput, "Email is required.");
+                    } else if (!emailPattern.test(emailInput.value.trim())) {
+                        isValid = false;
+                        markError(emailInput, "Invalid email format.");
+                    }
+                }
 // validate Passwords
             const pass1 = document.getElementById('passInput') || document.getElementById('passInputMem');
             const pass2 = document.getElementById('confirmPassInput') || document.getElementById('confirmPassInputMem');
