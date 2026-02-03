@@ -1,9 +1,13 @@
+<?php 
+    $page = 'login';     
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Safe Scan - Login</title>
+    <title>SafeScan</title>
     <link rel="stylesheet" href="/assets/css/logincss/login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -12,7 +16,6 @@
 
     <div class="login-container">
 
-<!-- left side design -->
         <div class="login-left">
             <div class="brand-logo">
                 <svg class="logo-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -22,7 +25,7 @@
                     <path d="M16 20h2a2 2 0 0 0 2-2v-2"></path>
                     <line x1="4" y1="12" x2="20" y2="12"></line>
                 </svg>
-                <span>Safe Scan</span>
+                <span>SafeScan</span>
             </div>
 
             <div class="visual-container">
@@ -40,7 +43,6 @@
             </div>
         </div>
 
-<!-- righ side --> 
         <div class="login-right">
 
             <a href="/home" class="close-btn">
@@ -51,43 +53,37 @@
                 <h1>Welcome!</h1>
                 <p class="subtitle">Enter your credentials to access your scanning dashboard.</p>
 
-                <form action="#" method="POST" id="login-form">
+                <?php if (isset($error)): ?>
+                    <div style="background: #fff0f0; color: #e74c3c; padding: 12px; border-radius: 6px; margin-bottom: 20px; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; border: 1px solid #ffcccc;">
+                        <i class="fa-solid fa-circle-exclamation"></i> 
+                        <span><?= htmlspecialchars($error) ?></span>
+                    </div>
+                <?php endif; ?>
+
+                <form action="/login" method="POST" id="login-form">
                     
                     <label>Email Address</label>
                     <div class="input-group">
                         <i class="fa-regular fa-envelope input-icon"></i>
-                        <input type="email" placeholder="name@email.com" required>
+                        <input type="email" name="email" required>
                     </div>
 
                     <label>Password</label>
                     <div class="input-group">
                         <i class="fa-solid fa-lock input-icon"></i>
-                        <input type="password" placeholder="•••••••" required>
+                        <input type="password" name="password" required>
                     </div>
+                    
                     <div class="forgot-link">
                         <a href="#">Forgot password?</a>
                     </div>
 
-                    <label>OTP</label>
-                <div class="otp-section">
-                    <div class="input-group otp-input">
-                        <i class="fa-regular fa-comment-dots input-icon"></i>
-                        <input type="text" placeholder="_ _ _ _" id="otp-input">
-                    </div>
-                    <div class="sms-link">
-                        <a href="#">Send <span class="highlight-text">SMS</span> code.</a>
-                    </div>
-                </div>
-
                     <button type="submit" class="btn-login">Log In</button>
 
-<!-- sign up links -->
                     <div class="signup-links">
                         <p>Have no account? <a href="/signup">Create <span class="role-admin">ACCOUNT</span>.</a></p>
                     </div>
                 </form>
-
-<!-- js script path -->
                 <script src="/assets/js/loginvalidation.js"></script>
             </div>
         </div>

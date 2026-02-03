@@ -5,13 +5,9 @@ class AuthController {
     private $userModel;
 
     public function __construct() {
-        // REMOVE session_start() here if it is already in index.php
-        // (Calling it twice causes a warning)
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        
-        // FIX 1: Use "new User()" (Singular, Capitalized) to match the class name
         $this->userModel = new User();
     }
 
@@ -19,45 +15,59 @@ class AuthController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($_POST['password'] !== $_POST['confirm_password']) {
-                die("Passwords do not match");
+                $error = "Passwords do not match";
+                require __DIR__ . '/../views/auth/signup.php';
+                return;
             }
 
-            $this->userModel->create($_POST);
+            $userData = [
+                'first_name' => $_POST['first_name'],
+                'last_name'  => $_POST['last_name'],
+                'email'      => $_POST['email'],
+                'phone'      => $_POST['phone'],
+                'country'    => $_POST['country'],
+                'province'   => $_POST['province'],
+                'city'       => $_POST['city'],
+                'street'     => $_POST['street'],
+                'password'   => $_POST['password']
+            ];
+
+            $this->userModel->create($userData);
             
-            // FIX 2: Use Clean URL for redirect
             header("Location: /login"); 
             exit;
         }
 
-        // FIX 3: Correct path to view (views/auth/ instead of views/login/)
         require __DIR__ . '/../views/auth/signup.php';
     }
 
     public function login() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            
+            $user = $this->userModel->findByEmail($_POST['email']);
 
-            $users = $this->userModel->findByEmail($_POST['email']);
-
-            if ($users && password_verify($_POST['password'], $users['password'])) {
-                $_SESSION['user_id'] = $users['id'];
+            if ($user && password_verify($_POST['password'], $user['password'])) {
                 
-                // FIX 2: Use Clean URL for redirect
-                header("Location: /profile");
+                session_regenerate_id(true);
+                
+                $_SESSION['user_id'] = $user['user_id']; 
+                $_SESSION['email'] = $user['email'];
+
+                header("Location: /home"); 
                 exit;
             }
 
-            $error = "Invalid credentials";
+            $error = "Invalid email or password.";
         }
 
-        // FIX 3: Correct path to view
         require __DIR__ . '/../views/auth/login.php';
     }
 
     public function logout() {
+        session_unset();
         session_destroy();
         
-        // FIX 2: Use Clean URL for redirect
-        header("Location: /home");
+        header("Location: /login");
         exit;
     }
 }

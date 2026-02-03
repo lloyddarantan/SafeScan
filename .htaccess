@@ -1,31 +1,16 @@
-# 1. DISABLE DIRECTORY LISTING
-# Prevents users from seeing a list of files if they open a folder.
 Options -Indexes
-
 RewriteEngine On
 
-# ----------------------------------------------------------------------
-# 2. SECURITY: PROTECT THE "APP" FOLDER
-# ----------------------------------------------------------------------
-# If someone tries to go to safescan.helioho.st/app, redirect them to Home.
+# Protect app folder
 RewriteRule ^app/(.*)$ /home [R=301,L]
 
-# ----------------------------------------------------------------------
-# 3. ASSET HANDLING
-# ----------------------------------------------------------------------
-# Allows your HTML to ask for "assets/css/..." and invisibly finds it in "public/assets/"
+# Assets mapping
 RewriteRule ^assets/(.*)$ public/assets/$1 [L,QSA]
 
-# ----------------------------------------------------------------------
-# 4. CLEAN URLS (The Router)
-# ----------------------------------------------------------------------
-# Set default file
+# Set index
 DirectoryIndex public/index.php
 
-# If the request is NOT a real file and NOT a real directory...
+# Send ALL requests to public/index.php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-
-# ...send it to index.php invisibly. 
-# The user sees "/home", but PHP sees "index.php?url=home"
-RewriteRule ^(.*)$ public/index.php?url=$1 [L,QSA]
+RewriteRule ^(.*)$ public/index.php [L,QSA]

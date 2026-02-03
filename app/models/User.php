@@ -10,8 +10,8 @@ class User {
 
     public function create($data) {
         $sql = "INSERT INTO users 
-                (first_name, last_name, address, phone, email, password) 
-                VALUES (?, ?, ?, ?, ?, ?)";
+                (first_name, last_name, country, province, city, street, phone, email, password) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = $this->conn->prepare($sql);
 
@@ -20,7 +20,10 @@ class User {
         return $stmt->execute([
             $data['first_name'],
             $data['last_name'],
-            $data['address'],
+            $data['country'],
+            $data['province'],
+            $data['city'],
+            $data['street'],
             $data['phone'],
             $data['email'],
             $hashedPassword

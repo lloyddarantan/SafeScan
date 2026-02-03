@@ -5,49 +5,43 @@ class Router
 {
     protected $routes = [];
 
-    // Register GET route
-    public function get($path, $callback)
-    {
+    public function get($path, $callback) {
         $this->routes['GET'][$this->normalize($path)] = $callback;
     }
 
-    // Register POST route
-    public function post($path, $callback)
-    {
+    public function post($path, $callback) {
         $this->routes['POST'][$this->normalize($path)] = $callback;
     }
 
-    // Resolve the current request
-    // app/Router.php
+    public function resolve() {
+        $method = $_SERVER['REQUEST_METHOD'];
 
-    public function resolve()
-        {
-            $method = $_SERVER['REQUEST_METHOD'];
+        // Get the real URL path (VERY IMPORTANT)
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-            // 1. Get the URL, default to empty string if missing
-            $url = $_GET['url'] ?? '';
-            
-            // 2. Trim slashes
-            $path = trim($url, '/');
-
-            // 3. IF path is empty (root domain), force it to 'home'
-            if ($path === '') {
-                $path = 'home';
-            }
-
-            $callback = $this->routes[$method][$path] ?? null;
-
-            if ($callback) {
-                call_user_func($callback);
-            } else {
-                http_response_code(404);
-                echo "<h1>404 Not Found</h1>";
-            }
+        // Remove "/public" or subfolder automatically (HelioHost safe)
+        $base = dirname($_SERVER['SCRIPT_NAME']);
+        if ($base !== '/' && strpos($uri, $base) === 0) {
+            $uri = substr($uri, strlen($base));
         }
 
-    // Normalize path (remove slashes)
-    protected function normalize($path)
-    {
+        $path = trim($uri, '/');
+
+        if ($path === '') {
+            $path = 'home';
+        }
+
+        $callback = $this->routes[$method][$path] ?? null;
+
+        if ($callback) {
+            call_user_func($callback);
+        } else {
+            http_response_code(404);
+            echo "<h1>404 Not Found</h1>";
+        }
+    }
+
+    protected function normalize($path) {
         return trim($path, '/');
     }
 }

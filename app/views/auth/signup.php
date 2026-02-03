@@ -1,9 +1,13 @@
+<?php 
+     $page =  'signup';  
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Safe Scan - Create Account</title>
+    <title>SafeScan</title>
     <link rel="stylesheet" href="/assets/css/logincss/signup.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -12,10 +16,7 @@
 
     <div class="login-container">
         
-<!-- logo left side part -->
-
         <div class="login-left">
-
             <div class="brand-logo">
                 <svg class="logo-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M4 8V6a2 2 0 0 1 2-2h2"></path>
@@ -24,7 +25,7 @@
                     <path d="M16 20h2a2 2 0 0 0 2-2v-2"></path>
                     <line x1="4" y1="12" x2="20" y2="12"></line>
                 </svg>
-                <span>Safe Scan</span>
+                <span>SafeScan</span>
             </div>
 
             <div class="visual-container">
@@ -40,8 +41,6 @@
             </div>
         </div>
 
-<!-- right side login -->
-
         <div class="login-right">
 
             <a href="/home" class="close-btn">
@@ -52,89 +51,93 @@
                 <h1>Create an account.</h1>
                 <p class="subtitle">Set up your account to securely access scanning features.</p>
 
-                <form action="#" method="POST" id="signup-form">
+                <?php if (isset($error)): ?>
+                    <div style="background: #fff0f0; color: #e74c3c; padding: 12px; border-radius: 6px; margin-bottom: 20px; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; border: 1px solid #ffcccc;">
+                        <i class="fa-solid fa-circle-exclamation"></i> 
+                        <span><?= htmlspecialchars($error) ?></span>
+                    </div>
+                <?php endif; ?>
+
+                <form action="/signup" method="POST" id="signup-form">
     
-<!-- first step create account -->
                     <div id="step-1">
                         <label>First name</label>
                         <div class="input-group">
                             <i class="fa-regular fa-user input-icon"></i>
-                            <input type="text" placeholder="Enter your first name">
+                            <input type="text" name="first_name" placeholder="Enter your first name" value="<?= $_POST['first_name'] ?? '' ?>" required>
                         </div>
 
-                         <label>Last name</label>
+                        <label>Last name</label>
                         <div class="input-group">
                             <i class="fa-regular fa-user input-icon"></i>
-                            <input type="text" placeholder="Enter your last name">
+                            <input type="text" name="last_name" placeholder="Enter your last name" value="<?= $_POST['last_name'] ?? '' ?>" required>
                         </div>
 
                         <label>Phone number</label>
                         <div class="input-group">
                             <i class="fa-solid fa-mobile-screen input-icon"></i>
-                            <input type="tel" placeholder="09..........">
+                            <input type="tel" name="phone" placeholder="09.........." value="<?= $_POST['phone'] ?? '' ?>" required>
                         </div>
 
                         <label style="margin-top: 15px; margin-bottom: 10px; font-size: 1rem;">Home Address</label>
                         <div class="address-grid">
                             <div class="address-field">
                                 <label>Country</label>
-                                <input type="text">
+                                <input type="text" name="country" value="<?= $_POST['country'] ?? '' ?>" required>
                             </div>
                             <div class="address-field">
                                 <label>Province</label>
-                                <input type="text">
+                                <input type="text" name="province" value="<?= $_POST['province'] ?? '' ?>" required>
                             </div>
                             <div class="address-field">
                                 <label>City</label>
-                                <input type="text">
+                                <input type="text" name="city" value="<?= $_POST['city'] ?? '' ?>" required>
                             </div>
                             <div class="address-field">
                                 <label>Street</label>
-                                <input type="text">
+                                <input type="text" name="street" value="<?= $_POST['street'] ?? '' ?>" required>
                             </div>
                         </div>
 
                         <button type="button" class="btn-login" onclick="showNextStep()">Next</button>
                     </div>
 
-<!-- second step create account -->
                     <div id="step-2" style="display: none;">
                         
                         <label>Email Address</label>
                         <div class="input-group">
                             <i class="fa-regular fa-envelope input-icon"></i>
-                            <input type="email" placeholder="name@email.com">
+                            <input type="email" name="email" placeholder="name@email.com" value="<?= $_POST['email'] ?? '' ?>" required>
                         </div>
 
                         <label>Password</label>
                         <div class="input-group">
                             <i class="fa-solid fa-lock input-icon"></i>
-                            <input type="password" placeholder="Create a password" id="passInput">
+                            <input type="password" name="password" placeholder="Create a password" id="passInput" required>
                             <i class="fa-regular fa-eye password-toggle" onclick="togglePassword('passInput')"></i>
                         </div>
 
                         <label>Confirm password</label>
                         <div class="input-group">
                             <i class="fa-solid fa-lock input-icon"></i>
-                            <input type="password" placeholder="Confirm your password" id="confirmPassInput">
+                            <input type="password" name="confirm_password" placeholder="Confirm your password" id="confirmPassInput" required>
                             <i class="fa-regular fa-eye password-toggle" onclick="togglePassword('confirmPassInput')"></i>
                         </div>
 
-<!-- button -->
                         <div class="button-group">
                             <button type="button" class="btn-back" onclick="showPreviousStep()">Back</button>
                             <button type="submit" class="btn-login">Register</button>
                         </div>
                     
-                    </div> <div class="signup-links" style="text-align: center; margin-top: 10px;">
+                    </div> 
+                    
+                    <div class="signup-links" style="text-align: center; margin-top: 10px;">
                         <p style="color: #555;">
                             Have an account? 
                             <a href="/login" style="color: #F89b42; font-weight: 500;">Log in.</a>
                         </p>
                     </div>
                 </form>
-
-<!-- js script path -->
                 <script src="/assets/js/loginvalidation.js"></script>
             </div>
         </div>

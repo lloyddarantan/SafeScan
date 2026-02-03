@@ -1,10 +1,14 @@
-// validation step 1
+/* =========================================
+   STEP NAVIGATION (Next / Back)
+   ========================================= */
+
 function showNextStep() {
     const step1Div = document.getElementById('step-1');
     const step2Div = document.getElementById('step-2');
     
     if (!step1Div || !step2Div) return;
 
+    // Select all inputs in Step 1
     const inputs = step1Div.querySelectorAll('input');
     let allValid = true;
 
@@ -12,22 +16,17 @@ function showNextStep() {
         const value = input.value.trim();
         let errorMsg = "";
 
-// to check empty
+        // Check if empty
         if (value === "") {
             errorMsg = "This field is required.";
         } 
-
-// to check email format
-        else if (input.type === "email") {
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailPattern.test(value)) errorMsg = "Please enter a valid email.";
-        } 
-// to check number format
-        else if (input.type === "tel" || input.placeholder.includes("09")) {
+        // Check phone format
+        else if (input.type === "tel" || input.name === "phone") {
             const phonePattern = /^[0-9]+$/;
             if (!phonePattern.test(value)) errorMsg = "Numbers only.";
         }
 
+        // Apply or remove error
         if (errorMsg !== "") {
             allValid = false;
             markError(input, errorMsg);
@@ -36,40 +35,67 @@ function showNextStep() {
         }
     });
 
+    // If no errors, proceed to Step 2
     if (allValid) {
         step1Div.style.display = 'none';
         step2Div.style.display = 'block';
     }
 }
 
+function showPreviousStep() {
+    const step1Div = document.getElementById('step-1');
+    const step2Div = document.getElementById('step-2');
+
+    if (step1Div && step2Div) {
+        step2Div.style.display = 'none';
+        step1Div.style.display = 'block';
+    }
+}
+
+/* =========================================
+   UI INTERACTIONS (Password Toggle)
+   ========================================= */
+
 function togglePassword(inputId) {
     const input = document.getElementById(inputId);
     if (!input) return;
-    input.type = (input.type === "password") ? "text" : "password";
+
+    // Toggle Input Type
+    const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+    input.setAttribute('type', type);
+    
+    // Toggle Icon Class
+    const icon = input.nextElementSibling;
+    if (icon && icon.classList.contains('password-toggle')) {
+        icon.classList.toggle('fa-eye');
+        icon.classList.toggle('fa-eye-slash');
+    }
 }
 
+/* =========================================
+   ERROR HANDLING (Floating Messages)
+   ========================================= */
 
-// error float logic
 function markError(input, message) {
     input.classList.add('input-error');
 
-// to find which has error
+    // Find the closest parent to append the error message
     const parent = input.closest('.input-group') || input.closest('.address-field') || input.parentElement;
 
-// remove existing error if any
+    // Remove existing error if present
     const existingError = parent.querySelector('.error-message');
     if (existingError) {
         existingError.remove();
     }
 
-// floating error message
+    // Create the error message div
     const errorDisplay = document.createElement('div');
     errorDisplay.className = 'error-message';
     errorDisplay.textContent = message;
     
     parent.appendChild(errorDisplay);
 
-// remove on type
+    // Remove error as soon as user types
     input.addEventListener('input', function() {
         removeError(input);
     }, { once: true });
@@ -78,41 +104,43 @@ function markError(input, message) {
 function removeError(input) {
     input.classList.remove('input-error');
     const parent = input.closest('.input-group') || input.closest('.address-field') || input.parentElement;
-    const errorDisplay = parent.querySelector('.error-message');
-    if (errorDisplay) {
-        errorDisplay.remove();
+    if(parent) {
+        const errorDisplay = parent.querySelector('.error-message');
+        if (errorDisplay) {
+            errorDisplay.remove();
+        }
     }
 }
 
-
-//                                   //
-// FOR UNIVERSAL LOGIN FORM         //
-//                                 //
+/* =========================================
+   FORM SUBMISSION VALIDATION
+   ========================================= */
 
 document.addEventListener('DOMContentLoaded', function() {
     
+    // --- 1. LOGIN FORM VALIDATION ---
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
         loginForm.addEventListener('submit', function(event) {
             let isFormValid = true;
 
-// Email
-            const emailInput = loginForm.querySelector('input[type="email"]');
+            // Email Check
+            const emailInput = loginForm.querySelector('input[name="email"]');
             if (emailInput && emailInput.value.trim() === "") {
                 isFormValid = false;
                 markError(emailInput, "Email is required.");
             }
 
-// Password
-            const passInput = loginForm.querySelector('input[type="password"]');
+            // Password Check
+            const passInput = loginForm.querySelector('input[name="password"]');
             if (passInput && passInput.value.trim() === "") {
                 isFormValid = false;
                 markError(passInput, "Password is required.");
             }
 
-// OTP
+            // OTP Check (if visible)
             const otpInput = document.getElementById('otp-input'); 
-            if (otpInput && otpInput.value.trim() === "") {
+            if (otpInput && otpInput.offsetParent !== null && otpInput.value.trim() === "") {
                 isFormValid = false;
                 markError(otpInput, "Please enter the OTP.");
             }
@@ -121,30 +149,29 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
- //                                   //
-// FOR ADMIN AND MEMBER SIGNUP FORM //
-//                                 //
+    // --- 2. SIGNUP FORM VALIDATION ---
     const signupForm = document.getElementById('signup-form');
     if (signupForm) {
         signupForm.addEventListener('submit', function(event) {
             let isValid = true;
             
-// validate Email
-            const emailInput = signupForm.querySelector('input[type="email"]');
-                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            // Validate Email
+            const emailInput = signupForm.querySelector('input[name="email"]');
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-                if (emailInput) {
-                    if (emailInput.value.trim() === "") {
-                        isValid = false;
-                        markError(emailInput, "Email is required.");
-                    } else if (!emailPattern.test(emailInput.value.trim())) {
-                        isValid = false;
-                        markError(emailInput, "Invalid email format.");
-                    }
+            if (emailInput) {
+                if (emailInput.value.trim() === "") {
+                    isValid = false;
+                    markError(emailInput, "Email is required.");
+                } else if (!emailPattern.test(emailInput.value.trim())) {
+                    isValid = false;
+                    markError(emailInput, "Invalid email format.");
                 }
-// validate Passwords
-            const pass1 = document.getElementById('passInput') || document.getElementById('passInputMem');
-            const pass2 = document.getElementById('confirmPassInput') || document.getElementById('confirmPassInputMem');
+            }
+
+            // Validate Passwords
+            const pass1 = document.getElementById('passInput');
+            const pass2 = document.getElementById('confirmPassInput');
             
             if (pass1 && pass1.value.trim() === "") {
                 isValid = false;
@@ -160,36 +187,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
 
-// validate address fields
-            const addressInputs = signupForm.querySelectorAll('.address-grid input');
-            addressInputs.forEach(addrInput => {
-                if (addrInput.value.trim() === "") {
-                    isValid = false;
-                    markError(addrInput, "Required.");
-                }
-            });
-
- // validate signup OTP
-            const otpInput = document.querySelector('#step-2 input[placeholder="_ _ _ _"]');
-            if (otpInput && otpInput.value.trim() === "") {
-                isValid = false;
-                markError(otpInput, "OTP required.");
-            }
-
             if (!isValid) event.preventDefault();
         });
     }
 });
-
-// Function to return to Step 1
-function showPreviousStep() {
-    const step1Div = document.getElementById('step-1');
-    const step2Div = document.getElementById('step-2');
-
-    if (step1Div && step2Div) {
-        // Hide Step 2
-        step2Div.style.display = 'none';
-        // Show Step 1
-        step1Div.style.display = 'block';
-    }
-}

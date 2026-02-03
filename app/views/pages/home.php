@@ -1,14 +1,11 @@
 <?php 
-    $baseUrl = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
-    $page = 'home';   
-
-    
+    $page = 'home';  
+    require __DIR__ . '/../others/navigation.php';     
 ?>
 
-<?php require __DIR__ . '/../others/navigation.php'; ?>
 
-<title>Safe Scan - Home</title>
-<link rel="stylesheet" href="<?= $baseUrl ?>/assets/css/index.css">
+<title>SafeScan</title>
+<link rel="stylesheet" href="/assets/css/index.css">
 
     <section class="hero-section">
         <div class="hero-content">

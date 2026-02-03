@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 29, 2026 at 03:59 PM
+-- Generation Time: Feb 03, 2026 at 04:50 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -88,7 +88,10 @@ CREATE TABLE `users` (
   `email` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `phone` varchar(15) NOT NULL,
-  `address` varchar(255) NOT NULL,
+  `country` varchar(255) NOT NULL,
+  `province` varchar(255) NOT NULL,
+  `city` varchar(255) NOT NULL,
+  `street` varchar(255) NOT NULL,
   `role` varchar(50) NOT NULL,
   `date_registered` timestamp NOT NULL DEFAULT current_timestamp(),
   `date_updated` timestamp NOT NULL DEFAULT current_timestamp()
@@ -98,8 +101,8 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `email`, `password`, `phone`, `address`, `role`, `date_registered`, `date_updated`) VALUES
-(1, 'Lloyd', 'Testing', 'testing123@gmail.com', '123', '123', '123', 'Admin', '2026-01-29 14:28:00', '2026-01-29 14:28:00');
+INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `email`, `password`, `phone`, `country`, `province`, `city`, `street`, `role`, `date_registered`, `date_updated`) VALUES
+(1, 'Lloyd', 'Testing', 'testing123@gmail.com', '123', '123', '123', '', '', '', 'Admin', '2026-01-29 14:28:00', '2026-01-29 14:28:00');
 
 --
 -- Indexes for dumped tables

@@ -1,10 +1,9 @@
 <?php 
     $page = 'profile';
+    require __DIR__ . '/../others/navigation.php';
  ?>
 
-<?php require __DIR__ . '/../others/navigation.php'; ?>
-
-<title>Safe Scan - Profile</title>
+<title>SafeScan</title>
 <link rel="stylesheet" href="/assets/css/profile.css">
 
 <div class="dashboard-container">
@@ -78,7 +77,7 @@
                 <div class="data-grid">
                     <div class="data-group">
                         <label>Street</label>
-                        <div><?= htmlspecialchars($user['address']); ?></div>
+                        <div><?= htmlspecialchars($user['street']); ?></div>
                     </div>
                     <div class="data-group">
                         <label>City</label>
@@ -90,7 +89,7 @@
                     </div>
                     <div class="data-group">
                         <label>Postal Code</label>
-                        <div><?= htmlspecialchars($user['postal_code'] ?? ''); ?></div>
+                        <div><?= htmlspecialchars($user['country'] ?? ''); ?></div>
                     </div>
                 </div>
             </div>
@@ -176,7 +175,7 @@
                 </div>
                 <div class="form-group full-width">
                     <label>Street Address</label>
-                    <input type="text" name="street" value="<?= htmlspecialchars($user['address']); ?>">
+                    <input type="text" name="street" value="<?= htmlspecialchars($user['street']); ?>">
                 </div>
             </div>
             <div class="modal-footer">
