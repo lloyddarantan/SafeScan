@@ -28,8 +28,15 @@ class ProfileController {
             'lastname'  => $_POST['lastname'],
             'email'     => $_POST['email'],
             'contact'   => $_POST['contact'],
-            'street'    => $_POST['street']
+            'street'    => $_POST['street'],
+			'city'      => $_POST['city'],
+            'province'  => $_POST['province'],
+            'country'   => $_POST['country']
         ];
+		
+		if (!empty($_POST['new_password'])) {
+            $data['password'] = password_hash($_POST['new_password'], PASSWORD_DEFAULT);
+        }
 
         $userModel->updateProfile($_SESSION['user_id'], $data);
 
