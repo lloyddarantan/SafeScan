@@ -44,24 +44,40 @@ class User {
     }
 
     public function updateProfile($id, $data) {
-            $sql = "UPDATE users SET 
-                        first_name = ?, 
-                        last_name = ?, 
-                        email = ?, 
-                        phone = ?, 
-                        street = ?
-                    WHERE user_id = ?";
+        $sql = "UPDATE users SET 
+                first_name = :firstname, 
+                last_name = :lastname, 
+                email = :email, 
+                phone = :contact, 
+                street = :street,
+                city = :city,
+                province = :province,
+                country = :country";
 
-            $stmt = $this->conn->prepare($sql);
-            return $stmt->execute([
-                $data['firstname'],
-                $data['lastname'],
-                $data['email'],
-                $data['contact'],
-                $data['street'],
-                $id
-            ]);
+        if (isset($data['password'])) {
+            $sql .= ", password = :password";
         }
+
+        $sql .= " WHERE user_id = :id";
+
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->bindValue(':firstname', $data['firstname']);
+        $stmt->bindValue(':lastname',  $data['lastname']);
+        $stmt->bindValue(':email',     $data['email']);
+        $stmt->bindValue(':contact',   $data['contact']);
+        $stmt->bindValue(':street',    $data['street']);
+        $stmt->bindValue(':city',      $data['city']);
+        $stmt->bindValue(':province',  $data['province']);
+        $stmt->bindValue(':country',   $data['country']);
+        $stmt->bindValue(':id',        $id);
+
+        if (isset($data['password'])) {
+            $stmt->bindValue(':password', $data['password']);
+        }
+
+        return $stmt->execute();
+    }
 
     public function deleteAccount($id) {
             $sql = "DELETE FROM users WHERE user_id = ?";
