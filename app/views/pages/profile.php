@@ -1,5 +1,5 @@
 <?php 
-    $page = 'profile';
+    // $page = 'profile';
     require __DIR__ . '/../others/navigation.php';
  ?>
 
@@ -23,7 +23,7 @@
         <div id="section-profile" class="content-section active">
             <div class="header-row">
                 <span class="page-title">My Profile</span>
-                <span class="role-badge">USER</span>
+                <!-- <span class="role-badge">USER</span> -->
             </div>
 
             <div class="info-card">
@@ -148,14 +148,14 @@
     </main>
 </div>
 
-<!-- EDIT PROFILE MODAL -->
+<!--edit profile-->
 <div id="editModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
             <h3>Edit Profile</h3>
             <span class="close-modal" onclick="closeModal()">&times;</span>
         </div>
-        <form action="" method="POST" class="edit-form">
+        <form action="/profile/update" method="POST" class="edit-form">
             <div class="form-grid">
                 <div class="form-group">
                     <label>First Name</label>
@@ -185,6 +185,32 @@
         </form>
     </div>
 </div>
+
+<!-- delete account modal -->
+    <div id="deleteModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirm Delete</h3>
+                <span class="close-modal" onclick="closeDeleteModal()">&times;</span>
+            </div>
+
+            <p style="margin:15px 0;">
+                This will permanently delete your account and all data.
+            </p>
+
+            <form action="/profile/delete" method="POST">
+                <div class="modal-footer">
+                    <button type="button" class="cancel-btn" onclick="closeDeleteModal()">
+                        Cancel
+                    </button>
+
+                    <button type="submit" class="logout-btn" style="background:#ff4d4d;color:white;">
+                        Yes, Delete My Account
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
 <?php require __DIR__ . '/../others/footer.php'; ?>
 <script src="/assets/js/profile.js"></script>

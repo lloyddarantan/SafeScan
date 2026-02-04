@@ -42,4 +42,31 @@ class User {
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    public function updateProfile($id, $data) {
+            $sql = "UPDATE users SET 
+                        first_name = ?, 
+                        last_name = ?, 
+                        email = ?, 
+                        phone = ?, 
+                        street = ?
+                    WHERE user_id = ?";
+
+            $stmt = $this->conn->prepare($sql);
+            return $stmt->execute([
+                $data['firstname'],
+                $data['lastname'],
+                $data['email'],
+                $data['contact'],
+                $data['street'],
+                $id
+            ]);
+        }
+
+    public function deleteAccount($id) {
+            $sql = "DELETE FROM users WHERE user_id = ?";
+            $stmt = $this->conn->prepare($sql);
+            return $stmt->execute([$id]);
+        }
+
 }

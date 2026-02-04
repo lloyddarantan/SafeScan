@@ -1,5 +1,10 @@
 <?php
-    $page = $_GET['url'] ?? 'home';
+    $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    $page = trim($uri, '/');
+
+    if ($page === '') {
+        $page = 'home';
+    }
 
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
@@ -7,6 +12,7 @@
 
     $isLoggedIn = isset($_SESSION['user_id']);
 ?>
+
 
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='orange' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 8V6a2 2 0 0 1 2-2h2'/%3E%3Cpath d='M4 16v2a2 2 0 0 0 2 2h2'/%3E%3Cpath d='M16 4h2a2 2 0 0 1 2 2v2'/%3E%3Cpath d='M16 20h2a2 2 0 0 0 2-2v-2'/%3E%3Cline x1='4' y1='12' x2='20' y2='12'/%3E%3C/svg%3E">
 

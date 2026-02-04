@@ -5,28 +5,27 @@ class Router
 {
     protected $routes = [];
 
+    // Register GET route
     public function get($path, $callback) {
         $this->routes['GET'][$this->normalize($path)] = $callback;
     }
 
+    // Register POST route
     public function post($path, $callback) {
         $this->routes['POST'][$this->normalize($path)] = $callback;
     }
 
+    // Resolve the current request (HelioHost-safe)
     public function resolve() {
         $method = $_SERVER['REQUEST_METHOD'];
 
-        // Get the real URL path (VERY IMPORTANT)
+        // Get the real path from the browser
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-        // Remove "/public" or subfolder automatically (HelioHost safe)
-        $base = dirname($_SERVER['SCRIPT_NAME']);
-        if ($base !== '/' && strpos($uri, $base) === 0) {
-            $uri = substr($uri, strlen($base));
-        }
-
+        // Remove leading and trailing slashes only
         $path = trim($uri, '/');
 
+        // Default route
         if ($path === '') {
             $path = 'home';
         }
@@ -41,6 +40,7 @@ class Router
         }
     }
 
+    // Normalize registered paths
     protected function normalize($path) {
         return trim($path, '/');
     }

@@ -1,5 +1,5 @@
 <?php 
-    $page = 'home';  
+    // $page = 'home';  
     require __DIR__ . '/../others/navigation.php';     
 ?>
 

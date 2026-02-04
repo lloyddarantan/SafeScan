@@ -44,5 +44,19 @@ $router->post('signup', function() {
     (new AuthController())->register();
 });
 
+$router->post('profile/update', function() {
+    (new ProfileController())->update();
+});
+
+$router->post('profile/delete', function() {
+    (new ProfileController())->delete();
+});
+
+
+$router->get('logout', function() {
+    (new AuthController())->logout();
+});
+
+
 // Handle the request
 $router->resolve();
