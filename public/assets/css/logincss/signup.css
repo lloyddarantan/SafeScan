@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap');
+
 * { 
     margin: 0; 
     padding: 0; 
@@ -16,7 +18,7 @@ body {
     width: 100%; 
 }
 
-/* --- left side design --- */
+/* --- Left Side Design --- */
 .login-left {
     flex: 1;
     background-color: #1A2238;
@@ -31,6 +33,7 @@ body {
         linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
     background-size: 40px 40px;
 }
+
 .brand-logo { 
     display: flex; 
     align-items: center; 
@@ -79,7 +82,6 @@ body {
     opacity: 0.6; 
 }
 
-
 .energy-icon { 
     font-size: 80px; 
     color: #F89b42; 
@@ -110,8 +112,7 @@ body {
     font-size: 0.95rem; 
 }
 
-
-/* --- right side sign in --- */
+/* --- Right Side Sign In --- */
 .login-right {
     flex: 1;
     background-color: #F2F2F2;
@@ -128,6 +129,7 @@ body {
     max-height: 100vh; 
     overflow-y: auto;
     padding-right: 5px;
+    scrollbar-width: thin;
 }
 
 .form-wrapper h1 {
@@ -178,7 +180,8 @@ form label {
 }
 
 .input-group input:focus { 
-    border-color: #F89b42; 
+    border-color: #F89b42;
+    background-color: #fff;
 }
 
 .address-grid {
@@ -187,6 +190,7 @@ form label {
     gap: 10px;
     margin-bottom: 15px;
 }
+
 .address-field { 
     display: flex; 
     flex-direction: column; 
@@ -222,7 +226,6 @@ form label {
     box-shadow: 0 5px 15px rgba(248, 155, 66, 0.4);
 }
 
-
 .signup-links {
     margin-top: 20px;
 }
@@ -248,10 +251,6 @@ form label {
     font-weight: 700;
 }
 
-.signup-links strong {
-    font-weight: 600;
-}   
-
 .password-toggle {
     position: absolute;
     right: 12px;
@@ -267,15 +266,10 @@ form label {
     color: #F89b42;
 }
 
-
-/* input error design */
+/* Input Error Design */
 input.input-error {
     border: 1px solid #ff3333 !important;
     background-color: #fffafa !important;
-}
-
-.input-group {
-    position: relative;
 }
 
 .error-message {
@@ -366,4 +360,98 @@ input.input-error {
 .button-group .btn-login {
     flex: 2;
     margin: 0;
+}
+
+.mobile-logo {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    color: #1A2238; 
+    font-size: 1.4rem;
+    font-weight: 500;
+    z-index: 100;
+}
+
+.logo-icon-mobile {
+    width: 35px;
+    height: 35px;
+    stroke: #F89b42;
+    stroke-width: 2.5;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.mobile-divider {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    
+    body {
+        overflow-y: auto; 
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .login-container {
+        flex-direction: column;
+    }
+
+    .login-left {
+        display: none;
+    }
+
+    .login-right {
+        padding: 80px 20px 30px; 
+        min-height: 100vh;
+        align-items: center; 
+        position: relative;
+    }
+
+	.mobile-divider {
+        display: block;
+        position: absolute;
+        top: 80px; 
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background-color: #d1d5db;
+        z-index: 90;
+    } 
+	
+    .mobile-logo {
+        display: flex;
+        position: absolute;
+        top: 25px;
+        left: 25px;
+    }
+
+    .close-btn {
+        top: 25px;
+        right: 25px;
+    }
+
+    .form-wrapper {
+        width: 100%;
+        max-width: 100%;
+        max-height: none; 
+        overflow-y: visible; 
+        padding-right: 0;
+		padding-top: 20px;
+    }
+
+    .form-wrapper h1 {
+        font-size: 1.5rem;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .subtitle {
+        text-align: center;
+    }
+
+    .signup-links {
+        padding-bottom: 20px;
+    }
 }
