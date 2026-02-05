@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -16,7 +18,7 @@ body {
     width: 100%;
 }
 
-/* --- left side design --- */
+/* --- Left Side Design --- */
 .login-left {
     flex: 1;
     background-color: #1A2238;
@@ -111,7 +113,7 @@ body {
     font-size: 0.95rem;
 }
 
-/* --- right side --- */
+/* --- Right Side --- */
 .login-right {
     flex: 1;
     background-color: #F2F2F2;
@@ -119,6 +121,7 @@ body {
     justify-content: center;
     align-items: center;
     padding: 40px;
+    position: relative;
 }
 
 .form-wrapper {
@@ -175,6 +178,7 @@ form label {
 
 .input-group input:focus {
     border-color: #F89b42;
+    background-color: #fff;
 }
 
 .forgot-link {
@@ -262,17 +266,11 @@ form label {
     font-weight: 700;
 }
 
-.signup-links strong {
-    font-weight: 600;
-}
-
+/* Error Messages */
 input.input-error {
     border: 1px solid #ff3333 !important;
     background-color: #fff0f0 !important;
     color: #cc0000;
-}
-
-input.input-error {
     animation: shake 0.3s ease-in-out;
 }
 
@@ -325,4 +323,75 @@ input.input-error {
     color: #F89b42;
     background-color: rgba(0,0,0,0.05);
     transform: rotate(90deg);
+}
+
+.mobile-logo {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    color: #1A2238; 
+    font-size: 1.4rem;
+    font-weight: 500;
+    z-index: 100;
+}
+
+.logo-icon-mobile {
+    width: 35px;
+    height: 35px;
+    stroke: #F89b42;
+    stroke-width: 2.5;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+@media (max-width: 900px) {
+    
+    body {
+        overflow-y: auto; 
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .login-container {
+        flex-direction: column;
+    }
+
+    .login-left {
+        display: none;
+    }
+
+    .login-right {
+        padding: 80px 20px 30px;
+        min-height: 100vh;
+        align-items: center; 
+        position: relative;
+    }
+
+    .mobile-logo {
+        display: flex;
+        position: absolute;
+        top: 25px;
+        left: 25px;
+    }
+
+    .close-btn {
+        top: 25px;
+        right: 25px;
+    }
+
+    .form-wrapper {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .form-wrapper h1 {
+        font-size: 2rem;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .subtitle {
+        text-align: center;
+    }
 }
