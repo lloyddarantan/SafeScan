@@ -3,6 +3,14 @@
     font-family: 'Kanit', sans-serif;
 }
 
+.nav-wrapper {
+    position: sticky;
+    top: 20px;
+    z-index: 1000;
+    width: 100%;
+    pointer-events: none;
+}
+
 .navbar {
     background-color: #ffffff;
     width: 90%;
@@ -10,9 +18,12 @@
     border-radius: 50px;
     padding: 10px 15px 10px 30px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     margin: 0 auto;
+    pointer-events: auto;
+    position: relative;
 }
 
 .logo-container {
@@ -22,6 +33,15 @@
     font-size: 24px;
     font-weight: 500;
     color: #1a1a1a;
+    z-index: 1003; 
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    opacity: 1;
+    visibility: visible;
+}
+
+.logo-container.logo-hidden {
+    opacity: 0;
+    visibility: hidden;
 }
 
 .logo-icon {
@@ -43,7 +63,7 @@
     padding: 0;
     margin: 0;
     margin-left: auto;
-    margin-right: 40px;
+    margin-right: 30px;
 }
 
 .nav-links li a {
@@ -75,8 +95,13 @@
     transform: scaleX(1);
 }
 
-.btn-chat {
-    background: #F89b42 100%;
+.nav-links li a:hover,
+.nav-links li a.active {
+    color: #F89b42;
+}
+
+.btn-chat-desktop {
+    background: #F89b42;
     color: white;
     text-decoration: none;
     padding: 12px 35px;
@@ -84,14 +109,84 @@
     font-weight: 500;
     font-size: 16px;
     transition: transform 0.2s ease;
+    display: inline-block;
 }
 
-.btn-chat:hover {
+.btn-chat-desktop:hover {
     transform: translateY(-1px);
     box-shadow: 0 6px 15px rgba(117, 117, 117, 0.4);
 }
 
+.hamburger { display: none; }
+.floating-chat-mobile { display: none; }
+
 @media (max-width: 768px) {
-    .nav-links { display: none; }
-    .navbar { padding: 10px; }
+    
+    .navbar { padding: 15px 20px; }
+    .btn-chat-desktop { display: none; }
+    
+    .hamburger {
+        display: flex;
+        flex-direction: column;
+        cursor: pointer;
+        gap: 5px;
+        z-index: 1004;
+    }
+
+    .hamburger .bar {
+        width: 25px;
+        height: 3px;
+        background-color: #333;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100vh;
+        width: 250px;
+        background-color: white;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
+        z-index: 1001;
+    }
+
+    .nav-links.active {
+        transform: translateX(0);
+    }
+
+    .floating-chat-mobile {
+        display: flex;
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        width: 60px;
+        height: 60px;
+        background: #F89b42;
+        color: white;
+        border-radius: 50%;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        font-size: 24px;
+        box-shadow: 0 4px 20px rgba(248, 155, 66, 0.4);
+        z-index: 2000;
+        animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .hamburger.toggle .bar:nth-child(1) { transform: rotate(-45deg) translate(-5px, 6px); }
+    .hamburger.toggle .bar:nth-child(2) { opacity: 0; }
+    .hamburger.toggle .bar:nth-child(3) { transform: rotate(45deg) translate(-5px, -6px); }
+}
+
+@keyframes popIn {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
 }
