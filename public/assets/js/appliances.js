@@ -6,7 +6,7 @@ function filterAppliances() {
     const sortValue = document.getElementById('sortFilter').value;
     
 // Dropdown filters
-    const typeValue = document.getElementById('typeFilter').value; // e.g., 'tv', 'ac'
+    const typeValue = document.getElementById('typeFilter').value;
     const wattValue = document.getElementById('wattageFilter').value;
     const energyValue = document.getElementById('energyFilter').value;
     
@@ -89,12 +89,10 @@ function switchTab(room, element) {
     };
     const titleEl = document.getElementById('pageTitle');
     if(titleEl) titleEl.innerText = titles[room] || 'Appliances';
-
-    // Run the main filter function
+	
     filterAppliances();
 }
 
-// --- Menu Toggles ---
 function toggleFilterMenu() {
     document.getElementById('filterMenu').classList.toggle('show');
 }
@@ -105,3 +103,14 @@ window.onclick = function(event) {
         if (menu) menu.classList.remove('show');
     }
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    const hash = window.location.hash.substring(1); 
+    
+    if(hash) {
+        const targetBtn = document.querySelector(`.sidebar .nav-item[onclick*="'${hash}'"]`);
+        if(targetBtn) {
+            targetBtn.click();
+        }
+    }
+});
