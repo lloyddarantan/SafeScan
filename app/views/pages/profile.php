@@ -1,4 +1,24 @@
 <?php 
+    header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+    header("Cache-Control: post-check=0, pre-check=0", false);
+    header("Pragma: no-cache");
+
+    if (isset($_GET['logout'])) {
+        require_once __DIR__ . '/../../controllers/AuthController.php'; 
+        
+        $auth = new AuthController();
+        $auth->logout();
+    }
+
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: /login");
+        exit;
+    }
+
     // $page = 'profile';
     require __DIR__ . '/../others/navigation.php';
  ?>
@@ -123,7 +143,7 @@
             <button type="button" class="cancel-btn" onclick="closeLogoutModal()">
                 Cancel
             </button>
-            <a href="/login" class="confirm-logout-btn">
+            <a href="?logout=true" class="confirm-logout-btn">
                 Log Out
             </a>
         </div>
