@@ -6,6 +6,7 @@ session_start();
 require_once __DIR__ . '/../app/Router.php';
 require_once __DIR__ . '/../app/controllers/HomeController.php';
 require_once __DIR__ . '/../app/controllers/ProfileController.php';
+require_once __DIR__ . '/../app/controllers/AppliancesController.php';
 require_once __DIR__ . '/../app/controllers/AuthController.php';
 
 $router = new Router();
@@ -23,8 +24,8 @@ $router->get('about', function() {
     echo "<h1>About Page</h1>";
 });
 
-$router->get('works', function() {
-    echo "<h1>How it Works Page</h1>";
+$router->get('appliances', function() {
+    (new AppliancesController())->index();
 });
 
 // Auth routes
