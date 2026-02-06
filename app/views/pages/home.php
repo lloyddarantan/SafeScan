@@ -56,7 +56,7 @@
                 <div class="card-content">
                     <h3>Kitchen</h3>
                     <p>Appliances used for cooking, food preparation, and food storage. These usually consume high electricity because they produce heat or keep items cold.</p>
-                    <a href="/category/kitchen" class="btn-view">View</a>
+                    <a href="/appliances#kitchen" class="btn-view">View</a>
                 </div>
             </div>
 
@@ -67,7 +67,7 @@
                 <div class="card-content">
                     <h3>Living Room</h3>
                     <p>Appliances used for comfort, entertainment, and daily activities where people usually gather. These are often used for long hours.</p>
-                    <a href="/category/living-room" class="btn-view">View</a>
+                    <a href="/appliances#living" class="btn-view">View</a>
                 </div>
             </div>
 
@@ -78,7 +78,7 @@
                 <div class="card-content">
                     <h3>Bedroom</h3>
                     <p>Appliances used for rest, relaxation, and personal comfort. These are commonly used at night or for extended periods.</p>
-                    <a href="/category/bedroom" class="btn-view">View</a>
+                    <a href="/appliances#bedroom" class="btn-view">View</a>
                 </div>
             </div>
 
