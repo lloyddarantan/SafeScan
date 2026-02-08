@@ -1,11 +1,9 @@
 <?php 
-    // $page = 'appliances';
-    require __DIR__ . '/../others/navigation.php';
+require __DIR__ . '/../others/navigation.php';
 ?>
 
-<title>Appliances - SafeScan</title>
+<title>SafeScan</title>
 <link rel="stylesheet" href="/assets/css/appliances.css">
-<link rel="stylesheet" href="/assets/css/index.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <div class="dashboard-container">
@@ -13,32 +11,32 @@
     <aside class="sidebar">
         <a class="nav-item active" onclick="switchTab('all', this)">All</a>
         <a class="nav-item" onclick="switchTab('kitchen', this)">Kitchen</a>
-        <a class="nav-item" onclick="switchTab('living', this)">Living Room</a>
+        <a class="nav-item" onclick="switchTab('living room', this)">Living Room</a>
         <a class="nav-item" onclick="switchTab('bedroom', this)">Bedroom</a>
     </aside>
 
     <main class="main-content">
 
-        <div class="header-row" style="justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <div class="header-row">
             <span class="page-title" id="pageTitle">All Appliances</span>
-            
+
             <div class="controls-wrapper">
                 <div class="search-box">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" id="searchInput" onkeyup="filterAppliances()" placeholder="Search..">
                 </div>
-                
+
                 <div class="filter-container">
                     <button class="filter-btn" onclick="toggleFilterMenu()">
                         <i class="fa-solid fa-sliders"></i> Filter
                     </button>
-                    
+
                     <div id="filterMenu" class="filter-dropdown">
                         <div class="filter-group">
                             <label>Sort</label>
                             <select id="sortFilter" onchange="filterAppliances()">
-                                <option value="az">Alphabetical (A &rarr; Z)</option>
-                                <option value="za">Alphabetical (Z &rarr; A)</option>
+                                <option value="az">Alphabetical (A → Z)</option>
+                                <option value="za">Alphabetical (Z → A)</option>
                             </select>
                         </div>
 
@@ -46,10 +44,13 @@
                             <label>Category</label>
                             <select id="typeFilter" onchange="filterAppliances()">
                                 <option value="all">All Types</option>
-                                <option value="ac">Air Conditioner</option>
-                                <option value="tv">Television</option>
-                                <option value="fridge">Refrigerator</option>
-                                <option value="small">Small Appliances</option>
+                                <?php if(isset($groupedAppliances)): ?>
+                                    <?php foreach(array_keys($groupedAppliances) as $g): ?>
+                                        <option value="<?= strtolower(str_replace(' ', '-', $g)) ?>">
+                                            <?= htmlspecialchars($g) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
                             </select>
                         </div>
 
@@ -57,8 +58,8 @@
                             <label>Wattage</label>
                             <select id="wattageFilter" onchange="filterAppliances()">
                                 <option value="all">Any Wattage</option>
-                                <option value="low">Low wattage (< 200W)</option>
-                                <option value="high">High wattage (> 200W)</option>
+                                <option value="low">Low wattage (&lt; 200W)</option>
+                                <option value="high">High wattage (&gt; 200W)</option>
                             </select>
                         </div>
 
@@ -66,8 +67,8 @@
                             <label>Energy Consumption</label>
                             <select id="energyFilter" onchange="filterAppliances()">
                                 <option value="all">Any Consumption</option>
-                                <option value="low">Low (< 5kWh)</option>
-                                <option value="high">High (> 5kWh)</option>
+                                <option value="low">Low (&lt; 5kWh)</option>
+                                <option value="high">High (&gt; 5kWh)</option>
                             </select>
                         </div>
                     </div>
@@ -76,84 +77,61 @@
         </div>
 
         <div id="main-appliance-list">
+            <?php if(isset($groupedAppliances)): ?>
+                <?php foreach ($groupedAppliances as $groupName => $items): ?>
+                    <div class="type-section">
+                        <h3 class="type-title"><?= htmlspecialchars($groupName) ?></h3>
+                        <div class="product-grid">
 
-            <div class="type-section" id="group-ac">
-                <h3 class="type-title">Air Conditioner</h3>
-                <div class="product-grid">
-                    <div class="product-card" data-type="ac" data-room="bedroom" data-wattage="950" data-energy="8" data-name="Panasonic CW 1.0 HP">
-                        <div class="card-image"><img src="https://placehold.co/300x200/png?text=AC+Unit" alt="AC"></div>
-                        <div class="card-info">
-                            <h4>Panasonic CW 1.0 HP</h4>
-                            <span class="category-tag">Bedroom</span>
-                            <div class="specs"><span><i class="fa-solid fa-bolt"></i> 950W</span><span><i class="fa-solid fa-plug"></i> 8kWh</span></div>
+                        <?php foreach ($items as $a): 
+                            $imageFile = strtolower(str_replace(' ', '_', $a['type'])) . ".png";
+                            $imagePath = "/assets/images/appliances/" . $imageFile;
+                            $room = strtolower($a['category']); 
+                        ?>
+                            <div class="product-card"
+                                data-room="<?= $room ?>"
+                                data-name="<?= strtolower($a['type']) ?>"
+                                data-wattage="<?= $a['wattage'] ?>"
+                                data-energy="<?= $a['energy_consumption'] ?>">
+
+                                <div class="card-image">
+                                    <img src="<?= $imagePath ?>" alt="<?= htmlspecialchars($a['type']) ?>">
+                                </div>
+
+                                <div class="card-info">
+                                    <h4><?= htmlspecialchars($a['type']) ?></h4>
+                                    <p class="brand"><?= htmlspecialchars($a['brand']) ?></p>
+
+                                    <div class="specs">
+                                        <span><i class="fa-solid fa-bolt"></i> <?= $a['wattage'] ?> W</span>
+                                        <span><i class="fa-solid fa-plug"></i> <?= $a['energy_consumption'] ?> kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <div class="type-section" id="group-tv">
-                <h3 class="type-title">Television</h3>
-                <div class="product-grid">
-                    <div class="product-card" data-type="tv" data-room="living" data-wattage="140" data-energy="2" data-name="Sony Bravia 55">
-                        <div class="card-image"><img src="https://placehold.co/300x200/png?text=Smart+TV" alt="TV"></div>
-                        <div class="card-info">
-                            <h4>Sony Bravia 55"</h4>
-                            <span class="category-tag">Living Room</span>
-                            <div class="specs"><span><i class="fa-solid fa-bolt"></i> 140W</span><span><i class="fa-solid fa-plug"></i> 2kWh</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="type-section" id="group-fridge">
-                <h3 class="type-title">Refrigerator</h3>
-                <div class="product-grid">
-                    <div class="product-card" data-type="fridge" data-room="kitchen" data-wattage="120" data-energy="4" data-name="Samsung Inverter Ref">
-                        <div class="card-image"><img src="https://placehold.co/300x200/png?text=Fridge" alt="Fridge"></div>
-                        <div class="card-info">
-                            <h4>Samsung Inverter Ref</h4>
-                            <span class="category-tag">Kitchen</span>
-                            <div class="specs"><span><i class="fa-solid fa-bolt"></i> 120W</span><span><i class="fa-solid fa-plug"></i> 4kWh</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="type-section" id="group-small">
-                <h3 class="type-title">Small Appliances</h3>
-                <div class="product-grid">
-                    <div class="product-card" data-type="small" data-room="kitchen" data-wattage="300" data-energy="1" data-name="Oster Blender">
-                        <div class="card-image"><img src="https://placehold.co/300x200/png?text=Blender" alt="Blender"></div>
-                        <div class="card-info">
-                            <h4>Oster Blender</h4>
-                            <span class="category-tag">Kitchen</span>
-                            <div class="specs"><span><i class="fa-solid fa-bolt"></i> 300W</span><span><i class="fa-solid fa-plug"></i> 1kWh</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
-
     </main>
 </div>
 
 <div id="authModal" class="modal-overlay">
-        <div class="modal-box">
-            <span class="close-modal">&times;</span>
-            
-            <div class="modal-content">
-                <i class="fa-solid fa-lock" style="font-size: 3rem; color: orange; margin-bottom: 15px;"></i>
-                <h3>Login Required</h3>
-                <p>You need to sign in to view your profile, use the chat, or upload appliances.</p>
-                
-                <div class="modal-actions">
-                    <a href="/login" class="btn-login">Log In</a>
-                    <a href="/signup" class="btn-signup">Sign Up</a>
-                </div>
+    <div class="modal-box">
+        <span class="close-modal">&times;</span>
+        <div class="modal-content">
+            <i class="fa-solid fa-lock" style="font-size: 3rem; color: orange; margin-bottom: 15px;"></i>
+            <h3>Login Required</h3>
+            <p>You need to sign in to view your profile, use the chat, or upload appliances.</p>
+            <div class="modal-actions">
+                <a href="/login" class="btn-login">Log In</a>
+                <a href="/signup" class="btn-signup">Sign Up</a>
             </div>
         </div>
     </div>
+</div>
 
 <?php require __DIR__ . '/../others/footer.php'; ?>
 <script src="/assets/js/appliances.js"></script>

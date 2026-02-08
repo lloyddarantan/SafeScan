@@ -1,116 +1,117 @@
+
 let currentRoomFilter = 'all';
 
+// FILTER
+function toggleFilterMenu() {
+    const menu = document.getElementById("filterMenu");
+    menu.classList.toggle("show");
+}
+window.onclick = function(event) {
+    if (!event.target.matches('.filter-btn') && !event.target.closest('.filter-btn') && !event.target.closest('.filter-dropdown')) {
+        const dropdowns = document.getElementsByClassName("filter-dropdown");
+        for (let i = 0; i < dropdowns.length; i++) {
+            const openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+            }
+        }
+    }
+}
+
+// FILTERING LOGIX
 function filterAppliances() {
-//Get Values from Inputs
+    // Get all input values
     const searchText = document.getElementById('searchInput').value.toLowerCase();
     const sortValue = document.getElementById('sortFilter').value;
-    
-// Dropdown filters
     const typeValue = document.getElementById('typeFilter').value;
-    const wattValue = document.getElementById('wattageFilter').value;
+    const wattageValue = document.getElementById('wattageFilter').value;
     const energyValue = document.getElementById('energyFilter').value;
-    
-//Loop through each Section (The Groups)
+
+    const cards = Array.from(document.querySelectorAll('.product-card'));
     const groups = document.querySelectorAll('.type-section');
-    
+
+
+    cards.forEach(card => {
+
+        const room = card.getAttribute('data-room');
+
+        const name = (card.getAttribute('data-name') || '').toLowerCase();
+        const wattage = parseFloat(card.getAttribute('data-wattage'));
+        const energy = parseFloat(card.getAttribute('data-energy'));
+
+        let isVisible = true;
+        if (currentRoomFilter !== 'all' && room !== currentRoomFilter) {
+            isVisible = false;
+        }
+
+        if (searchText && !name.includes(searchText)) {
+            isVisible = false;
+        }
+
+        if (typeValue !== 'all') {
+            const cleanFilter = typeValue.replace(/-/g, ' ');
+            if (name !== cleanFilter && !name.includes(cleanFilter)) {
+                isVisible = false;
+            }
+        }
+
+        if (wattageValue === 'low' && wattage >= 200) 
+            isVisible = false;
+        if (wattageValue === 'high' && wattage < 200) 
+            isVisible = false;
+
+        if (energyValue === 'low' && energy >= 5) 
+            isVisible = false;
+        if (energyValue === 'high' && energy < 5) 
+            isVisible = false;
+
+        card.style.display = isVisible ? 'block' : 'none';
+        
+        if (isVisible) card.classList.add('visible-item');
+            else card.classList.remove('visible-item');
+    });
+
     groups.forEach(group => {
-        const cards = Array.from(group.getElementsByClassName('product-card'));
-        let visibleCount = 0;
+        const grid = group.querySelector('.product-grid');
+        const visibleCards = Array.from(group.querySelectorAll('.product-card.visible-item'));
 
-//Check visibility for each card
-        cards.forEach(card => {
-// Get Card Data
-            const name = card.getAttribute('data-name').toLowerCase();
-            const room = card.getAttribute('data-room');   // e.g., 'kitchen'
-            const type = card.getAttribute('data-type');   // e.g., 'tv'
-            const wattage = parseInt(card.getAttribute('data-wattage'));
-            const energy = parseInt(card.getAttribute('data-energy'));
+        visibleCards.sort((a, b) => {
+            const nameA = a.getAttribute('data-name').toLowerCase();
+            const nameB = b.getAttribute('data-name').toLowerCase();
 
-            let isVisible = true;
-
- // --- FILTER LOGIC ---
-            
-       //Sidebar Room Check
-            if (currentRoomFilter !== 'all' && room !== currentRoomFilter) isVisible = false;
-
-        //Dropdown Type Check (TV, AC, etc.)
-            if (typeValue !== 'all' && type !== typeValue) isVisible = false;
-
-        //Search Text
-            if (searchText && !name.includes(searchText)) isVisible = false;
-
-        // Wattage
-            if (wattValue === 'low' && wattage >= 200) isVisible = false;
-            if (wattValue === 'high' && wattage < 200) isVisible = false;
-
-         // Energy
-            if (energyValue === 'low' && energy >= 5) isVisible = false;
-            if (energyValue === 'high' && energy < 5) isVisible = false;
-
-         // Apply Visibility
-            card.style.display = isVisible ? 'block' : 'none';
-            if (isVisible) visibleCount++;
+            if (sortValue === 'az') 
+                return nameA.localeCompare(nameB);
+            if (sortValue === 'za') 
+                return nameB.localeCompare(nameA);
+            return 0;
         });
 
- //Hide the whole Group Header if no cards are visible inside it
-        group.style.display = visibleCount > 0 ? 'block' : 'none';
+        visibleCards.forEach(card => grid.appendChild(card));
 
-//Sort visible cards inside this group
-        if (visibleCount > 0) {
-            const visibleCards = cards.filter(c => c.style.display !== 'none');
-            visibleCards.sort((a, b) => {
-                const nameA = a.getAttribute('data-name').toLowerCase();
-                const nameB = b.getAttribute('data-name').toLowerCase();
-                if (sortValue === 'az') return nameA.localeCompare(nameB);
-                return nameB.localeCompare(nameA); // za
-            });
-        // Re-append cards in sorted order
-            const groupGrid = group.querySelector('.product-grid');
-            visibleCards.forEach(card => groupGrid.appendChild(card));
-        }
+        const hasVisible = visibleCards.length > 0;
+        group.style.display = hasVisible ? 'block' : 'none';
     });
 }
 
-// --- Sidebar Navigation Logic ---
+// TABS
 function switchTab(room, element) {
-    //Update visual active state on sidebar
     document.querySelectorAll('.sidebar .nav-item').forEach(el => el.classList.remove('active'));
     element.classList.add('active');
-
-    // Set the global room filter variable
     currentRoomFilter = room;
 
-    //Update Page Title
     const titles = {
         'all': 'All Appliances',
         'kitchen': 'Kitchen',
-        'living': 'Living Room',
+        'living room': 'Living Room',
         'bedroom': 'Bedroom'
     };
+    
     const titleEl = document.getElementById('pageTitle');
     if(titleEl) titleEl.innerText = titles[room] || 'Appliances';
-	
+
+        filterAppliances();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
     filterAppliances();
-}
-
-function toggleFilterMenu() {
-    document.getElementById('filterMenu').classList.toggle('show');
-}
-
-window.onclick = function(event) {
-    if (!event.target.matches('.filter-btn') && !event.target.closest('.filter-btn') && !event.target.closest('.filter-dropdown')) {
-        const menu = document.getElementById('filterMenu');
-        if (menu) menu.classList.remove('show');
-    }
-}
-
-document.addEventListener("DOMContentLoaded", function() {
-    const hash = window.location.hash.substring(1); 
-    
-    if(hash) {
-        const targetBtn = document.querySelector(`.sidebar .nav-item[onclick*="'${hash}'"]`);
-        if(targetBtn) {
-            targetBtn.click();
-        }
-    }
 });

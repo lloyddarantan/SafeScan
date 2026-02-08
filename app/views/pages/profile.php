@@ -150,21 +150,11 @@
     </div>
 </div>
 
-        <!-- MEMBERS SECTION -->
+        <!-- APPLIANCES SECTION -->
         <div id="section-members" class="content-section">
-            <h3 style="font-weight: 400; margin-bottom: 10px;">Members</h3>
+            <h3 style="font-weight: 400; margin-bottom: 10px;">Appliances</h3>
             <div class="member-grid">
-                <!-- Example member card -->
-                <div class="member-card">
-                    <i class="fa-regular fa-circle-user member-avatar"></i>
-                    <div class="member-info">
-                        <div class="member-name">
-                            <?= htmlspecialchars($user['first_name'] . ' ' . $user['last_name']); ?>
-                            <span class="badge-owner">Owner</span>
-                        </div>
-                        <span class="member-email"><?= htmlspecialchars($user['email']); ?></span>
-                    </div>
-                </div>
+                <!-- ADD LIKED APPLIANCES HERE -->
             </div>
         </div>
 

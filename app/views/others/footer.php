@@ -26,5 +26,4 @@
 
 <script src="/assets/js/modal.js"></script>
 <script src="/assets/js/loginvalidation.js"></script>
-</body>
-</html>
+

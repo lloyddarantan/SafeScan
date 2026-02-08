@@ -6,8 +6,8 @@ session_start();
 require_once __DIR__ . '/../app/Router.php';
 require_once __DIR__ . '/../app/controllers/HomeController.php';
 require_once __DIR__ . '/../app/controllers/ProfileController.php';
-require_once __DIR__ . '/../app/controllers/AppliancesController.php';
 require_once __DIR__ . '/../app/controllers/AuthController.php';
+require_once __DIR__ . '/../app/controllers/AppliancesController.php';
 
 $router = new Router();
 
@@ -52,7 +52,6 @@ $router->post('profile/update', function() {
 $router->post('profile/delete', function() {
     (new ProfileController())->delete();
 });
-
 
 $router->get('logout', function() {
     (new AuthController())->logout();
