@@ -25,6 +25,7 @@
 
 <title>SafeScan</title>
 <link rel="stylesheet" href="/assets/css/profile.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <div class="dashboard-container">
 
@@ -172,8 +173,20 @@
                         <th>Watts</th>
                     </tr>
                 </thead>
+<!-- working on -->
                 <tbody>
-                    <!-- Sample data -->
+                    <tr>
+						<td colspan="3" style="padding: 0; border: none;">
+
+							<div class="wip-container">
+								<div class="wip-icon-circle">
+									<i class="fa-solid fa-helmet-safety"></i>
+								</div>
+								<h3>Under Development</h3>
+								<p>We are currently working on this section.<br>Check back soon!</p>
+							</div>
+						</td>
+					</tr>
                 </tbody>
             </table>
         </div>
