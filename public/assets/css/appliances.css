@@ -1,20 +1,19 @@
-/* --- 1. GLOBAL RESET & SCROLL FIX --- */
+
 html, body {
     width: 100%;
     height: auto !important;
     min-height: 100vh;
     margin: 0;
     padding: 0;
-    overflow-y: auto !important; /* Force standard browser scroll */
+    overflow-y: auto !important;
     overflow-x: hidden;
     background-color: #f9f9f9;
     font-family: 'Kanit', sans-serif;
 }
 
-/* --- 2. CONTAINER (VERTICAL STACK LAYOUT) --- */
 .dashboard-container {
     display: flex;
-    flex-direction: column; /* THIS PUTS SIDEBAR ON TOP */
+    flex-direction: column;
     width: 90%;
     max-width: 1200px;
     margin: 40px auto;
@@ -22,16 +21,13 @@ html, body {
     min-height: 0;
 }
 
-/* --- 3. TOP NAVIGATION (Formerly Sidebar) --- */
 .sidebar {
-    width: 100%; /* Full width across the top */
-    background-color: #ffffff; /* White background looks cleaner on top */
+    width: 100%;
+    background-color: #ffffff;
     padding: 20px 30px;
     border-radius: 12px;
-    margin-bottom: 30px; /* Space between Nav and Content */
+    margin-bottom: 30px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.03);
-    
-    /* Make the links sit in a row */
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
@@ -46,9 +42,9 @@ html, body {
     cursor: pointer;
     font-size: 1rem;
     text-decoration: none;
-    border-radius: 20px; /* Pill shape */
+    border-radius: 20px;
     transition: all 0.2s ease;
-    background: #f4f4f4; /* Light grey background for tabs */
+    background: #f4f4f4;
 }
 
 .nav-item:hover {
@@ -61,21 +57,17 @@ html, body {
     font-weight: 500; 
 }
 
-/* --- 4. MAIN CONTENT --- */
 .main-content {
-    width: 100%; /* Full width */
+    width: 100%;
     background-color: #ffffff;
     padding: 40px;
     border-radius: 12px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.05);
     box-sizing: border-box;
-    
-    /* Standard flow - no height locks */
     height: auto !important;
     display: block;
 }
 
-/* --- HEADER & FILTERS --- */
 .header-row {
     display: flex;
     justify-content: space-between;
@@ -102,7 +94,6 @@ html, body {
     font-family: 'Kanit', sans-serif;
 }
 
-/* Filter Dropdown */
 .filter-container { position: relative; }
 .filter-dropdown {
     display: none; position: absolute; top: 110%; right: 0;
@@ -122,7 +113,6 @@ html, body {
 
 .product-grid {
     display: grid;
-    /* Responsive Grid: Cards will never be smaller than 220px */
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 25px;
     width: 100%;
@@ -199,9 +189,47 @@ html, body {
 
 /* --- MOBILE ADJUSTMENTS --- */
 @media (max-width: 700px) {
-    .header-row { flex-direction: column; align-items: flex-start; }
-    .controls-wrapper { width: 100%; flex-wrap: wrap; }
-    .search-box { width: 100%; }
-    .search-box input { width: 100%; box-sizing: border-box; }
-    .sidebar { justify-content: center; } /* Center nav items on phone */
+    .header-row { 
+        flex-direction: column; 
+        align-items: flex-start; 
+        gap: 15px;
+    }
+
+    .controls-wrapper { 
+        width: 100%; 
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .search-box { 
+        width: 100%; 
+    }
+    
+    .search-box input { 
+        width: 100%; 
+        box-sizing: border-box; 
+    }
+
+    .filter-container {
+        width: 100%;
+        display: block;
+    }
+
+    .filter-btn {
+        width: 100%;
+        text-align: center;
+        display: block;
+    }
+
+    .filter-dropdown {
+        width: 100%;
+        right: auto;
+        left: 0;
+        position: absolute;
+    }
+    
+    .sidebar { 
+        justify-content: center; 
+    }
 }
