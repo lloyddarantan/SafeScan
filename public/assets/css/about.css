@@ -148,10 +148,73 @@ h3 {
 }
 
 @media (max-width: 768px) {
+    .container {
+        padding: 30px 15px; 
+    }
+
+    .project-section {
+        padding: 30px 20px;
+        margin-bottom: 40px;
+    }
+
+    .project-title {
+        font-size: 1.8rem;
+    }
+
+    .project-subtitle {
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        margin-bottom: 15px;
+    }
+
+    .project-desc {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+	
+    .team-header {
+        margin-bottom: 30px;
+    }
+
+    .team-header h2 {
+        font-size: 1.6rem;
+    }
+    
+    .team-header p {
+        font-size: 0.9rem;
+    }
+
     .team-grid {
         grid-template-columns: 1fr;
+        gap: 25px;
+        margin-bottom: 40px;
     }
-    .project-title {
-        font-size: 2.2rem;
+
+    .member-card {
+        padding: 30px 20px;
+    }
+
+    .photo-container {
+        width: 130px;
+        height: 130px;
+        margin-bottom: 15px;
+    }
+
+    h3 {
+        font-size: 1.3rem;
+    }
+
+    .role-title {
+        font-size: 0.75rem;
+    }
+
+    .bio {
+        font-size: 0.9rem;
+    }
+    
+    .mission-statement {
+        padding: 20px 10px;
+        margin-top: 30px;
+        font-size: 0.85rem;
     }
 }
