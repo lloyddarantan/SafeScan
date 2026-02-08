@@ -6,8 +6,11 @@ session_start();
 require_once __DIR__ . '/../app/Router.php';
 require_once __DIR__ . '/../app/controllers/HomeController.php';
 require_once __DIR__ . '/../app/controllers/ProfileController.php';
+require_once __DIR__ . '/../app/controllers/AboutController.php';
 require_once __DIR__ . '/../app/controllers/AuthController.php';
 require_once __DIR__ . '/../app/controllers/AppliancesController.php';
+require_once __DIR__ . '/../app/controllers/ChatController.php';
+require_once __DIR__ . '/../app/controllers/UploadController.php';
 
 $router = new Router();
 
@@ -21,11 +24,19 @@ $router->get('profile', function() {
 });
 
 $router->get('about', function() {
-    echo "<h1>About Page</h1>";
+    (new AboutController())->index();
 });
 
 $router->get('appliances', function() {
     (new AppliancesController())->index();
+});
+
+$router->get('chat', function() {
+    (new ChatController())->index();
+});
+
+$router->get('upload', function() {
+    (new UploadController())->index();
 });
 
 // Auth routes
