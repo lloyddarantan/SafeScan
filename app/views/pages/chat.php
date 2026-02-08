@@ -19,8 +19,8 @@
         <h1 class="dev-title">Work in Progress</h1>
         
         <p class="dev-message">
-            We are currently working hard to bring this feature to life.<br>
-            Stay tuned for updates!
+            Our AI Safety Assistant is currently learning!<br>
+            Chat support will be online in the next update
         </p>
 
         <div class="button-group">

@@ -19,7 +19,6 @@
         exit;
     }
 
-    // $page = 'profile';
     require __DIR__ . '/../others/navigation.php';
  ?>
 
@@ -29,23 +28,19 @@
 
 <div class="dashboard-container">
 
-    <!-- SIDEBAR -->
     <aside class="sidebar">
         <a class="nav-item active" onclick="switchTab('profile', this)">My Profile</a>
-        <a class="nav-item" onclick="switchTab('members', this)">Members</a>
+        <a class="nav-item" onclick="switchTab('members', this)">My Saved Appliances</a>
         <a class="nav-item" onclick="switchTab('history', this)">History</a>
         <a class="nav-item danger" onclick="switchTab('delete', this)">Delete Account</a>
     </aside>
 
-    <!-- MAIN CONTENT -->
     <main class="main-content">
 
-        <!-- PROFILE SECTION -->
         <div id="section-profile" class="content-section active">
             <div class="header-row">
                 <span class="page-title">My Profile</span>
-                <!-- <span class="role-badge">USER</span> -->
-            </div>
+                </div>
 
             <div class="info-card">
                 <div class="profile-flex" style="justify-content: space-between;">
@@ -61,7 +56,6 @@
                 </div>
             </div>
 
-            <!-- PERSONAL INFORMATION -->
             <div class="info-card">
                 <div class="card-header">
                     <h3 class="card-title">Personal Information</h3>
@@ -90,7 +84,6 @@
                 </div>
             </div>
 
-            <!-- ADDRESS SECTION -->
             <div class="info-card">
                 <div class="card-header">
                     <h3 class="card-title">Address</h3>
@@ -114,52 +107,70 @@
                     </div>
                 </div>
             </div>
-
-			
-<!-- LOGOUT BUTTON -->
             <button class="logout-btn" onclick="openLogoutModal()">Log Out</button>
         </div>
-		
-<!-- LOGOUT MODAL -->
-<div id="logoutModal" class="modal-overlay">
-   	<div class="modal-content compact-modal" style="text-align: center; max-width: 400px;">
         
-        <div class="modal-header" style="border-bottom: none; justify-content: flex-end;">
-            <span class="close-modal" onclick="closeLogoutModal()">&times;</span>
-        </div>
+        <div id="logoutModal" class="modal-overlay">
+            <div class="modal-content compact-modal" style="text-align: center; max-width: 400px;">
+                
+                <div class="modal-header" style="border-bottom: none; justify-content: flex-end;">
+                    <span class="close-modal" onclick="closeLogoutModal()">&times;</span>
+                </div>
 
-        <div class="logout-content">
-            <div class="logout-icon-container">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <div class="logout-content">
+                    <div class="logout-icon-container">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </div>
+
+                    <h3>Sign Out</h3>
+                    
+                    <p class="logout-text">
+                        Are you sure you want to sign out of SafeScan?
+                    </p>
+                </div>
+
+                <div class="modal-footer" style="justify-content: center; gap: 10px; border-top: none; padding-top: 10px;">
+                    <button type="button" class="cancel-btn" onclick="closeLogoutModal()">
+                        Cancel
+                    </button>
+                    <a href="?logout=true" class="confirm-logout-btn">
+                        Log Out
+                    </a>
+                </div>
             </div>
-
-            <h3>Sign Out</h3>
-            
-            <p class="logout-text">
-                Are you sure you want to sign out of SafeScan?
-            </p>
         </div>
 
-        <div class="modal-footer" style="justify-content: center; gap: 10px; border-top: none; padding-top: 10px;">
-            <button type="button" class="cancel-btn" onclick="closeLogoutModal()">
-                Cancel
-            </button>
-            <a href="?logout=true" class="confirm-logout-btn">
-                Log Out
-            </a>
-        </div>
-    </div>
-</div>
-
-        <!-- APPLIANCES SECTION -->
         <div id="section-members" class="content-section">
-            <h3 style="font-weight: 400; margin-bottom: 10px;">Appliances</h3>
-            <div class="member-grid">
-                <!-- ADD LIKED APPLIANCES HERE -->
-            </div>
-        </div>
+            <h3 style="font-weight: 400; margin-bottom: 20px;">My Saved Appliances</h3>
+            
+            <div class="product-grid">
+                <?php if (!empty($savedAppliances)): ?>
+                    <?php foreach ($savedAppliances as $row): ?>
+                        <?php
+                        $imageFile = strtolower(str_replace(' ', '_', $row['type'])) . ".png";
+                        $imagePath = "/assets/images/appliances/" . $imageFile;
+                        ?>
+                        
+                        <div class="product-card">
+                            <div class="card-image">
+                                <img src="<?= $imagePath ?>" alt="<?= htmlspecialchars($row['type']) ?>">
+                            </div>
+                            <div class="card-info">
+                                <h4><?= htmlspecialchars($row['type']) ?></h4>
+                                <p class="brand"><?= htmlspecialchars($row['brand']) ?></p>
+                                <div class="specs">
+                                    <span><i class="fa-solid fa-bolt"></i> <?= $row['wattage'] ?> W</span>
+                                    <span><i class="fa-solid fa-plug"></i> <?= $row['energy_consumption'] ?> kWh</span>
+                                </div>
+                            </div>
+                        </div>
 
-        <!-- HISTORY SECTION -->
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p style='color: #666;'>You haven't saved any appliances yet.</p>
+                <?php endif; ?>
+            </div>
+         </div>
         <div id="section-history" class="content-section">
             <div class="table-header-row">
                 <span class="section-heading">History</span>
@@ -173,25 +184,23 @@
                         <th>Watts</th>
                     </tr>
                 </thead>
-<!-- working on -->
                 <tbody>
                     <tr>
-						<td colspan="3" style="padding: 0; border: none;">
+                        <td colspan="3" style="padding: 0; border: none;">
 
-							<div class="wip-container">
-								<div class="wip-icon-circle">
-									<i class="fa-solid fa-helmet-safety"></i>
-								</div>
-								<h3>Under Development</h3>
-								<p>We are currently working on this section.<br>Check back soon!</p>
-							</div>
-						</td>
-					</tr>
+                            <div class="wip-container">
+                                <div class="wip-icon-circle">
+                                    <i class="fa-solid fa-helmet-safety"></i>
+                                </div>
+                                <h3>Under Development</h3>
+                                <p>We are currently working on this section.<br>Check back soon!</p>
+                            </div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- DELETE ACCOUNT SECTION -->
         <div id="section-delete" class="content-section">
             <h2 style="color: #ff4d4d; margin-bottom: 20px;">Delete Account</h2>
             <p>Are you sure you want to delete your account? This action cannot be undone.</p> <br><br>
@@ -199,11 +208,9 @@
                 Delete My Account
             </button>
         </div>
-
     </main>
 </div>
 
-<!-- EDIT PROFILE MODAL -->
 <div id="editModal" class="modal-overlay">
     <div class="modal-content compact-modal">
         <div class="modal-header">
@@ -279,8 +286,7 @@
     </div>
 </div>
 
-<!-- delete account modal -->
-    <div id="deleteModal" class="modal-overlay">
+<div id="deleteModal" class="modal-overlay">
     <div class="modal-content compact-modal" style="text-align: center; max-width: 400px;">
         
         <div class="modal-header" style="border-bottom: none; justify-content: flex-end;">

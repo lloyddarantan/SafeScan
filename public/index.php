@@ -39,6 +39,9 @@ $router->get('upload', function() {
     (new UploadController())->index();
 });
 
+$router->post('favorite/toggle', function() {
+    (new AppliancesController())->toggleFavorite();
+});
 // Auth routes
 $router->get('login', function() {
     (new AuthController())->login();

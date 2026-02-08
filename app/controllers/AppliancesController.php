@@ -25,4 +25,33 @@ class AppliancesController {
 
         require_once __DIR__ . '/../views/pages/appliances.php';
     }
+
+    public function toggleFavorite() {
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+
+        require_once __DIR__ . '/../config/Database.php';
+
+        $db = Database::getInstance()->getConnection();
+
+        $user_id = $_SESSION['user_id'];
+        $appliance_id = $_POST['appliance_id'];
+
+        $check = $db->prepare("SELECT id FROM favorites WHERE user_id=? AND appliance_id=?");
+        $check->execute([$user_id, $appliance_id]);
+
+        if ($check->fetch()) {
+            $del = $db->prepare("DELETE FROM favorites WHERE user_id=? AND appliance_id=?");
+            $del->execute([$user_id, $appliance_id]);
+        } else {
+            $ins = $db->prepare("INSERT INTO favorites (user_id, appliance_id) VALUES (?,?)");
+            $ins->execute([$user_id, $appliance_id]);
+        }
+
+        header("Location: /appliances");
+        exit;
+    }
+
 }

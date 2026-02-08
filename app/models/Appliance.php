@@ -9,7 +9,8 @@ class Appliance {
     }
 
     public function getAllAppliances() {
-        $sql = "SELECT * FROM appliance ORDER BY type, brand";
+        $sql = "SELECT *, appliance_id AS id FROM appliance ORDER BY type, brand";
+        
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

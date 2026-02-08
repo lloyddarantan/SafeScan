@@ -4,6 +4,10 @@ require_once __DIR__ . '/../models/User.php';
 class ProfileController {
 
     public function index() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         if (!isset($_SESSION['user_id'])) {
             header("Location: /login");
             exit;
@@ -11,11 +15,16 @@ class ProfileController {
 
         $userModel = new User();
         $user = $userModel->getById($_SESSION['user_id']);
+        $savedAppliances = $userModel->getSavedAppliances($_SESSION['user_id']);
 
         require_once __DIR__ . '/../views/pages/profile.php';
     }
 
     public function update() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         if (!isset($_SESSION['user_id'])) {
             header("Location: /login");
             exit;
@@ -29,12 +38,12 @@ class ProfileController {
             'email'     => $_POST['email'],
             'contact'   => $_POST['contact'],
             'street'    => $_POST['street'],
-			'city'      => $_POST['city'],
+            'city'      => $_POST['city'],
             'province'  => $_POST['province'],
             'country'   => $_POST['country']
         ];
-		
-		if (!empty($_POST['new_password'])) {
+        
+        if (!empty($_POST['new_password'])) {
             $data['password'] = password_hash($_POST['new_password'], PASSWORD_DEFAULT);
         }
 
@@ -45,6 +54,10 @@ class ProfileController {
     }
 
     public function delete() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         if (!isset($_SESSION['user_id'])) {
             header("Location: /login");
             exit;

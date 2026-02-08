@@ -17,7 +17,7 @@ require __DIR__ . '/../others/navigation.php';
     </aside>
 
     <main class="main-content">
-
+        <div id = "main-appliances-list">
         <div class="header-row">
             <span class="page-title" id="pageTitle">All Appliances</span>
 
@@ -78,6 +78,28 @@ require __DIR__ . '/../others/navigation.php';
         </div>
 
         <div id="main-appliance-list">
+            
+            <?php 
+            // --- FIXED: Fetch Existing Likes (Correct Path & PDO) ---
+            $userId = $_SESSION['user_id'] ?? 0;
+            $likedItems = [];
+
+            if($userId > 0) {
+                // FIXED PATH: Went up two levels (../../) to find config/Database.php
+                require_once __DIR__ . '/../../config/Database.php';
+                
+                // Use PDO connection
+                $dbConn = Database::getInstance()->getConnection();
+                
+                $favStmt = $dbConn->prepare("SELECT appliance_id FROM favorites WHERE user_id = ?");
+                $favStmt->execute([$userId]);
+                
+                // Fetch simple array of IDs
+                $likedItems = $favStmt->fetchAll(PDO::FETCH_COLUMN);
+            }
+            // --------------------------------------------------------
+            ?>
+
             <?php if(isset($groupedAppliances)): ?>
                 <?php foreach ($groupedAppliances as $groupName => $items): ?>
                     <div class="type-section">
@@ -86,14 +108,24 @@ require __DIR__ . '/../others/navigation.php';
 
                         <?php foreach ($items as $a): 
                             $imageFile = strtolower(str_replace(' ', '_', $a['type'])) . ".png";
-                            $imagePath = "/assets/images/appliances/" . $imageFile;
+                            $imagePath = "/assets/img/appliances/" . $imageFile;
                             $room = strtolower($a['category']); 
+                            
+                            // Check if liked
+                            $isLiked = in_array($a['appliance_id'], $likedItems);
                         ?>
                             <div class="product-card"
                                 data-room="<?= $room ?>"
                                 data-name="<?= strtolower($a['type']) ?>"
                                 data-wattage="<?= $a['wattage'] ?>"
                                 data-energy="<?= $a['energy_consumption'] ?>">
+
+                               <form method="POST" action="/favorite/toggle" style="display:inline;">
+                                    <input type="hidden" name="appliance_id" value="<?= $a['appliance_id'] ?>">
+                                    <button type="submit" class="fav-btn <?= $isLiked ? 'active' : '' ?>">
+                                        <i class="<?= $isLiked ? 'fa-solid' : 'fa-regular' ?> fa-heart"></i>
+                                    </button>
+                                </form>
 
                                 <div class="card-image">
                                     <img src="<?= $imagePath ?>" alt="<?= htmlspecialchars($a['type']) ?>">

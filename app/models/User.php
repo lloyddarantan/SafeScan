@@ -83,6 +83,16 @@ class User {
             $sql = "DELETE FROM users WHERE user_id = ?";
             $stmt = $this->conn->prepare($sql);
             return $stmt->execute([$id]);
-        }
+    }
 
+   public function getSavedAppliances($userId) {
+    
+    $sql = "SELECT a.* FROM appliance a 
+            JOIN favorites f ON a.appliance_id = f.appliance_id 
+            WHERE f.user_id = ?";
+            
+    $stmt = $this->conn->prepare($sql); 
+    $stmt->execute([$userId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 }
