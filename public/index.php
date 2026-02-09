@@ -11,6 +11,7 @@ require_once __DIR__ . '/../app/controllers/AuthController.php';
 require_once __DIR__ . '/../app/controllers/AppliancesController.php';
 require_once __DIR__ . '/../app/controllers/ChatController.php';
 require_once __DIR__ . '/../app/controllers/UploadController.php';
+require_once __DIR__ . '/../app/controllers/AdminController.php';
 
 $router = new Router();
 
@@ -42,6 +43,25 @@ $router->get('upload', function() {
 $router->post('favorite/toggle', function() {
     (new AppliancesController())->toggleFavorite();
 });
+
+// ADMIN ROUTES
+
+$router->get('admin', function() {
+    (new AdminController())->index();
+});
+
+$router->post('admin/update_role', function() {
+    (new AdminController())->updateRole();
+});
+
+$router->post('admin/add_appliance', function() {
+    (new AdminController())->addAppliance();
+});
+
+$router->get('admin/delete_appliance', function() {
+    (new AdminController())->deleteAppliance();
+});
+
 // Auth routes
 $router->get('login', function() {
     (new AuthController())->login();
