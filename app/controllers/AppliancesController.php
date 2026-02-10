@@ -12,7 +12,6 @@ class AppliancesController {
 
         $db = Database::getInstance()->getConnection();
 
-        // Get liked appliances for current user
         $likedItems = [];
         if (isset($_SESSION['user_id'])) {
             $stmt = $db->prepare("SELECT appliance_id FROM favorites WHERE user_id = ?");
@@ -20,17 +19,21 @@ class AppliancesController {
             $likedItems = $stmt->fetchAll(PDO::FETCH_COLUMN);
         }
 
-        // Attach image path & favorite status to each appliance
         foreach ($appliances as &$a) {
-            $a['image'] = $this->getApplianceImage($a['brand'], $a['type']);
-            $a['isLiked'] = in_array($a['appliance_id'], $likedItems);
-        }
+			if (!empty($a['image']) && $a['image'] !== 'default.png') {
+				$a['image'] = '/assets/img/appliances/' . $a['image'];
+			} else {
+				$a['image'] = $this->getApplianceImage($a['brand'], $a['type']);
+			}
+
+			$a['isLiked'] = in_array($a['appliance_id'], $likedItems);
+		}
+		
         unset($a);
 
-        // Group appliances by "group" (Air Conditioner, Refrigerator, etc.)
         $groupedAppliances = [];
         foreach ($appliances as $a) {
-            $group = $a['group']; // <-- Use `group` field
+            $group = $a['group'];
 
             if (!isset($groupedAppliances[$group])) {
                 $groupedAppliances[$group] = [];
@@ -39,7 +42,6 @@ class AppliancesController {
             $groupedAppliances[$group][] = $a;
         }
 
-        // Sort groups alphabetically
         ksort($groupedAppliances, SORT_STRING | SORT_FLAG_CASE);
 
         require_once __DIR__ . '/../views/pages/appliances.php';
@@ -66,7 +68,8 @@ class AppliancesController {
             $ins->execute([$user_id, $appliance_id]);
         }
 
-        header("Location: /appliances");
+       $redirect = $_SERVER['HTTP_REFERER'] ?? '/appliances';
+        header("Location: " . $redirect);
         exit;
     }
 
