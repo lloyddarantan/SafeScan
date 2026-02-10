@@ -54,12 +54,37 @@ class AdminController {
 
     public function addAppliance() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            
+            $imageFilename = "default.png"; 
+
+            if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
+    
+			$uploadDir = __DIR__ . '/../../public/assets/img/appliances/';
+
+			if (!is_dir($uploadDir)) {
+				mkdir($uploadDir, 0777, true);
+			}
+
+			$fileExtension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+			$fileName = time() . '_' . uniqid() . '.' . $fileExtension;
+			$targetFilePath = $uploadDir . $fileName;
+
+			if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFilePath)) {
+				$imageFilename = $fileName;
+			} else {
+				error_log("Failed to move file to: " . $targetFilePath);
+			}
+		}
+
             $data = [
-                'brand' => $_POST['brand'],
-                'group' => $_POST['group'],
-                'type'  => $_POST['type'],
-                'watt'  => $_POST['watt'],
-                'cons'  => $_POST['cons']
+                'brand'       => $_POST['brand'],
+                'category'    => $_POST['category'],
+                'group'       => $_POST['group'],
+                'type'        => $_POST['type'],
+                'watt'        => $_POST['watt'],
+                'cons'        => $_POST['cons'],
+                'description' => $_POST['description'],
+                'image'       => $imageFilename
             ];
 
             $this->adminModel->createAppliance($data);
@@ -76,8 +101,8 @@ class AdminController {
             exit();
         }
     }
-	
-	public function updateProfile() {
+    
+    public function updateProfile() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             $id = $_SESSION['user_id'];
