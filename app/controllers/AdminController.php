@@ -76,5 +76,24 @@ class AdminController {
             exit();
         }
     }
+	
+	public function updateProfile() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            
+            $id = $_SESSION['user_id'];
+
+            $data = [
+                'first_name' => htmlspecialchars(trim($_POST['first_name'])),
+                'last_name'  => htmlspecialchars(trim($_POST['last_name'])),
+                'email'      => filter_var($_POST['email'], FILTER_SANITIZE_EMAIL),
+                'phone'      => htmlspecialchars(trim($_POST['phone']))
+            ];
+
+            $this->adminModel->updateAdminProfile($id, $data);
+            
+            header("Location: /admin");
+            exit();
+        }
+    }
 }
 ?>
