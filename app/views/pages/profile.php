@@ -146,15 +146,17 @@
             <div class="product-grid">
                 <?php if (!empty($savedAppliances)): ?>
                     <?php foreach ($savedAppliances as $row): ?>
-                        <?php
-                        $imageFile = strtolower(str_replace(' ', '_', $row['type'])) . ".png";
-                        $imagePath = "/assets/images/appliances/" . $imageFile;
-                        ?>
-                        
                         <div class="product-card">
                             <div class="card-image">
-                                <img src="<?= $imagePath ?>" alt="<?= htmlspecialchars($row['type']) ?>">
+                                <img src="<?= $row['image'] ?>" alt="<?= htmlspecialchars($row['type']) ?>">
                             </div>
+                            <form method="POST" action="/favorite/toggle">
+                                <input type="hidden" name="appliance_id" value="<?= $row['appliance_id'] ?>">
+                                <button type="submit" class="fav-btn active">
+                                    <i class="fa-solid fa-heart"></i>
+                                </button>
+                            </form>
+
                             <div class="card-info">
                                 <h4><?= htmlspecialchars($row['type']) ?></h4>
                                 <p class="brand"><?= htmlspecialchars($row['brand']) ?></p>
