@@ -17,136 +17,107 @@ require __DIR__ . '/../others/navigation.php';
     </aside>
 
     <main class="main-content">
-        <div id = "main-appliances-list">
-        <div class="header-row">
-            <span class="page-title" id="pageTitle">All Appliances</span>
+        <div id="main-appliances-list">
+            <div class="header-row">
+                <span class="page-title" id="pageTitle">All Appliances</span>
 
-            <div class="controls-wrapper">
-                <div class="search-box">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="searchInput" onkeyup="filterAppliances()" placeholder="Search..">
-                </div>
+                <div class="controls-wrapper">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="searchInput" onkeyup="filterAppliances()" placeholder="Search..">
+                    </div>
 
-                <div class="filter-container">
-                    <button class="filter-btn" onclick="toggleFilterMenu()">
-                        <i class="fa-solid fa-sliders"></i> Filter
-                    </button>
+                    <div class="filter-container">
+                        <button class="filter-btn" onclick="toggleFilterMenu()">
+                            <i class="fa-solid fa-sliders"></i> Filter
+                        </button>
 
-                    <div id="filterMenu" class="filter-dropdown">
-                        <div class="filter-group">
-                            <label>Sort</label>
-                            <select id="sortFilter" onchange="filterAppliances()">
-                                <option value="az">Alphabetical (A → Z)</option>
-                                <option value="za">Alphabetical (Z → A)</option>
-                            </select>
-                        </div>
+                        <div id="filterMenu" class="filter-dropdown">
+                            <div class="filter-group">
+                                <label>Sort</label>
+                                <select id="sortFilter" onchange="filterAppliances()">
+                                    <option value="az">Alphabetical (A → Z)</option>
+                                    <option value="za">Alphabetical (Z → A)</option>
+                                </select>
+                            </div>
 
-                        <div class="filter-group">
-                            <label>Category</label>
-                            <select id="typeFilter" onchange="filterAppliances()">
-                                <option value="all">All Types</option>
-                                <?php if(isset($groupedAppliances)): ?>
-                                    <?php foreach(array_keys($groupedAppliances) as $g): ?>
-                                        <option value="<?= strtolower(str_replace(' ', '-', $g)) ?>">
-                                            <?= htmlspecialchars($g) ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-                            </select>
-                        </div>
+                            <div class="filter-group">
+                                <label>Group</label>
+                                <select id="groupFilter" onchange="filterAppliances()">
+                                    <option value="all">All Groups</option>
+                                    <?php if(isset($groupedAppliances)): ?>
+                                        <?php foreach(array_keys($groupedAppliances) as $g): ?>
+                                            <option value="<?= strtolower(str_replace(' ', '-', $g)) ?>">
+                                                <?= htmlspecialchars($g) ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </select>
+                            </div>
 
-                        <div class="filter-group">
-                            <label>Wattage</label>
-                            <select id="wattageFilter" onchange="filterAppliances()">
-                                <option value="all">Any Wattage</option>
-                                <option value="low">Low wattage (&lt; 200W)</option>
-                                <option value="high">High wattage (&gt; 200W)</option>
-                            </select>
-                        </div>
+                            <div class="filter-group">
+                                <label>Wattage</label>
+                                <select id="wattageFilter" onchange="filterAppliances()">
+                                    <option value="all">Any Wattage</option>
+                                    <option value="low">Low (&lt; 200W)</option>
+                                    <option value="high">High (&gt; 200W)</option>
+                                </select>
+                            </div>
 
-                        <div class="filter-group">
-                            <label>Energy Consumption</label>
-                            <select id="energyFilter" onchange="filterAppliances()">
-                                <option value="all">Any Consumption</option>
-                                <option value="low">Low (&lt; 5kWh)</option>
-                                <option value="high">High (&gt; 5kWh)</option>
-                            </select>
+                            <div class="filter-group">
+                                <label>Energy Consumption</label>
+                                <select id="energyFilter" onchange="filterAppliances()">
+                                    <option value="all">Any Consumption</option>
+                                    <option value="low">Low (&lt; 5kWh)</option>
+                                    <option value="high">High (&gt; 5kWh)</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div id="main-appliance-list">
-            
-            <?php 
-            // --- FIXED: Fetch Existing Likes (Correct Path & PDO) ---
-            $userId = $_SESSION['user_id'] ?? 0;
-            $likedItems = [];
+            <div id="main-appliance-list">
+                <?php if(isset($groupedAppliances)): ?>
+                    <?php foreach ($groupedAppliances as $groupName => $items): ?>
+                        <div class="group-section">
+                            <h3 class="group-title"><?= htmlspecialchars($groupName) ?></h3>
+                            <div class="product-grid">
+                                <?php foreach ($items as $a): ?>
+                                    <div class="product-card"
+                                        data-room="<?= strtolower($a['category']) ?>"
+                                        data-group="<?= strtolower($groupName) ?>"
+                                        data-name="<?= strtolower($a['type']) ?>"
+                                        data-wattage="<?= $a['wattage'] ?>"
+                                        data-energy="<?= $a['energy_consumption'] ?>">
 
-            if($userId > 0) {
-                // FIXED PATH: Went up two levels (../../) to find config/Database.php
-                require_once __DIR__ . '/../../config/Database.php';
-                
-                // Use PDO connection
-                $dbConn = Database::getInstance()->getConnection();
-                
-                $favStmt = $dbConn->prepare("SELECT appliance_id FROM favorites WHERE user_id = ?");
-                $favStmt->execute([$userId]);
-                
-                // Fetch simple array of IDs
-                $likedItems = $favStmt->fetchAll(PDO::FETCH_COLUMN);
-            }
-            // --------------------------------------------------------
-            ?>
+                                        <form method="POST" action="/favorite/toggle" style="display:inline;">
+                                            <input type="hidden" name="appliance_id" value="<?= $a['appliance_id'] ?>">
+                                            <button type="submit" class="fav-btn <?= $a['isLiked'] ? 'active' : '' ?>">
+                                                <i class="<?= $a['isLiked'] ? 'fa-solid' : 'fa-regular' ?> fa-heart"></i>
+                                            </button>
+                                        </form>
 
-            <?php if(isset($groupedAppliances)): ?>
-                <?php foreach ($groupedAppliances as $groupName => $items): ?>
-                    <div class="type-section">
-                        <h3 class="type-title"><?= htmlspecialchars($groupName) ?></h3>
-                        <div class="product-grid">
+                                        <div class="card-image">
+                                            <img src="<?= $a['image'] ?>" alt="<?= htmlspecialchars($a['type']) ?>">
+                                        </div>
 
-                        <?php foreach ($items as $a): 
-                            $imageFile = strtolower(str_replace(' ', '_', $a['type'])) . ".png";
-                            $imagePath = "/assets/img/appliances/" . $imageFile;
-                            $room = strtolower($a['category']); 
-                            
-                            // Check if liked
-                            $isLiked = in_array($a['appliance_id'], $likedItems);
-                        ?>
-                            <div class="product-card"
-                                data-room="<?= $room ?>"
-                                data-name="<?= strtolower($a['type']) ?>"
-                                data-wattage="<?= $a['wattage'] ?>"
-                                data-energy="<?= $a['energy_consumption'] ?>">
+                                        <div class="card-info">
+                                            <h4><?= htmlspecialchars($a['type']) ?></h4>
+                                            <p class="brand"><?= htmlspecialchars($a['brand']) ?></p>
 
-                               <form method="POST" action="/favorite/toggle" style="display:inline;">
-                                    <input type="hidden" name="appliance_id" value="<?= $a['appliance_id'] ?>">
-                                    <button type="submit" class="fav-btn <?= $isLiked ? 'active' : '' ?>">
-                                        <i class="<?= $isLiked ? 'fa-solid' : 'fa-regular' ?> fa-heart"></i>
-                                    </button>
-                                </form>
-
-                                <div class="card-image">
-                                    <img src="<?= $imagePath ?>" alt="<?= htmlspecialchars($a['type']) ?>">
-                                </div>
-
-                                <div class="card-info">
-                                    <h4><?= htmlspecialchars($a['type']) ?></h4>
-                                    <p class="brand"><?= htmlspecialchars($a['brand']) ?></p>
-
-                                    <div class="specs">
-                                        <span><i class="fa-solid fa-bolt"></i> <?= $a['wattage'] ?> W</span>
-                                        <span><i class="fa-solid fa-plug"></i> <?= $a['energy_consumption'] ?> kWh</span>
+                                            <div class="specs">
+                                                <span><i class="fa-solid fa-bolt"></i> <?= $a['wattage'] ?> W</span>
+                                                <span><i class="fa-solid fa-plug"></i> <?= $a['energy_consumption'] ?> kWh</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                <?php endforeach; ?>
                             </div>
-                        <?php endforeach; ?>
-
                         </div>
-                    </div>
-                <?php endforeach; ?>
-            <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
         </div>
     </main>
 </div>
