@@ -59,8 +59,8 @@ require __DIR__ . '/../others/navigation.php';
                                 <label>Wattage</label>
                                 <select id="wattageFilter" onchange="filterAppliances()">
                                     <option value="all">Any Wattage</option>
-                                    <option value="low">Low (&lt; 200W)</option>
-                                    <option value="high">High (&gt; 200W)</option>
+                                    <option value="low">Low (&lt; 300W)</option>
+                                    <option value="high">High (&gt; 300W)</option>
                                 </select>
                             </div>
 
@@ -68,8 +68,8 @@ require __DIR__ . '/../others/navigation.php';
                                 <label>Energy Consumption</label>
                                 <select id="energyFilter" onchange="filterAppliances()">
                                     <option value="all">Any Consumption</option>
-                                    <option value="low">Low (&lt; 5kWh)</option>
-                                    <option value="high">High (&gt; 5kWh)</option>
+                                    <option value="low">Low (&lt; 2kWh)</option>
+                                    <option value="high">High (&gt; 3kWh)</option>
                                 </select>
                             </div>
                         </div>
