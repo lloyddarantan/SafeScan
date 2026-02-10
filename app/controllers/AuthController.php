@@ -20,6 +20,13 @@ class AuthController {
                 require __DIR__ . '/../views/auth/signup.php';
                 return;
             }
+			
+			$existingUser = $this->userModel->findByEmail($_POST['email']);
+            if ($existingUser) {
+                $error = "This email is already registered.";
+                require __DIR__ . '/../views/auth/signup.php';
+                return;
+            }
 
             $userData = [
                 'first_name' => $_POST['first_name'],
