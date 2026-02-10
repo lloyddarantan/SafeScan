@@ -69,11 +69,14 @@ class Admin {
     public function getAllAppliances() {
         $sql = "SELECT 
                     appliance_id, 
-                    brand, 
+                    brand,
+                    category,
                     `group` as 'group', 
                     type, 
                     wattage as watt, 
                     energy_consumption as cons, 
+                    description,
+                    image,
                     'N/A' as date 
                 FROM appliance 
                 ORDER BY appliance_id DESC";
@@ -82,19 +85,22 @@ class Admin {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function createAppliance($data) {
+   public function createAppliance($data) {
         $sql = "INSERT INTO appliance 
-                (brand, `group`, type, wattage, energy_consumption) 
-                VALUES (?, ?, ?, ?, ?)";
+                (brand, category, `group`, type, wattage, energy_consumption, description, image) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)"; 
 
         $stmt = $this->conn->prepare($sql);
 
         return $stmt->execute([
             $data['brand'],
+            $data['category'],
             $data['group'],
             $data['type'],
             $data['watt'],
-            $data['cons']
+            $data['cons'],
+            $data['description'],
+            $data['image']
         ]);
     }
 
