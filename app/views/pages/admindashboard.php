@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/assets/css/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-	<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='orange' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 8V6a2 2 0 0 1 2-2h2'/%3E%3Cpath d='M4 16v2a2 2 0 0 0 2 2h2'/%3E%3Cpath d='M16 4h2a2 2 0 0 1 2 2v2'/%3E%3Cpath d='M16 20h2a2 2 0 0 0 2-2v-2'/%3E%3Cline x1='4' y1='12' x2='20' y2='12'/%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='orange' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 8V6a2 2 0 0 1 2-2h2'/%3E%3Cpath d='M4 16v2a2 2 0 0 0 2 2h2'/%3E%3Cpath d='M16 4h2a2 2 0 0 1 2 2v2'/%3E%3Cpath d='M16 20h2a2 2 0 0 0 2-2v-2'/%3E%3Cline x1='4' y1='12' x2='20' y2='12'/%3E%3C/svg%3E">
 </head>
 <body>
 
@@ -98,33 +98,64 @@
     </div>
 
     <div id="users" class="view-section">
-        <div class="card">
+        <div class="card user-card">
             <div class="card-header">
                 <h2 class="card-title">User Management</h2>
-                <div class="search-wrapper">
-                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                    <input type="text" id="userSearch" class="search-box" placeholder="Search users..." onkeyup="searchTable('userSearch', 'usersTable')">
+
+                <div class="header-controls">
+                    <select id="userRoleFilter" class="filter-select" onchange="filterUsers()">
+                        <option value="">All Roles</option>
+                        <option value="Admin">Admin</option>
+                        <option value="User">User</option>
+                    </select>
+
+                    <select id="userSort" class="filter-select" onchange="sortUsers()">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="az">Name (A-Z)</option>
+                        <option value="za">Name (Z-A)</option>
+                    </select>
+
+                    <div class="search-wrapper">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="userSearch" class="search-box" placeholder="Search users..." onkeyup="filterUsers()">
+                    </div>
                 </div>
-            </div>
+                </div>
+
             <div class="table-container">
                 <table id="usersTable">
                     <thead>
-                        <tr><th>Name</th><th>Role</th><th>Location</th><th>Joined</th><th>Action</th></tr>
+                        <tr>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Location</th>
+                            <th>Joined</th>
+                            <th>Action</th>
+                        </tr>
                     </thead>
                     <tbody id="usersTableBody">
                         <?php if(!empty($data['users'])): ?>
                             <?php foreach($data['users'] as $u): ?>
-                            <tr>
-                                <td class="user-name"><strong><?php echo $u['name']; ?></strong></td>
-                                <td><span class="badge badge-<?php echo strtolower($u['role']); ?>"><?php echo $u['role']; ?></span></td>
-                                <td><?php echo $u['loc']; ?></td>
-                                <td><?php echo $u['joined']; ?></td>
-                                <td>
-                                    <button class="btn-action" onclick="openRoleModal(this, '<?php echo $u['user_id'] ?? ''; ?>')">
-                                        <i class="fa-solid fa-user-pen"></i> Edit
-                                    </button>
-                                </td>
-                            </tr>
+                                <tr class="user-row" 
+                                    data-name="<?= strtolower($u['name']) ?>" 
+                                    data-role="<?= $u['role'] ?>"
+                                    data-timestamp="<?= strtotime($u['joined']) ?>">
+
+                                    <td><strong><?= $u['name'] ?></strong></td>
+                                    <td>
+                                        <span class="badge badge-<?= strtolower($u['role']) ?>">
+                                            <?= $u['role'] ?>
+                                        </span>
+                                    </td>
+                                    <td><?= $u['loc'] ?></td>
+                                    <td><?= $u['joined'] ?></td>
+                                    <td>
+                                        <button class="btn-action" onclick="openRoleModal(this, '<?php echo $u['user_id'] ?? ''; ?>')">
+                                            <i class="fa-solid fa-user-pen"></i> Edit
+                                        </button>
+                                    </td>
+                                </tr>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </tbody>
@@ -134,9 +165,10 @@
     </div>
 
     <div id="appliances" class="view-section">
-        <div class="card">
+        <div class="card appliance-card">
             <div class="card-header">
                 <h2 class="card-title">Appliances Database</h2>
+
                 <div class="header-controls">
                     <select id="filterBrand" class="filter-select" onchange="filterApps()">
                         <option value="">All Brands</option>
@@ -155,27 +187,32 @@
                     </button>
                 </div>
             </div>
+
             <div class="table-container">
-                <table id="appTable">
+                <table>
                     <thead>
-                        <tr><th>Brand</th><th>Group</th><th>Model / Type</th><th>Wattage</th><th>Consumption (kWh)</th></tr>
+                    <tr>
+                        <th>Brand</th>
+                        <th>Group</th>
+                        <th>Model</th>
+                        <th>Watts</th>
+                        <th>Consumption</th>
+                    </tr>
                     </thead>
-                    <tbody id="appTableBody">
-                        <?php if(!empty($data['appliances'])): ?>
-                            <?php foreach($data['appliances'] as $app): ?>
+                    <tbody>
+                        <?php foreach($data['appliances'] as $app): ?>
                             <tr class="app-row" 
-                                data-brand="<?php echo htmlspecialchars($app['brand']); ?>" 
-                                data-group="<?php echo htmlspecialchars($app['group']); ?>"
-                                data-search="<?php echo htmlspecialchars(strtolower($app['brand'] . ' ' . $app['group'] . ' ' . $app['type'])); ?>">
+                                data-brand="<?= $app['brand'] ?>" 
+                                data-group="<?= $app['group'] ?>"
+                                data-search="<?= strtolower($app['brand'] . ' ' . $app['group'] . ' ' . $app['type']) ?>">
                                 
-                                <td><strong><?php echo $app['brand']; ?></strong></td>
-                                <td><?php echo $app['group']; ?></td>
-                                <td><?php echo $app['type']; ?></td>
-                                <td><?php echo $app['watt']; ?>W</td>
-                                <td><?php echo $app['cons']; ?></td>
+                                <td><strong><?= $app['brand'] ?></strong></td>
+                                <td><?= $app['group'] ?></td>
+                                <td><?= $app['type'] ?></td>
+                                <td><?= $app['watt'] ?>W</td>
+                                <td><?= $app['cons'] ?></td>
                             </tr>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
@@ -189,32 +226,32 @@
                 <i class="fa-solid fa-xmark close-modal" onclick="closeModal('modalProfile')"></i>
             </div>
             <form action="/admin/update_profile" method="POST">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>First Name</label>
-                        <input type="text" name="first_name" value="<?php echo $data['admin']['first_name']; ?>" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Last Name</label>
-                        <input type="text" name="last_name" value="<?php echo $data['admin']['last_name']; ?>" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Phone</label>
-                        <input type="text" name="phone" value="<?php echo $data['admin']['phone'] ?? ''; ?>">
-                    </div>
+				<div class="form-grid">
+					<div class="form-group">
+						<label>First Name</label>
+						<input type="text" name="first_name" value="<?php echo $data['admin']['first_name']; ?>" required>
+					</div>
+					<div class="form-group">
+						<label>Last Name</label>
+						<input type="text" name="last_name" value="<?php echo $data['admin']['last_name']; ?>" required>
+					</div>
 
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" name="email" value="<?php echo $data['admin']['email']; ?>" required>
-                    </div>
-                </div>
+					<div class="form-group">
+						<label>Phone</label>
+						<input type="text" name="phone" value="<?php echo $data['admin']['phone'] ?? ''; ?>">
+					</div>
 
-                <div class="modal-actions">
-                    <button type="button" class="btn-cancel" onclick="closeModal('modalProfile')">Cancel</button>
-                    <button type="submit" class="btn-add">Save</button>
-                </div>
-            </form>
+					<div class="form-group">
+						<label>Email</label>
+						<input type="email" name="email" value="<?php echo $data['admin']['email']; ?>" required>
+					</div>
+				</div>
+
+				<div class="modal-actions">
+					<button type="button" class="btn-cancel" onclick="closeModal('modalProfile')">Cancel</button>
+					<button type="submit" class="btn-add">Save Changes</button>
+				</div>
+			</form>
         </div>
     </div>
 
