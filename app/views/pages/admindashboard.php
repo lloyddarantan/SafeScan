@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -168,16 +166,16 @@
         <div class="card appliance-card">
             <div class="card-header">
                 <h2 class="card-title">Appliances Database</h2>
-
                 <div class="header-controls">
+                    <select id="filterCategory" class="filter-select" onchange="filterApps()">
+                        <option value="">All Categories</option>
+                    </select>
                     <select id="filterBrand" class="filter-select" onchange="filterApps()">
                         <option value="">All Brands</option>
                     </select>
-                    
                     <select id="filterGroup" class="filter-select" onchange="filterApps()">
                         <option value="">All Groups</option>
                     </select>
-
                     <div class="search-wrapper">
                         <i class="fa-solid fa-magnifying-glass search-icon"></i>
                         <input type="text" id="appSearch" class="search-box" placeholder="Search model..." onkeyup="filterApps()">
@@ -192,11 +190,12 @@
                 <table>
                     <thead>
                     <tr>
+                        <th>Category</th>
                         <th>Brand</th>
                         <th>Group</th>
                         <th>Model</th>
                         <th>Watts</th>
-                        <th>Consumption</th>
+                        <th>Cons (kWh)</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -204,8 +203,10 @@
                             <tr class="app-row" 
                                 data-brand="<?= $app['brand'] ?>" 
                                 data-group="<?= $app['group'] ?>"
-                                data-search="<?= strtolower($app['brand'] . ' ' . $app['group'] . ' ' . $app['type']) ?>">
+                                data-category="<?= $app['category'] ?>"
+                                data-search="<?= strtolower($app['brand'] . ' ' . $app['group'] . ' ' . $app['type'] . ' ' . $app['category']) ?>">
                                 
+                                <td><?= $app['category'] ?></td>
                                 <td><strong><?= $app['brand'] ?></strong></td>
                                 <td><?= $app['group'] ?></td>
                                 <td><?= $app['type'] ?></td>
@@ -219,7 +220,7 @@
         </div>
     </div>
 
-    <div id="modalProfile" class="modal-overlay" onclick="handleOutsideClick(event, 'modalProfile')">
+    <div id="modalProfile" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Edit Profile</h3>
@@ -255,24 +256,74 @@
         </div>
     </div>
 
-    <div id="modalAppliance" class="modal-overlay" onclick="handleOutsideClick(event, 'modalAppliance')">
+    <div id="modalAppliance" class="modal-overlay">
         <div class="modal-content">
-            <div class="modal-header"><h3>Add Appliance</h3><i class="fa-solid fa-xmark close-modal" onclick="closeModal('modalAppliance')"></i></div>
-            <form action="/admin/add_appliance" method="POST">
+            <div class="modal-header">
+                <h3>Add Appliance</h3>
+                <i class="fa-solid fa-xmark close-modal" onclick="closeModal('modalAppliance')"></i>
+            </div>
+            
+            <form action="/admin/add_appliance" method="POST" enctype="multipart/form-data">
+                
                 <div class="form-grid">
                     <div class="form-group"><label>Brand</label><input type="text" name="brand" required></div>
-                    <div class="form-group"><label>Category</label>
-                        <select name="group">
+                    
+                    <div class="form-group">
+                        <label>Category (Room)</label>
+                        <select name="category" required>
+                            <option value="" disabled selected>Select Room</option>
+                            <option value="Living Room">Living Room</option>
+                            <option value="Bedroom">Bedroom</option>
+                            <option value="Kitchen">Kitchen</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group"><label>Group (Type)</label>
+                        <select name="group" required>
+                            <option value="" disabled selected>Select Type</option>
                             <option value="Air Conditioner">Air Conditioner</option>
                             <option value="Refrigerator">Refrigerator</option>
                             <option value="TV">TV</option>
                             <option value="Fan">Fan</option>
+                            <option value="Small Appliances">Small Appliances</option>
                         </select>
                     </div>
-                    <div class="form-group full-width"><label>Model</label><input type="text" name="type" required></div>
+
+                    <div class="form-group"><label>Model</label><input type="text" name="type" required></div>
                     <div class="form-group"><label>Watts</label><input type="number" name="watt" required></div>
                     <div class="form-group"><label>Consumption (kWh)</label><input type="text" name="cons" required></div>
+                    
+                    <div class="form-group full-width">
+						<label>Appliance Photo</label>
+
+						<div class="photo-upload-container">
+							<input type="file" 
+								   name="image" 
+								   id="hiddenFileInput" 
+								   accept="image/*" 
+								   onchange="handleFileSelect(event)" 
+								   style="display: none;">
+
+							<div class="preview-card" onclick="document.getElementById('hiddenFileInput').click()">
+								<div class="upload-hint" id="uploadHint">
+									<i class="fa-solid fa-cloud-arrow-up"></i>
+									<span>Click to upload</span>
+								</div>
+								<img id="previewImage" src="" alt="Preview">
+							</div>
+
+							<button type="button" class="btn-remove-photo" id="removePhotoBtn" onclick="removePhoto()">
+								<i class="fa-solid fa-trash"></i> Remove Image
+							</button>
+						</div>
+					</div>
+
+                    <div class="form-group full-width" style="grid-column: span 2;">
+                        <label>Description</label>
+                        <textarea name="description" rows="3" placeholder="Enter details..." style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"></textarea>
+                    </div>
                 </div>
+
                 <div class="modal-actions">
                     <button type="button" class="btn-cancel" onclick="closeModal('modalAppliance')">Cancel</button>
                     <button type="submit" class="btn-add">Save</button>
@@ -281,7 +332,7 @@
         </div>
     </div>
 
-    <div id="modalRole" class="modal-overlay" onclick="handleOutsideClick(event, 'modalRole')">
+    <div id="modalRole" class="modal-overlay">
         <div class="modal-content" style="max-width: 450px;">
             <div class="modal-header">
                 <h3>Edit User Role</h3>
@@ -308,4 +359,3 @@
 
     <script src="/assets/js/admin.js"></script>
 </body>
-</html>
