@@ -66,7 +66,8 @@ class AppliancesController {
             $ins->execute([$user_id, $appliance_id]);
         }
 
-        header("Location: /appliances");
+       $redirect = $_SERVER['HTTP_REFERER'] ?? '/appliances';
+        header("Location: " . $redirect);
         exit;
     }
 
