@@ -50,6 +50,10 @@ $router->get('admin', function() {
     (new AdminController())->index();
 });
 
+$router->post('admin/update_profile', function() {
+    (new AdminController())->updateProfile();
+});
+
 $router->post('admin/update_role', function() {
     (new AdminController())->updateRole();
 });
