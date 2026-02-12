@@ -82,7 +82,6 @@
                     <a href="/appliances#bedroom" class="btn-view">View</a>
                 </div>
             </div>
-
         </div>
     </section>
 
