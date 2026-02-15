@@ -14,10 +14,10 @@
 
         <div class="footer-links">
             <a href="/?url=home">Home</a>
-            <a href="/?url=works">Services</a>
+            <a href="/?url=services">Services</a>
             <a href="/?url=about">About</a>
-            <a href="#">Terms</a>
-            <a href="#">Privacy Policy</a>
+            <a href="/?url=terms">Terms</a>
+            <a href="/?url=privacypolicy">Privacy Policy</a>
         </div>
 
         <p class="copyright">Safe Scan © 2026</p>
