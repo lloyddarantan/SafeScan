@@ -7,6 +7,9 @@ require_once __DIR__ . '/../app/Router.php';
 require_once __DIR__ . '/../app/controllers/HomeController.php';
 require_once __DIR__ . '/../app/controllers/ProfileController.php';
 require_once __DIR__ . '/../app/controllers/AboutController.php';
+require_once __DIR__ . '/../app/controllers/ServicesController.php';
+require_once __DIR__ . '/../app/controllers/PrivacyController.php';
+require_once __DIR__ . '/../app/controllers/TermsController.php';
 require_once __DIR__ . '/../app/controllers/AuthController.php';
 require_once __DIR__ . '/../app/controllers/AppliancesController.php';
 require_once __DIR__ . '/../app/controllers/ChatController.php';
@@ -26,6 +29,18 @@ $router->get('profile', function() {
 
 $router->get('about', function() {
     (new AboutController())->index();
+});
+
+$router->get('services', function() {
+    (new ServicesController())->index();
+});
+
+$router->get('privacypolicy', function() {
+    (new PrivacyController())->index();
+});
+
+$router->get('terms', function() {
+    (new TermsController())->index();
 });
 
 $router->get('appliances', function() {
