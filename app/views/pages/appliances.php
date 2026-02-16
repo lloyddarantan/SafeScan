@@ -172,7 +172,7 @@ require __DIR__ . '/../others/navigation.php';
 <div id="applianceDetailModal" class="modal-overlay">
     <div class="modal-box detail-modal-box">
         
-        <div class="close-modal" onclick="closeApplianceModal()">
+        <div class="close-modal-modal" onclick="closeApplianceModal()">
             <i class="fa-solid fa-xmark"></i>
         </div>
 
