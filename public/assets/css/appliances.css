@@ -227,6 +227,11 @@ body.modal-open {
 .modal-content p { color: #666; margin-bottom: 25px; font-size: 1rem; line-height: 1.5; }
 
 .close-modal {
+    position: absolute; top: 15px; right: 20px;
+	font-size: 28px; color: #ccc; cursor: pointer;
+}
+
+.close-modal-modal {
     position: absolute;
     top: 25px;
     right: 25px;
@@ -244,7 +249,9 @@ body.modal-open {
     transition: all 0.2s ease;
 }
 
-.close-modal:hover {
+.close-modal:hover { color: #333; }
+
+.close-modal-modal:hover {
     background: #ff6b6b;
     color: white;
     transform: rotate(90deg);
