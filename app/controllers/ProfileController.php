@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../models/User.php';
 
 class ProfileController {
-
+    
     public function index() {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -79,21 +79,19 @@ class ProfileController {
     }
 
     private function getApplianceImage($brand, $type) {
-    $slug = strtolower($brand . '_' . $type);
-    $slug = preg_replace('/[^a-z0-9\.]+/', '_', $slug);
-    $slug = trim($slug, '_');
+        $slug = strtolower($brand . '_' . $type);
+        $slug = preg_replace('/[^a-z0-9\.]+/', '_', $slug);
+        $slug = trim($slug, '_');
 
-    $serverPath = __DIR__ . '/../../public/assets/img/appliances/';
-    $webPath    = '/assets/img/appliances/';
+        $serverPath = __DIR__ . '/../../public/assets/img/appliances/';
+        $webPath    = '/assets/img/appliances/';
 
-    foreach (['png', 'jpg', 'jpeg'] as $ext) {
-        if (file_exists($serverPath . $slug . '.' . $ext)) {
-            return $webPath . $slug . '.' . $ext;
+        foreach (['png', 'jpg', 'jpeg'] as $ext) {
+            if (file_exists($serverPath . $slug . '.' . $ext)) {
+                return $webPath . $slug . '.' . $ext;
+            }
         }
+
+        return $webPath . 'default.png';
     }
-
-    return $webPath . 'default.png';
-}
-
-
 }
