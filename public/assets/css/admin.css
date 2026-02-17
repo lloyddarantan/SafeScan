@@ -600,6 +600,93 @@ tr:hover td {
   overflow-y: auto;
 }
 
+.compact-modal {
+    max-width: 420px; /* Keeps the modal box nice and small */
+    text-align: center;
+    padding: 40px 30px; 
+    position: relative; /* Needed to position the X button */
+}
+
+/* Absolute positioning for the X so it sits in the corner */
+.close-absolute {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 1.25rem;
+    color: #94a3b8;
+}
+
+.danger-icon-container {
+    width: 70px;
+    height: 70px;
+    background-color: #fee2e2; /* Light red/pink background */
+    color: #ef4444; /* Bright red icon */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px auto; /* Centers the circle */
+    font-size: 2rem;
+}
+
+.delete-content h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 12px;
+}
+
+.delete-warning-text {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.delete-warning-text strong {
+    color: #ef4444; /* Makes the word 'cannot' red like the picture */
+}
+
+.modal-footer {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+}
+
+.cancel-btn {
+    flex: 1; /* Makes both buttons the exact same width */
+    padding: 12px 10px;
+    background-color: #f1f5f9;
+    color: #475569;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.cancel-btn:hover {
+    background-color: #e2e8f0;
+}
+
+.delete-confirm-btn {
+    flex: 1;
+    padding: 12px 10px;
+    background-color: #ff4d4d; /* Bright red button */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.delete-confirm-btn:hover {
+    background-color: #f83131;
+}
+
 @keyframes slideUp {
   from { transform: translateY(20px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }

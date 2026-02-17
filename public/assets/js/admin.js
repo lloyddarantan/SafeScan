@@ -258,3 +258,61 @@ function handleEditFileSelect(event) {
         reader.readAsDataURL(file);
     }
 }
+
+// Store the ID of the appliance we want to delete
+let currentDeleteId = null;
+
+// Open the modal and save the ID
+function openDeleteModal(applianceId) {
+    currentDeleteId = applianceId;
+    openModal('deleteModal'); 
+}
+
+// Close the modal and reset the ID
+function closeDeleteModal() {
+    currentDeleteId = null;
+    closeModal('deleteModal'); 
+}
+
+// 1. Helper function to remember we were on the Appliances tab
+function keepApplianceTabOpen() {
+    sessionStorage.setItem('reopenSection', 'appliances');
+}
+
+// 2. Updated confirmDelete function
+function confirmDelete() {
+    if (currentDeleteId) {
+        keepApplianceTabOpen(); // Save state before redirect
+        window.location.href = '/admin/delete_appliance?id=' + currentDeleteId;
+    }
+}
+
+// 3. Handle page reloads and form submissions
+document.addEventListener("DOMContentLoaded", function() {
+    
+    // --- PART A: Attach memory to Add and Edit Forms ---
+    // This ensures that when you add or edit, it stays on the appliances tab too
+    const addForm = document.querySelector('form[action="/admin/add_appliance"]');
+    const editForm = document.querySelector('form[action="/admin/edit_appliance"]');
+    
+    if (addForm) addForm.addEventListener('submit', keepApplianceTabOpen);
+    if (editForm) editForm.addEventListener('submit', keepApplianceTabOpen);
+
+
+    // --- PART B: Auto-switch back to Appliances tab if memory exists ---
+    let sectionToReopen = sessionStorage.getItem('reopenSection');
+    
+    if (sectionToReopen === 'appliances') {
+        // Find the Appliances tab element by looking for the word "Appliances"
+        let applianceTabBtn = Array.from(document.querySelectorAll('.tab-link'))
+                                   .find(tab => tab.textContent.includes('Appliances'));
+        
+        if (applianceTabBtn) {
+            // Use your existing switchTab function to change the view instantly
+            switchTab('appliances', applianceTabBtn);
+        }
+        
+        // Clear the memory so it behaves normally next time you visit the page
+        sessionStorage.removeItem('reopenSection'); 
+    }
+});

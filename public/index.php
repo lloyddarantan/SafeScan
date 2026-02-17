@@ -79,6 +79,10 @@ $router->get('admin/delete_appliance', function() {
     (new AdminController())->deleteAppliance();
 });
 
+$router->post('admin/edit_appliance', function() {
+    (new AdminController())->editAppliance();
+});
+
 // Auth routes
 $router->get('login', function() {
     (new AuthController())->login();

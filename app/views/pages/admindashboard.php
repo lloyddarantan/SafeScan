@@ -213,7 +213,8 @@
 							<tr class="app-row" 
 								data-brand="<?= $app['brand'] ?>" 
 								data-group="<?= $app['group'] ?>" 
-								data-category="<?= $app['category'] ?>">
+								data-category="<?= $app['category'] ?>"
+                                data-search="<?= strtolower($app['brand'] . ' ' . $app['group'] . ' ' . $app['type'] . ' ' . $app['category']) ?>">
 
 								<td class="tile-image">
 									<img src="<?= $app['image_path'] ?>" alt="<?= $app['brand'] ?>" />
@@ -237,12 +238,13 @@
 										<i class="fa-solid fa-pen-to-square"></i>
 									</button>
 
-									<a href="/admin/delete_appliance?id=<?= $app['appliance_id'] ?>" 
-									   class="btn-action delete-btn" 
-									   title="Delete"
-									   onclick="return confirm('Are you sure you want to delete this appliance?');">
-										<i class="fa-solid fa-trash"></i>
-									</a>
+									<a href="javascript:void(0);" 
+                                        class="btn-action delete-btn" 
+                                        title="Delete"
+                                        onclick="openDeleteModal(<?= $app['appliance_id'] ?>)">
+                                            <i class="fa-solid fa-trash"></i>
+                                    </a>
+
 								</td>
 							</tr>
 						<?php endforeach; ?>
@@ -462,6 +464,31 @@
         </form>
     </div>
 </div>
+
+<div id="deleteModal" class="modal-overlay">
+    <div class="modal-content compact-modal delete-content">
+        <i class="fa-solid fa-xmark close-modal close-absolute" onclick="closeDeleteModal()"></i>
+
+        <div class="danger-icon-container">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        
+        <h3>Delete Appliance?</h3>
+        <p class="delete-warning-text">
+            You are about to permanently delete this appliance. 
+            <br>This action <strong>cannot</strong> be undone.
+        </p>
+        <div class="modal-footer">
+            <button class="cancel-btn" onclick="closeDeleteModal()">
+                Keep Appliance
+            </button>
+            <button class="delete-confirm-btn" onclick="confirmDelete()">
+                Yes, Delete
+            </button>
+        </div>
+    </div>
+</div>
+
 
     <script src="/assets/js/admin.js"></script>
 </body>
