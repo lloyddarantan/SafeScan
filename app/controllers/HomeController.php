@@ -1,15 +1,8 @@
 <?php
 class HomeController {
-    public function __construct() {
+    public function index() {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
-        }
-    }
-
-    public function index() {
-        if (!isset($_SESSION['user_id'])) {
-            header("Location: /login");
-            exit();
         }
 
         if (isset($_SESSION['role']) && $_SESSION['role'] === 'Admin') {
@@ -21,4 +14,3 @@ class HomeController {
         require_once __DIR__ . '/../views/pages/home.php';
     }
 }
-?>
