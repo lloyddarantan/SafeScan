@@ -102,7 +102,7 @@ require __DIR__ . '/../others/navigation.php';
                                 ?>
                                     <div class="product-card <?= $visibilityClass ?>"
                                          onclick="openApplianceModal(this)"
-                                         data-room="<?= strtolower(str_replace('_',' ', $a['category'])) ?>"
+                                         data-room="<?= strtolower($a['category']) ?>"
                                          data-group="<?= strtolower($groupName) ?>"
                                          data-name="<?= strtolower($a['type']) ?>"
                                          data-brand="<?= htmlspecialchars($a['brand']) ?>"
@@ -111,12 +111,18 @@ require __DIR__ . '/../others/navigation.php';
                                          data-img="<?= $a['image'] ?>"
                                          data-display-name="<?= htmlspecialchars($a['type']) ?>">
 
-                                        <form method="POST" action="/favorite/toggle" style="display:inline;" onclick="event.stopPropagation()">
-                                            <input type="hidden" name="appliance_id" value="<?= $a['appliance_id'] ?>">
-                                            <button type="submit" class="fav-btn <?= $a['isLiked'] ? 'active' : '' ?>">
-                                                <i class="<?= $a['isLiked'] ? 'fa-solid' : 'fa-regular' ?> fa-heart"></i>
+                                        <?php if (isset($isLoggedIn) && $isLoggedIn): ?>
+										<form method="POST" action="/favorite/toggle" style="display:inline;" onclick="event.stopPropagation()">
+											<input type="hidden" name="appliance_id" value="<?= $a['appliance_id'] ?>">
+											<button type="submit" class="fav-btn <?= $a['isLiked'] ? 'active' : '' ?>">
+												<i class="<?= $a['isLiked'] ? 'fa-solid' : 'fa-regular' ?> fa-heart"></i>
+											</button>
+										</form>
+                                        <?php else: ?>
+                                            <button type="button" class="fav-btn login-trigger" onclick="event.stopPropagation()">
+                                                <i class="fa-regular fa-heart"></i>
                                             </button>
-                                        </form>
+                                        <?php endif; ?>
 
                                         <div class="card-image">
                                             <img src="<?= $a['image'] ?>" alt="<?= htmlspecialchars($a['type']) ?>">
