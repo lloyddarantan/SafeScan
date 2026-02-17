@@ -214,12 +214,10 @@ function removePhoto() {
 }
 
 function setApplianceView(viewType, btn) {
-    // Toggle active button
     const buttons = btn.parentElement.querySelectorAll('.btn-view');
     buttons.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
 
-    // Get appliance table container
     const container = document.querySelector('#appliances .table-container');
 
     if (!container) return;
@@ -228,5 +226,35 @@ function setApplianceView(viewType, btn) {
         container.classList.add('grid-view');
     } else {
         container.classList.remove('grid-view');
+    }
+}
+
+function openEditAppliance(data) {
+    document.getElementById('edit_appliance_id').value = data.appliance_id;
+    document.getElementById('edit_brand').value = data.brand;
+    document.getElementById('edit_type').value = data.type;
+    document.getElementById('edit_watt').value = data.watt;
+    document.getElementById('edit_cons').value = data.cons;
+    document.getElementById('edit_safety_reminder').value = data.safety_reminder;
+    document.getElementById('edit_hazards').value = data.hazards;
+    document.getElementById('edit_current_image').value = data.image;
+
+    document.getElementById('edit_category').value = data.category;
+    document.getElementById('edit_group').value = data.group;
+
+    const preview = document.getElementById('editPreviewImage');
+    preview.src = data.image_path || '/assets/img/appliances/' + data.image;
+
+    openModal('modalEditAppliance');
+}
+
+function handleEditFileSelect(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('editPreviewImage').src = e.target.result;
+        }
+        reader.readAsDataURL(file);
     }
 }
