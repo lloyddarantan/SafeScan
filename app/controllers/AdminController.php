@@ -109,7 +109,8 @@ class AdminController {
                 'type'        => $_POST['type'],
                 'watt'        => $_POST['watt'],
                 'cons'        => $_POST['cons'],
-                'description' => $_POST['description'],
+                'safety_reminder' => $_POST['safety_reminder'] ?? '',
+                'hazards'         => $_POST['hazards'] ?? '',
                 'image'       => $imageFilename
             ];
 
@@ -163,5 +164,42 @@ class AdminController {
 
         return $webPath . 'default.png';
     }
+	public function editAppliance() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $imageFilename = $_POST['current_image']; 
+
+            if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
+                $uploadDir = __DIR__ . '/../../public/assets/img/appliances/';
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0777, true);
+                }
+                $fileExtension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+                $fileName = time() . '_' . uniqid() . '.' . $fileExtension;
+                $targetFilePath = $uploadDir . $fileName;
+
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFilePath)) {
+                    $imageFilename = $fileName;
+                }
+            }
+
+            $data = [
+                'appliance_id'    => $_POST['appliance_id'],
+                'brand'           => $_POST['brand'],
+                'category'        => $_POST['category'],
+                'group'           => $_POST['group'],
+                'type'            => $_POST['type'],
+                'watt'            => $_POST['watt'],
+                'cons'            => $_POST['cons'],
+                'safety_reminder' => $_POST['safety_reminder'] ?? '',
+                'hazards'         => $_POST['hazards'] ?? '',
+                'image'           => $imageFilename
+            ];
+
+            $this->adminModel->updateAppliance($data);
+            header("Location: /admin");
+            exit();
+        }
+    }
 }
+
 ?>
