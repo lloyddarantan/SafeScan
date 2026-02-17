@@ -746,6 +746,116 @@ input[type="file"]:hover::-webkit-file-upload-button {
     border-color: #fca5a5;
 }
 
+/* --- View Toggle Buttons --- */
+.view-toggles {
+    display: flex;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px;
+    gap: 4px;
+}
+
+.btn-view {
+    background: transparent;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.btn-view:hover {
+    background-color: #f1f5f9;
+    color: var(--primary);
+}
+
+.btn-view.active {
+    background-color: var(--primary-light);
+    color: var(--primary);
+}
+
+.table-container.grid-view table {
+    display: block;
+}
+
+.table-container.grid-view thead {
+    display: none;
+}
+
+.table-container.grid-view tbody {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+    padding: 4px;
+}
+
+.table-container.grid-view tr {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    transition: transform 0.2s, box-shadow 0.2s;
+    gap: 8px;
+}
+
+.table-container.grid-view tr:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary);
+}
+
+.table-container.grid-view td {
+    border: none;
+    padding: 0;
+    display: block;
+    width: 100%;
+    text-align: left;
+}
+
+.table-container.grid-view td:nth-child(1) {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.table-container.grid-view td:nth-child(2) {
+    font-size: 1.1rem;
+    color: var(--text-main);
+    margin-bottom: 2px;
+}
+
+.table-container.grid-view td:nth-child(3) {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed var(--border);
+}
+
+.table-container.grid-view td:nth-child(4)::before { content: "Model: "; color: #94a3b8; }
+.table-container.grid-view td:nth-child(5)::before { content: "Power: "; color: #94a3b8; }
+.table-container.grid-view td:nth-child(6)::before { content: "Cons: "; color: #94a3b8; }
+
+.table-container.grid-view td:nth-child(4),
+.table-container.grid-view td:nth-child(5),
+.table-container.grid-view td:nth-child(6) {
+    font-size: 0.85rem;
+    display: flex;
+    justify-content: space-between;
+}
+
 @media (min-width: 640px) {
   .modal-content {
     padding: 32px;
