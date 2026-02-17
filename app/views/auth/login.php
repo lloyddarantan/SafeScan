@@ -38,9 +38,9 @@
             </div>
 
             <div class="left-content">
-                <h2>Next Generation</h2>
-                <h2 class="highlight">Electric Scanning Technology</h2>
-                <p>Experience the fastest, most accurate electric scanning powered by advanced neural networks.</p>
+                <h2>Smart Appliance</h2>
+                <h2 class="highlight">Energy & Outlet Monitoring</h2>
+                <p>Track appliance wattage, calculate total outlet load, and prevent electrical overload with real-time safety insights.</p>
             </div>
         </div>
 
