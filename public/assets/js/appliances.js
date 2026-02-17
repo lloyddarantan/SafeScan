@@ -268,45 +268,81 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// --- MODAL LOGIC END ---
 
-function toggleSeeMore(btn) {
-    const groupSection = btn.closest('.group-section');
+function setApplianceView(viewType, btn) {
+    document.querySelectorAll('.btn-view').forEach(b => b.classList.remove('active'));
+    if(btn) btn.classList.add('active');
 
-    const hiddenItems = groupSection.querySelectorAll('.appliance-hidden');
+    const tableView = document.querySelector('.table-container');
+    const gridView = document.getElementById('appliances-grid');
 
-    const isExpanded = btn.classList.contains('expanded');
-
-    if (!isExpanded) {
-        hiddenItems.forEach(item => {
-            item.style.display = 'unset';
-        });
-
-        btn.innerHTML = 'Show Less <i class="fa-solid fa-chevron-up"></i>';
-        btn.classList.add('expanded');
+    if (viewType === 'grid') {
+        if(tableView) tableView.style.display = 'none';
+        if(gridView) gridView.style.display = 'grid'; 
+        localStorage.setItem('appView', 'grid');
     } else {
-        hiddenItems.forEach(item => {
-            item.style.display = 'none';
-        });
-
-        btn.innerHTML = 'See More <i class="fa-solid fa-chevron-down"></i>';
-        btn.classList.remove('expanded');
+        if(tableView) tableView.style.display = 'block';
+        if(gridView) gridView.style.display = 'none';
+        localStorage.setItem('appView', 'list');
     }
 }
 
-window.addEventListener("load", () => {
-    const hash = window.location.hash.slice(1);
-    if (hash) {
-        const navItem = Array.from(document.querySelectorAll('.sidebar .nav-item'))
-            .find(el => el.getAttribute('onclick')?.includes(hash));
+function openEditAppliance(id, brand, type, group, category, watt, cons, safety, hazards, image_path) {
+    document.getElementById('edit_id').value = id;
+    document.getElementById('edit_brand').value = brand;
+    document.getElementById('edit_type').value = type;
+    document.getElementById('edit_group').value = group;
+    document.getElementById('edit_category').value = category;
+    document.getElementById('edit_watt').value = watt;
+    document.getElementById('edit_cons').value = cons;
+    document.getElementById('edit_safety').value = safety;
+    document.getElementById('edit_hazards').value = hazards;
 
-        if (navItem) {
-            const onclickAttr = navItem.getAttribute('onclick');
-            const match = /switchTab\('(.+?)'/.exec(onclickAttr);
-            if (match) {
-                const room = match[1];
-                switchTab(room, navItem);
-            }
-        }
+    const previewImg = document.getElementById('edit_previewImage');
+    const hint = document.getElementById('edit_uploadHint');
+    
+    if (image_path) {
+        previewImg.src = image_path;
+        previewImg.style.display = 'block';
+        hint.style.display = 'none';
+    } else {
+        previewImg.src = '';
+        previewImg.style.display = 'none';
+        hint.style.display = 'flex';
     }
-});
+
+    openModal('modalEditAppliance');
+}
+
+function handleEditFileSelect(event) {
+    const reader = new FileReader();
+    reader.onload = function() {
+        const output = document.getElementById('edit_previewImage');
+        output.src = reader.result;
+        output.style.display = 'block';
+        document.getElementById('edit_uploadHint').style.display = 'none';
+    };
+    reader.readAsDataURL(event.target.files[0]);
+}
+
+function toggleSeeMore(button) {
+    const groupSection = button.closest('.group-section');
+    const hiddenCards = groupSection.querySelectorAll('.product-card.appliance-hidden');
+    const isExpanded = button.classList.contains('expanded');
+
+    if (!isExpanded) {
+        hiddenCards.forEach(card => {
+            card.style.display = 'block';
+            card.classList.add('visible-by-button'); 
+        });
+        button.innerHTML = 'See Less <i class="fa-solid fa-chevron-up"></i>';
+        button.classList.add('expanded');
+    } else {
+        hiddenCards.forEach(card => {
+            card.style.display = 'none';
+            card.classList.remove('visible-by-button');
+        });
+        button.innerHTML = 'See More <i class="fa-solid fa-chevron-down"></i>';
+        button.classList.remove('expanded');
+    }
+}
