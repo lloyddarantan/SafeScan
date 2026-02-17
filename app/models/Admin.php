@@ -75,7 +75,8 @@ class Admin {
                     type, 
                     wattage as watt, 
                     energy_consumption as cons, 
-                    description,
+                    safety_reminder,
+                    hazards,
                     image,
                     'N/A' as date 
                 FROM appliance 
@@ -87,8 +88,8 @@ class Admin {
 
    public function createAppliance($data) {
         $sql = "INSERT INTO appliance 
-                (brand, category, `group`, type, wattage, energy_consumption, description, image) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)"; 
+                (brand, category, `group`, type, wattage, energy_consumption, safety_reminder, hazards, image) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"; 
 
         $stmt = $this->conn->prepare($sql);
 
@@ -99,7 +100,8 @@ class Admin {
             $data['type'],
             $data['watt'],
             $data['cons'],
-            $data['description'],
+            $data['safety_reminder'],
+            $data['hazards'],
             $data['image']
         ]);
     }
@@ -109,5 +111,35 @@ class Admin {
         $stmt = $this->conn->prepare($sql);
         return $stmt->execute([$applianceId]);
     }
+	
+	public function updateAppliance($data) {
+    $sql = "UPDATE appliance SET 
+            brand = ?, 
+            category = ?, 
+            `group` = ?, 
+            type = ?, 
+            wattage = ?, 
+            energy_consumption = ?, 
+            safety_reminder = ?, 
+            hazards = ?, 
+            image = ? 
+            WHERE appliance_id = ?";
+
+    $stmt = $this->conn->prepare($sql);
+
+    return $stmt->execute([
+        $data['brand'],
+        $data['category'],
+        $data['group'],
+        $data['type'],
+        $data['watt'],
+        $data['cons'],
+        $data['safety_reminder'],
+        $data['hazards'],
+        $data['image'],
+        $data['appliance_id']
+    ]);
 }
+}
+
 ?>
