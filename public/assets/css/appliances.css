@@ -267,7 +267,8 @@ body.modal-open {
 
 .detail-modal-box {
     width: 90%;
-    max-width: 950px;
+    max-width: 1000px;
+	height: 580px;
     padding: 0;
     border-radius: 24px;
     overflow: hidden;
@@ -281,7 +282,6 @@ body.modal-open {
 .detail-modal-layout {
     display: flex;
     align-items: stretch;
-    justify-content: space-between;
     min-height: 550px;
 }
 
@@ -296,19 +296,22 @@ body.modal-open {
 
 .detail-image-container {
     flex: 1;
-    background: #f4f6f8;
+    background: #f8fafc;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 60px;
-    position: relative;
+    padding: 40px;
+    height: 580px; 
+    max-height: 580px;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .detail-image-container img {
-    max-width: 100%;
-    max-height: 380px;
-    object-fit: contain;
-    filter: drop-shadow(0 15px 25px rgba(0,0,0,0.15));
+    width: 100%;
+    height: 100%;
+    object-fit: contain; 
+    filter: drop-shadow(0 15px 25px rgba(0,0,0,0.1));
     transition: transform 0.3s ease;
 }
 
@@ -317,7 +320,7 @@ body.modal-open {
 }
 
 .detail-info-container {
-    flex: 1.2;
+    flex: 1.4;
     padding: 60px 50px;
     display: flex;
     flex-direction: column;
@@ -336,29 +339,27 @@ body.modal-open {
 }
 
 .detail-info-container h2 {
-    font-size: 2.5rem;
-    color: #2d3436;
-    margin: 0 0 40px 0;
-    line-height: 1.1;
-    font-weight: 600;
+    font-size: 2rem;
+    color: #1a202c;
+    margin: 0 0 30px 0;
+    line-height: 1.2;
 }
 
 .detail-specs-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 25px;
+    gap: 20px;
     margin-top: auto;
 }
 
 .spec-item {
-    background: #fff;
-    border: 1px solid #e0e0e0;
-    padding: 20px 25px;
+    background: #ffffff;
+    border: 1px solid #edf2f7;
+    padding: 18px;
     border-radius: 16px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .spec-item:hover {
@@ -369,25 +370,52 @@ body.modal-open {
 }
 
 .spec-item i {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     color: #F89b42;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 .spec-item .label {
-    font-size: 0.75rem;
-    color: #a0a0a0;
+    font-size: 0.7rem;
+    color: #718096;
     text-transform: uppercase;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    margin-bottom: 5px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
 }
 
 .spec-item .value {
-    font-size: 1.3rem;
-    color: #2d3436;
+    font-size: 1.2rem;
+    color: #2d3748;
     font-weight: 600;
 }
+
+.spec-item:nth-child(n+3) .text-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.spec-item:nth-child(3), 
+.spec-item:nth-child(4) {
+    grid-column: span 2; 
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+}
+
+.spec-item:nth-child(3) {
+    background: #ebf8ff;
+    border-color: #bee3f8;
+}
+.spec-item:nth-child(3) i { color: #3182ce; }
+.spec-item:nth-child(3) .value { font-size: 0.95rem; color: #2c5282; line-height: 1.4; }
+
+.spec-item:nth-child(4) {
+    background: #fff5f5;
+    border-color: #fed7d7;
+}
+.spec-item:nth-child(4) i { color: #e53e3e; }
+.spec-item:nth-child(4) .value { font-size: 0.95rem; color: #9b2c2c; line-height: 1.4; }
 
 .nav-arrow {
     position: absolute;
@@ -580,91 +608,88 @@ body.modal-open {
         width: 35px; height: 35px;
         font-size: 18px;
     }
+	
+	.detail-modal-layout { flex-direction: column; }
+    .detail-image-container { height: 250px; padding: 20px; }
+    .detail-info-container { padding: 30px 20px; }
+    .detail-specs-grid { grid-template-columns: 1fr; }
+    .spec-item:nth-child(n) { grid-column: span 1; }
 }
 
 @media (max-width: 480px) {
     .detail-modal-box {
         width: 92%;
-        margin: 20px auto;
-        max-height: 85vh;
-        overflow-y: auto;
-        padding-bottom: 20px;
-    }
-
-    .detail-modal-layout {
-        display: flex;
-        flex-direction: column !important;
-        height: auto;
-        min-height: auto;
+        height: 90vh; 
+        margin: 5vh auto;
     }
 
     .detail-image-container {
-        width: 100%;
-        height: 220px;
-        padding: 20px;
-        background: #f4f6f8;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-sizing: border-box;
+        flex: 0 0 200px;
+        height: 200px;
+        min-height: 200px;
+        padding: 15px;
     }
 
     .detail-image-container img {
-        max-height: 100%;
-        max-width: 100%;
-        object-fit: contain;
+        max-height: 170px;
     }
-
-    .nav-arrow {
-        top: 110px;
-        width: 35px; 
-        height: 35px;
-        font-size: 0.9rem;
-        background: rgba(255, 255, 255, 0.9);
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    .nav-arrow.prev { left: 10px; }
-    .nav-arrow.next { right: 10px; }
 
     .detail-info-container {
-        width: 100%;
-        padding: 20px 25px;
-        box-sizing: border-box;
-        text-align: left;
+        padding: 20px 15px;
     }
 
     .detail-brand {
-        display: block;
-        font-size: 0.85rem;
-        margin-bottom: 5px;
+        font-size: 0.75rem;
+        letter-spacing: 1px;
     }
 
     .detail-info-container h2 {
-        font-size: 1.8rem;
-        margin: 0 0 25px 0;
-        line-height: 1.2;
+        font-size: 1.5rem;
+        margin-bottom: 15px;
     }
 
     .detail-specs-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 15px;
-        width: 100%;
+        grid-template-columns: 1fr;
+        gap: 10px;
     }
 
-    .spec-item {
+    .spec-item, 
+    .spec-item:nth-child(3), 
+    .spec-item:nth-child(4) {
+        grid-column: span 1;
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
         padding: 12px;
-        background: #fff;
-        border: 1px solid #eee;
     }
 
-    .close-modal {
-        top: 10px;
-        right: 10px;
-        background: white;
+    .spec-item i {
+        margin-bottom: 0;
+        font-size: 1.2rem;
+        width: 25px;
+        text-align: center;
+    }
+
+    .spec-item .value {
+        font-size: 1rem;
+    }
+
+    .spec-item .label {
+        font-size: 0.65rem;
+    }
+
+    .nav-arrow {
+        top: 100px;
+        width: 35px;
+        height: 35px;
+        font-size: 0.8rem;
+    }
+
+    .close-modal-modal {
+        top: 8px;
+        right: 8px;
         width: 32px;
         height: 32px;
-        font-size: 18px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        font-size: 16px;
     }
 }
