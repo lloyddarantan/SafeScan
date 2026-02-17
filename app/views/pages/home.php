@@ -28,21 +28,28 @@
 
     <div class="bottom-section-wrapper">
         <section class="ai-section">
-            <div class="ai-image-card">
-                <img src="/assets/img/api-appliances.png" alt="AI Detection" class="ai-img">
-            </div>
+            <a href="/profile#outlet" class="ai-image-link">
+                <div class="ai-image-card">
+                    <img src="/assets/img/api-appliances.jpg" alt="AI Detection" class="ai-img">
+                    <div class="image-overlay">
+                        <span class="hover-btn">Go to Outlet Management <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </a>
 
             <div class="ai-content">
                 <h2>
-                    Understand your appliance <br>
-                    energy usage with <span class="highlight">Smart detection</span>
+                    Understand your appliance energy 
+                    <br> usage with <span class="highlight">Smart detection</span>
                 </h2>
                 <p>
-                    Gain better insight into your household appliances by using instant visual lookups to identify appliance names and their power consumption. Avoid guesswork and confusion when estimating electricity usage.
+                    Track the total amperage connected to each socket and prevent electrical overloads before they happen. Visual indicators help you manage appliance connections safely and efficiently.
                 </p>
+                <a href="/profile#outlet" class="action-btn">Try it now <i class="fa-solid fa-arrow-right"></i></a>
             </div>
         </section>
     </div>
+
 
 	<section class="category-section">
         <h2 class="section-title">Know more about your appliances</h2>
