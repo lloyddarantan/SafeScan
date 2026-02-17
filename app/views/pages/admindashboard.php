@@ -205,31 +205,48 @@
                             <th>Category</th>
                             <th>Watts</th>
                             <th>Energy Consumption (kWh)</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
 					<tbody>
-                        <?php foreach($data['appliances'] as $app): ?>
-                            <tr class="app-row"
-                                data-brand="<?= $app['brand'] ?>"
-                                data-group="<?= $app['group'] ?>"
-                                data-category="<?= $app['category'] ?>"
-                                data-search="<?= strtolower($app['brand'] . ' ' . $app['group'] . ' ' . $app['type'] . ' ' . $app['category']) ?>">
+						<?php foreach($data['appliances'] as $app): ?>
+							<tr class="app-row" 
+								data-brand="<?= $app['brand'] ?>" 
+								data-group="<?= $app['group'] ?>" 
+								data-category="<?= $app['category'] ?>">
 
-                                <td class="tile-image">
-                                    <img src="<?= $app['image_path'] ?>" alt="<?= $app['brand'] ?>" />
-                                </td>
-                                <td class="brand-hover-cell">
+								<td class="tile-image">
+									<img src="<?= $app['image_path'] ?>" alt="<?= $app['brand'] ?>" />
+								</td>
+								<td class="brand-hover-cell">
                                     <strong><?= $app['brand'] ?></strong>
                                     <img src="<?= $app['image_path'] ?>" class="brand-hover-img" alt="<?= $app['brand'] ?>" />
                                 </td>
-                                <td><?= $app['type'] ?></td>
-                                <td><?= $app['group'] ?></td>
-                                <td><?= $app['category'] ?></td>
-                                <td><?= $app['watt'] ?>W</td>
-                                <td><?= $app['cons'] ?>kWh</td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
+								<td><?= $app['type'] ?></td>
+								<td><?= $app['group'] ?></td>
+								<td><?= $app['category'] ?></td>
+								<td><?= $app['watt'] ?>W</td>
+								<td><?= $app['cons'] ?>kWh</td>
+								<td class="col-safety"><?= htmlspecialchars($app['safety_reminder']) ?></td>
+								<td class="col-hazards"><?= htmlspecialchars($app['hazards']) ?></td>
+
+								<td class="actions-cell">
+									<button class="btn-action edit-btn" 
+										title="Edit"
+										onclick='openEditAppliance(<?php echo json_encode($app); ?>)'>
+										<i class="fa-solid fa-pen-to-square"></i>
+									</button>
+
+									<a href="/admin/delete_appliance?id=<?= $app['appliance_id'] ?>" 
+									   class="btn-action delete-btn" 
+									   title="Delete"
+									   onclick="return confirm('Are you sure you want to delete this appliance?');">
+										<i class="fa-solid fa-trash"></i>
+									</a>
+								</td>
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
                 </table>
             </div>
 
@@ -335,9 +352,15 @@
 					</div>
 
                     <div class="form-group full-width" style="grid-column: span 2;">
-                        <label>Description</label>
-                        <textarea name="description" rows="3" placeholder="Enter details..." style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"></textarea>
+                        <label>Safety Reminder</label>
+                        <textarea name="safety_reminder" rows="3" placeholder="Enter safety reminder details..." style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"></textarea>
                     </div>
+
+                    <div class="form-group full-width" style="grid-column: span 2;">
+                        <label>Hazards</label>
+                        <textarea name="hazards" rows="3" placeholder="Enter hazard details..." style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"></textarea>
+                    </div>
+
                 </div>
 
                 <div class="modal-actions">
@@ -372,6 +395,73 @@
             </form>
         </div>
     </div>
+	
+<div id="modalEditAppliance" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Edit Appliance</h3>
+            <i class="fa-solid fa-xmark close-modal" onclick="closeModal('modalEditAppliance')"></i>
+        </div>
+        
+        <form action="/admin/edit_appliance" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="appliance_id" id="edit_appliance_id">
+            <input type="hidden" name="current_image" id="edit_current_image">
+
+            <div class="form-grid">
+                <div class="form-group"><label>Brand</label><input type="text" name="brand" id="edit_brand" required></div>
+                
+                <div class="form-group">
+                    <label>Category (Room)</label>
+                    <select name="category" id="edit_category" required>
+                        <option value="Living Room">Living Room</option>
+                        <option value="Bedroom">Bedroom</option>
+                        <option value="Kitchen">Kitchen</option>
+                    </select>
+                </div>
+
+                <div class="form-group"><label>Group (Type)</label>
+                    <select name="group" id="edit_group" required>
+                        <option value="Air Conditioner">Air Conditioner</option>
+                        <option value="Refrigerator">Refrigerator</option>
+                        <option value="TV">TV</option>
+                        <option value="Fan">Fan</option>
+                        <option value="Small Appliances">Small Appliances</option>
+                    </select>
+                </div>
+
+                <div class="form-group"><label>Model</label><input type="text" name="type" id="edit_type" required></div>
+                <div class="form-group"><label>Watts</label><input type="number" name="watt" id="edit_watt" required></div>
+                <div class="form-group"><label>Consumption (kWh)</label><input type="text" name="cons" id="edit_cons" required></div>
+                
+                <div class="form-group full-width">
+                    <label>Update Photo (Optional)</label>
+                    <div class="photo-upload-container">
+                        <input type="file" name="image" id="editFileInput" accept="image/*" onchange="handleEditFileSelect(event)" style="display: none;">
+                        <div class="preview-card" onclick="document.getElementById('editFileInput').click()">
+                            <img id="editPreviewImage" src="" alt="Current Image">
+                            <div class="upload-hint"><i class="fa-solid fa-pen"></i> Change</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group full-width" style="grid-column: span 2;">
+                    <label>Safety Reminder</label>
+                    <textarea name="safety_reminder" id="edit_safety_reminder" rows="3" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"></textarea>
+                </div>
+
+                <div class="form-group full-width" style="grid-column: span 2;">
+                    <label>Hazards</label>
+                    <textarea name="hazards" id="edit_hazards" rows="3" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"></textarea>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeModal('modalEditAppliance')">Cancel</button>
+                <button type="submit" class="btn-add">Update Appliance</button>
+            </div>
+        </form>
+    </div>
+</div>
 
     <script src="/assets/js/admin.js"></script>
 </body>
