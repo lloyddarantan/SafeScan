@@ -29,6 +29,14 @@ function filterAppliances() {
     const cards = Array.from(document.querySelectorAll('.product-card'));
     const groups = document.querySelectorAll('.group-section');
 
+    const isDefaultState = (
+        searchText === '' && 
+        groupValue === 'all' && 
+        wattageValue === 'all' && 
+        energyValue === 'all' && 
+        currentRoomFilter === 'all'
+    );
+
     cards.forEach(card => {
         const room = card.getAttribute('data-room');
         const cardGroup = card.getAttribute('data-group');
@@ -45,25 +53,39 @@ function filterAppliances() {
         if (searchText && !name.includes(searchText)) isVisible = false;
 
         // GROUP filter
-       if (groupValue !== 'all') {
+        if (groupValue !== 'all') {
             const cardGroupNormalized = cardGroup.replace(/\s+/g, '-');
             if (cardGroupNormalized !== groupValue) isVisible = false;
         }
 
         // WATTAGE filter
-        if (wattageValue === 'low' && wattage >= 200) isVisible = false;
-        if (wattageValue === 'high' && wattage < 200) isVisible = false;
+        if (wattageValue === 'low' && wattage >= 300) isVisible = false;
+        if (wattageValue === 'high' && wattage < 300) isVisible = false;
 
         // ENERGY filter
-        if (energyValue === 'low' && energy >= 5) isVisible = false;
-        if (energyValue === 'high' && energy < 5) isVisible = false;
+        if (energyValue === 'low' && energy >= 2) isVisible = false;
+        if (energyValue === 'high' && energy < 2) isVisible = false;
 
-        card.style.display = isVisible ? 'block' : 'none';
-        if (isVisible) card.classList.add('visible-item');
-        else card.classList.remove('visible-item');
+        if (isVisible) {
+            card.classList.add('visible-item');
+            
+            if (isDefaultState) {
+                card.style.display = ''; 
+            } else {
+                card.style.display = 'block'; 
+            }
+        } else {
+            card.classList.remove('visible-item');
+            card.style.display = 'none';
+        }
     });
 
-    // SORT within each group
+    const seeMoreButtons = document.querySelectorAll('.see-more-wrapper');
+    seeMoreButtons.forEach(btn => {
+		
+        btn.style.display = isDefaultState ? 'flex' : 'none';
+    });
+
     groups.forEach(group => {
         const grid = group.querySelector('.product-grid');
         const visibleCards = Array.from(group.querySelectorAll('.product-card.visible-item'));
@@ -77,6 +99,7 @@ function filterAppliances() {
         });
 
         visibleCards.forEach(card => grid.appendChild(card));
+        
         group.style.display = visibleCards.length > 0 ? 'block' : 'none';
     });
 }
@@ -103,3 +126,148 @@ function switchTab(room, element) {
 document.addEventListener("DOMContentLoaded", () => {
     filterAppliances();
 });
+
+function openApplianceModal(cardElement) {
+    document.body.classList.add('modal-open');
+
+    const allCards = Array.from(document.querySelectorAll('.product-card'));
+    visibleApplianceCards = allCards.filter(card => card.offsetParent !== null);
+    
+    currentApplianceIndex = visibleApplianceCards.indexOf(cardElement);
+
+    if (currentApplianceIndex > -1) {
+        updateModalContent(visibleApplianceCards[currentApplianceIndex]);
+        document.getElementById('applianceDetailModal').style.display = 'flex';
+    }
+}
+
+function closeApplianceModal() {
+    document.body.classList.remove('modal-open');
+    document.getElementById('applianceDetailModal').style.display = 'none';
+}
+
+let isAnimating = false;
+
+    function changeAppliance(direction) {
+    if (visibleApplianceCards.length === 0 || isAnimating) return;
+    
+    isAnimating = true;
+    const container = document.querySelector('.detail-modal-layout');
+    
+    const exitClass = direction === 1 ? 'slide-out-left' : 'slide-out-right';
+    const enterClass = direction === 1 ? 'slideInRight' : 'slideInLeft';
+    
+    container.classList.add(exitClass);
+
+    setTimeout(() => {
+        let newIndex = currentApplianceIndex + direction;
+        if (newIndex >= visibleApplianceCards.length) newIndex = 0;
+        else if (newIndex < 0) newIndex = visibleApplianceCards.length - 1;
+
+        currentApplianceIndex = newIndex;
+        updateModalContent(visibleApplianceCards[currentApplianceIndex]);
+
+        container.classList.remove(exitClass);
+
+        container.style.animation = 'none';
+        container.offsetHeight;
+        container.style.animation = `${enterClass} 0.3s forwards`;
+
+        setTimeout(() => {
+            container.style.animation = '';
+            isAnimating = false;
+        }, 300);
+
+    }, 200);
+}
+
+    function updateModalContent(card) {
+        const img = card.getAttribute('data-img');
+        const title = card.getAttribute('data-display-name');
+        const brand = card.getAttribute('data-brand');
+        const wattage = card.getAttribute('data-wattage');
+        const energy = card.getAttribute('data-energy');
+        const group = card.getAttribute('data-group');
+
+        document.getElementById('detailImage').src = img;
+        document.getElementById('detailTitle').textContent = title;
+        document.getElementById('detailBrand').textContent = brand;
+        document.getElementById('detailWattage').textContent = wattage + ' W';
+        document.getElementById('detailEnergy').textContent = energy + ' kWh';
+        document.getElementById('detailGroup').textContent = group.charAt(0).toUpperCase() + group.slice(1);
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('applianceDetailModal');
+        if (event.target == modal) {
+            closeApplianceModal();
+        }
+		
+        const authModal = document.getElementById('authModal');
+        if (event.target == authModal) {
+            authModal.style.display = "none";
+        }
+    }
+    
+    document.addEventListener('keydown', function(event) {
+        if (document.getElementById('applianceDetailModal').style.display === 'flex') {
+            if (event.key === 'ArrowLeft') {
+                changeAppliance(-1);
+            } else if (event.key === 'ArrowRight') {
+                changeAppliance(1);
+            } else if (event.key === 'Escape') {
+                closeApplianceModal();
+            }
+        }
+    });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const modalBox = document.querySelector('.detail-modal-box');
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    modalBox.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    modalBox.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+        const threshold = 50;
+        
+        if (touchEndX < touchStartX - threshold) {
+            changeAppliance(1); 
+        }
+        
+        if (touchEndX > touchStartX + threshold) {
+            changeAppliance(-1);
+        }
+    }
+});
+
+function toggleSeeMore(btn) {
+    const groupSection = btn.closest('.group-section');
+    
+    const hiddenItems = groupSection.querySelectorAll('.appliance-hidden');
+    
+    const isExpanded = btn.classList.contains('expanded');
+
+    if (!isExpanded) {
+        hiddenItems.forEach(item => {
+            item.style.display = 'unset'; 
+        });
+        
+        btn.innerHTML = 'Show Less <i class="fa-solid fa-chevron-up"></i>';
+        btn.classList.add('expanded');
+    } else {
+        hiddenItems.forEach(item => {
+            item.style.display = 'none';
+        });
+        
+        btn.innerHTML = 'See More <i class="fa-solid fa-chevron-down"></i>';
+        btn.classList.remove('expanded');
+    }
+}

@@ -35,10 +35,10 @@
             <div class="ai-content">
                 <h2>
                     Understand your appliance <br>
-                    energy usage with <span class="highlight">AI detection</span>
+                    energy usage with <span class="highlight">Smart detection</span>
                 </h2>
                 <p>
-                    Gain better insight into your household appliances by using AI-powered image scanning to identify appliance names and their power consumption. Avoid guesswork and confusion when estimating electricity usage.
+                    Gain better insight into your household appliances by using instant visual lookups to identify appliance names and their power consumption. Avoid guesswork and confusion when estimating electricity usage.
                 </p>
             </div>
         </section>
@@ -56,7 +56,11 @@
                 <div class="card-content">
                     <h3>Kitchen</h3>
                     <p>Appliances used for cooking, food preparation, and food storage. These usually consume high electricity because they produce heat or keep items cold.</p>
-                    <a href="/appliances#kitchen" class="btn-view">View</a>
+                    <?php if (isset($isLoggedIn) && $isLoggedIn): ?>
+                        <a href="/appliances#kitchen" class="btn-view">View</a>
+                    <?php else: ?>
+                        <a href="#" class="btn-view login-trigger">View</a>
+                    <?php endif; ?>
                 </div>
             </div>
 
@@ -67,7 +71,11 @@
                 <div class="card-content">
                     <h3>Living Room</h3>
                     <p>Appliances used for comfort, entertainment, and daily activities where people usually gather. These are often used for long hours.</p>
-                    <a href="/appliances#living" class="btn-view">View</a>
+                    <?php if (isset($isLoggedIn) && $isLoggedIn): ?>
+                        <a href="/appliances#kitchen" class="btn-view">View</a>
+                    <?php else: ?>
+                        <a href="#" class="btn-view login-trigger">View</a>
+                    <?php endif; ?>
                 </div>
             </div>
 
@@ -78,7 +86,11 @@
                 <div class="card-content">
                     <h3>Bedroom</h3>
                     <p>Appliances used for rest, relaxation, and personal comfort. These are commonly used at night or for extended periods.</p>
-                    <a href="/appliances#bedroom" class="btn-view">View</a>
+                    <?php if (isset($isLoggedIn) && $isLoggedIn): ?>
+                        <a href="/appliances#kitchen" class="btn-view">View</a>
+                    <?php else: ?>
+                        <a href="#" class="btn-view login-trigger">View</a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -86,7 +98,7 @@
 
 <!-- login and signup modal -->
 
-    <div id="authModal" class="modal-overlay">
+<div id="authModal" class="modal-overlay">
         <div class="modal-box">
             <span class="close-modal">&times;</span>
             
