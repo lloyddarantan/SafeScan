@@ -167,6 +167,14 @@
             <div class="card-header">
                 <h2 class="card-title">Appliances Database</h2>
                 <div class="header-controls">
+					<div class="view-toggles">
+						<button class="btn-view active" onclick="setApplianceView('list', this)" title="List View">
+							<i class="fa-solid fa-list"></i>
+						</button>
+						<button class="btn-view" onclick="setApplianceView('grid', this)" title="Tile View">
+							<i class="fa-solid fa-border-all"></i>
+						</button>
+					</div>
                     <select id="filterCategory" class="filter-select" onchange="filterApps()">
                         <option value="">All Categories</option>
                     </select>
@@ -198,7 +206,7 @@
                         <th>Cons (kWh)</th>
                     </tr>
                     </thead>
-                    <tbody>
+					  <tbody>
                         <?php foreach($data['appliances'] as $app): ?>
                             <tr class="app-row" 
                                 data-brand="<?= $app['brand'] ?>" 
