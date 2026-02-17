@@ -20,7 +20,9 @@ window.onclick = function(event) {
 
 // FILTERING LOGIC
 function filterAppliances() {
-    const searchText = document.getElementById('searchInput').value.toLowerCase();
+    const searchInput = document.getElementById('searchInput').value.toLowerCase();
+    const searchTerms = searchInput.split(' ').filter(term => term.trim() !== '');
+
     const sortValue = document.getElementById('sortFilter').value;
     const groupValue = document.getElementById('groupFilter').value;
     const wattageValue = document.getElementById('wattageFilter').value;
@@ -30,7 +32,7 @@ function filterAppliances() {
     const groups = document.querySelectorAll('.group-section');
 
     const isDefaultState = (
-        searchText === '' && 
+        searchInput === '' && 
         groupValue === 'all' && 
         wattageValue === 'all' && 
         energyValue === 'all' && 
@@ -40,19 +42,22 @@ function filterAppliances() {
     cards.forEach(card => {
         const room = card.getAttribute('data-room');
         const cardGroup = card.getAttribute('data-group');
+        
         const name = (card.getAttribute('data-name') || '').toLowerCase();
+        const brand = (card.getAttribute('data-brand') || '').toLowerCase();
+        const searchData = `${name} ${brand}`; 
+
         const wattage = parseFloat(card.getAttribute('data-wattage'));
         const energy = parseFloat(card.getAttribute('data-energy'));
 
         let isVisible = true;
 
-        // TAB filter
         if (currentRoomFilter !== 'all' && room !== currentRoomFilter) isVisible = false;
 
-        // SEARCH filter
-        if (searchText && !name.includes(searchText)) isVisible = false;
-
-        // GROUP filter
+        if (searchTerms.length > 0) {
+            const matchesAllTerms = searchTerms.every(term => searchData.includes(term));
+            if (!matchesAllTerms) isVisible = false;
+        }
         if (groupValue !== 'all') {
             const cardGroupNormalized = cardGroup.replace(/\s+/g, '-');
             if (cardGroupNormalized !== groupValue) isVisible = false;
@@ -82,7 +87,6 @@ function filterAppliances() {
 
     const seeMoreButtons = document.querySelectorAll('.see-more-wrapper');
     seeMoreButtons.forEach(btn => {
-		
         btn.style.display = isDefaultState ? 'flex' : 'none';
     });
 
@@ -277,9 +281,8 @@ function toggleSeeMore(btn) {
 }
 
 window.addEventListener("load", () => {
-    const hash = window.location.hash.slice(1); 
+    const hash = window.location.hash.slice(1);
     if (hash) {
-
         const navItem = Array.from(document.querySelectorAll('.sidebar .nav-item'))
                              .find(el => el.getAttribute('onclick')?.includes(hash));
 
