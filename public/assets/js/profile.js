@@ -396,3 +396,25 @@ function showToast(message, type = 'info') {
         });
     }, 3000);
 }
+
+window.addEventListener('load', () => {
+    const hash = window.location.hash.slice(1);
+    if(hash) {
+        const navItem = Array.from(document.querySelectorAll('.nav-item'))
+                             .find(el => el.getAttribute('onclick')?.includes(hash));
+        if(navItem) {
+
+            const onclickAttr = navItem.getAttribute('onclick');
+            const match = /switchTab\('(.+?)'/.exec(onclickAttr);
+            if(match) {
+                const tabId = match[1];
+                switchTab(tabId, navItem);
+            }
+        } else {
+            const section = document.getElementById('section-' + hash);
+            if(section) section.classList.add('active');
+        }
+    }
+});
+
+

@@ -79,7 +79,7 @@
                     <h3>Living Room</h3>
                     <p>Appliances used for comfort, entertainment, and daily activities where people usually gather. These are often used for long hours.</p>
                     <?php if (isset($isLoggedIn) && $isLoggedIn): ?>
-                        <a href="/appliances#kitchen" class="btn-view">View</a>
+                        <a href="/appliances#living-room" class="btn-view">View</a>
                     <?php else: ?>
                         <a href="#" class="btn-view login-trigger">View</a>
                     <?php endif; ?>
@@ -94,7 +94,7 @@
                     <h3>Bedroom</h3>
                     <p>Appliances used for rest, relaxation, and personal comfort. These are commonly used at night or for extended periods.</p>
                     <?php if (isset($isLoggedIn) && $isLoggedIn): ?>
-                        <a href="/appliances#kitchen" class="btn-view">View</a>
+                        <a href="/appliances#bedroom" class="btn-view">View</a>
                     <?php else: ?>
                         <a href="#" class="btn-view login-trigger">View</a>
                     <?php endif; ?>

@@ -102,7 +102,7 @@ require __DIR__ . '/../others/navigation.php';
                                 ?>
                                     <div class="product-card <?= $visibilityClass ?>"
                                          onclick="openApplianceModal(this)"
-                                         data-room="<?= strtolower($a['category']) ?>"
+                                         data-room="<?= strtolower(str_replace('_',' ', $a['category'])) ?>"
                                          data-group="<?= strtolower($groupName) ?>"
                                          data-name="<?= strtolower($a['type']) ?>"
                                          data-brand="<?= htmlspecialchars($a['brand']) ?>"

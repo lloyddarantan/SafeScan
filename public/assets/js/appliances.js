@@ -108,20 +108,24 @@ function filterAppliances() {
 function switchTab(room, element) {
     document.querySelectorAll('.sidebar .nav-item').forEach(el => el.classList.remove('active'));
     element.classList.add('active');
-    currentRoomFilter = room;
 
+    // Convert hyphen to space for matching data-room
+    currentRoomFilter = room.replace(/-/g, ' ');
+
+    // Update page title correctly
     const titles = {
         'all': 'All Appliances',
         'kitchen': 'Kitchen',
         'living room': 'Living Room',
         'bedroom': 'Bedroom'
     };
-    
+
     const titleEl = document.getElementById('pageTitle');
-    if(titleEl) titleEl.innerText = titles[room] || 'Appliances';
+    if (titleEl) titleEl.innerText = titles[currentRoomFilter] || 'Appliances';
 
     filterAppliances();
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
     filterAppliances();
@@ -271,3 +275,22 @@ function toggleSeeMore(btn) {
         btn.classList.remove('expanded');
     }
 }
+
+window.addEventListener("load", () => {
+    const hash = window.location.hash.slice(1); 
+    if (hash) {
+
+        const navItem = Array.from(document.querySelectorAll('.sidebar .nav-item'))
+                             .find(el => el.getAttribute('onclick')?.includes(hash));
+
+        if (navItem) {
+            const onclickAttr = navItem.getAttribute('onclick');
+            const match = /switchTab\('(.+?)'/.exec(onclickAttr);
+            if (match) {
+                const room = match[1];
+                switchTab(room, navItem);
+            }
+        }
+    }
+});
+
