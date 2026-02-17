@@ -16,6 +16,16 @@ window.onclick = function(event) {
             }
         }
     }
+	
+    const modal = document.getElementById('applianceDetailModal');
+    if (event.target == modal) {
+        closeApplianceModal();
+    }
+
+    const authModal = document.getElementById('authModal');
+    if (event.target == authModal) {
+        authModal.style.display = "none";
+    }
 }
 
 // FILTERING LOGIC
@@ -32,20 +42,20 @@ function filterAppliances() {
     const groups = document.querySelectorAll('.group-section');
 
     const isDefaultState = (
-        searchInput === '' && 
-        groupValue === 'all' && 
-        wattageValue === 'all' && 
-        energyValue === 'all' && 
+        searchInput === '' &&
+        groupValue === 'all' &&
+        wattageValue === 'all' &&
+        energyValue === 'all' &&
         currentRoomFilter === 'all'
     );
 
     cards.forEach(card => {
         const room = card.getAttribute('data-room');
         const cardGroup = card.getAttribute('data-group');
-        
+
         const name = (card.getAttribute('data-name') || '').toLowerCase();
         const brand = (card.getAttribute('data-brand') || '').toLowerCase();
-        const searchData = `${name} ${brand}`; 
+        const searchData = `${name} ${brand}`;
 
         const wattage = parseFloat(card.getAttribute('data-wattage'));
         const energy = parseFloat(card.getAttribute('data-energy'));
@@ -73,11 +83,11 @@ function filterAppliances() {
 
         if (isVisible) {
             card.classList.add('visible-item');
-            
+
             if (isDefaultState) {
-                card.style.display = ''; 
+                card.style.display = '';
             } else {
-                card.style.display = 'block'; 
+                card.style.display = 'block';
             }
         } else {
             card.classList.remove('visible-item');
@@ -103,7 +113,7 @@ function filterAppliances() {
         });
 
         visibleCards.forEach(card => grid.appendChild(card));
-        
+
         group.style.display = visibleCards.length > 0 ? 'block' : 'none';
     });
 }
@@ -112,11 +122,9 @@ function filterAppliances() {
 function switchTab(room, element) {
     document.querySelectorAll('.sidebar .nav-item').forEach(el => el.classList.remove('active'));
     element.classList.add('active');
-
-    // Convert hyphen to space for matching data-room
+	
     currentRoomFilter = room.replace(/-/g, ' ');
-
-    // Update page title correctly
+	
     const titles = {
         'all': 'All Appliances',
         'kitchen': 'Kitchen',
@@ -135,12 +143,21 @@ document.addEventListener("DOMContentLoaded", () => {
     filterAppliances();
 });
 
+// --- MODAL LOGIC START ---
+
+let visibleApplianceCards = [];
+let currentApplianceIndex = 0;
+
 function openApplianceModal(cardElement) {
     document.body.classList.add('modal-open');
 
     const allCards = Array.from(document.querySelectorAll('.product-card'));
-    visibleApplianceCards = allCards.filter(card => card.offsetParent !== null);
-    
+    visibleApplianceCards = allCards.filter(card => 
+        card.classList.contains('visible-item') && card.offsetParent !== null
+    );
+
+    if (visibleApplianceCards.length === 0) visibleApplianceCards = allCards;
+
     currentApplianceIndex = visibleApplianceCards.indexOf(cardElement);
 
     if (currentApplianceIndex > -1) {
@@ -156,15 +173,15 @@ function closeApplianceModal() {
 
 let isAnimating = false;
 
-    function changeAppliance(direction) {
+function changeAppliance(direction) {
     if (visibleApplianceCards.length === 0 || isAnimating) return;
-    
+
     isAnimating = true;
     const container = document.querySelector('.detail-modal-layout');
-    
+
     const exitClass = direction === 1 ? 'slide-out-left' : 'slide-out-right';
-    const enterClass = direction === 1 ? 'slideInRight' : 'slideInLeft';
-    
+    const enterClass = direction === 1 ? 'slide-in-right' : 'slide-in-left';
+
     container.classList.add(exitClass);
 
     setTimeout(() => {
@@ -176,61 +193,56 @@ let isAnimating = false;
         updateModalContent(visibleApplianceCards[currentApplianceIndex]);
 
         container.classList.remove(exitClass);
+        
+        void container.offsetWidth; 
 
-        container.style.animation = 'none';
-        container.offsetHeight;
-        container.style.animation = `${enterClass} 0.3s forwards`;
+        container.classList.add(enterClass);
 
         setTimeout(() => {
-            container.style.animation = '';
+            container.classList.remove(enterClass);
             isAnimating = false;
         }, 300);
 
     }, 200);
 }
 
-    function updateModalContent(card) {
-        const img = card.getAttribute('data-img');
-        const title = card.getAttribute('data-display-name');
-        const brand = card.getAttribute('data-brand');
-        const wattage = card.getAttribute('data-wattage');
-        const energy = card.getAttribute('data-energy');
-        const group = card.getAttribute('data-group');
+function updateModalContent(card) {
+    const img = card.getAttribute('data-img');
+    const title = card.getAttribute('data-display-name') || card.getAttribute('data-name');
+    const brand = card.getAttribute('data-brand');
+    const wattage = card.getAttribute('data-wattage');
+    const energy = card.getAttribute('data-energy');
+    
+    const safety = card.getAttribute('data-safety') || 'General safety precautions apply.';
+    const hazards = card.getAttribute('data-hazards') || 'None reported.';
 
-        document.getElementById('detailImage').src = img;
-        document.getElementById('detailTitle').textContent = title;
-        document.getElementById('detailBrand').textContent = brand;
-        document.getElementById('detailWattage').textContent = wattage + ' W';
-        document.getElementById('detailEnergy').textContent = energy + ' kWh';
-        document.getElementById('detailGroup').textContent = group.charAt(0).toUpperCase() + group.slice(1);
-    }
+    document.getElementById('detailImage').src = img;
+    document.getElementById('detailTitle').textContent = title;
+    document.getElementById('detailBrand').textContent = brand;
+    document.getElementById('detailWattage').textContent = wattage + ' W';
+    document.getElementById('detailEnergy').textContent = energy + ' kWh';
+    
+    document.getElementById('detailSafety').textContent = safety;
+    document.getElementById('detailHazards').textContent = hazards;
+}
 
-    window.onclick = function(event) {
-        const modal = document.getElementById('applianceDetailModal');
-        if (event.target == modal) {
+document.addEventListener('keydown', function(event) {
+    if (document.getElementById('applianceDetailModal').style.display === 'flex') {
+        if (event.key === 'ArrowLeft') {
+            changeAppliance(-1);
+        } else if (event.key === 'ArrowRight') {
+            changeAppliance(1);
+        } else if (event.key === 'Escape') {
             closeApplianceModal();
         }
-		
-        const authModal = document.getElementById('authModal');
-        if (event.target == authModal) {
-            authModal.style.display = "none";
-        }
     }
-    
-    document.addEventListener('keydown', function(event) {
-        if (document.getElementById('applianceDetailModal').style.display === 'flex') {
-            if (event.key === 'ArrowLeft') {
-                changeAppliance(-1);
-            } else if (event.key === 'ArrowRight') {
-                changeAppliance(1);
-            } else if (event.key === 'Escape') {
-                closeApplianceModal();
-            }
-        }
-    });
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     const modalBox = document.querySelector('.detail-modal-box');
+    
+    if (!modalBox) return;
+
     let touchStartX = 0;
     let touchEndX = 0;
 
@@ -245,36 +257,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleSwipe() {
         const threshold = 50;
-        
+
         if (touchEndX < touchStartX - threshold) {
-            changeAppliance(1); 
+            changeAppliance(1);
         }
-        
+
         if (touchEndX > touchStartX + threshold) {
-            changeAppliance(-1);
+            changeAppliance(-1); 
         }
     }
 });
 
+// --- MODAL LOGIC END ---
+
 function toggleSeeMore(btn) {
     const groupSection = btn.closest('.group-section');
-    
+
     const hiddenItems = groupSection.querySelectorAll('.appliance-hidden');
-    
+
     const isExpanded = btn.classList.contains('expanded');
 
     if (!isExpanded) {
         hiddenItems.forEach(item => {
-            item.style.display = 'unset'; 
+            item.style.display = 'unset';
         });
-        
+
         btn.innerHTML = 'Show Less <i class="fa-solid fa-chevron-up"></i>';
         btn.classList.add('expanded');
     } else {
         hiddenItems.forEach(item => {
             item.style.display = 'none';
         });
-        
+
         btn.innerHTML = 'See More <i class="fa-solid fa-chevron-down"></i>';
         btn.classList.remove('expanded');
     }
@@ -284,7 +298,7 @@ window.addEventListener("load", () => {
     const hash = window.location.hash.slice(1);
     if (hash) {
         const navItem = Array.from(document.querySelectorAll('.sidebar .nav-item'))
-                             .find(el => el.getAttribute('onclick')?.includes(hash));
+            .find(el => el.getAttribute('onclick')?.includes(hash));
 
         if (navItem) {
             const onclickAttr = navItem.getAttribute('onclick');
@@ -296,4 +310,3 @@ window.addEventListener("load", () => {
         }
     }
 });
-
