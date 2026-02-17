@@ -137,10 +137,12 @@ body {
 }
 
 .dashboard-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 24px;
-  align-items: start;
+    display: grid;
+    /* Use minmax so the sidebar doesn't squish, and content takes the rest */
+    grid-template-columns: 250px 1fr; 
+    gap: 20px;
+    height: calc(100vh - 70px); /* Subtract header height */
+    overflow: hidden; /* Prevent double scrollbars */
 }
 
 .card {
@@ -401,14 +403,17 @@ td {
   border-bottom: 1px solid #f1f5f9;
   font-size: 0.9rem;
   color: var(--text-main);
-  white-space: nowrap;
+  
+  /* --- CHANGED: Allow text wrap everywhere --- */
+  white-space: normal; 
+  vertical-align: top; 
+  /* ------------------------------------------- */
 }
 
 tr:hover td {
   background-color: #fafbfc;
 }
 
-/* gi pang islan nako */
 .tile-image {
     display: none;
 }
@@ -425,7 +430,6 @@ tr:hover td {
     border-radius: 8px;
 }
 
-/* gi dugang nako para sa list view */
 .brand-hover-cell {
     position: relative;
     cursor: pointer;
@@ -463,7 +467,6 @@ tr:hover td {
 [data-view="grid"] .brand-hover-img {
     display: none !important;
 }
-/* diri kutob */
 
 #appTable th:last-child,
 #appTable td:last-child {
@@ -915,6 +918,80 @@ input[type="file"]:hover::-webkit-file-upload-button {
     justify-content: space-between;
 }
 
+th.col-safety, td.col-safety,
+th.col-hazards, td.col-hazards {
+    display: none;
+}
+
+.table-container.grid-view .col-safety,
+.table-container.grid-view .col-hazards {
+    display: block !important;
+    margin-top: 10px;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    text-align: left;
+}
+
+.table-container.grid-view .col-safety {
+    background-color: #fff7ed;
+    color: #c2410c;
+    border: 1px solid #ffedd5;
+}
+
+.table-container.grid-view .col-safety::before {
+    content: "Safety Reminder:";
+    display: block;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: #ea580c;
+}
+
+.table-container.grid-view .col-hazards {
+    background-color: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fee2e2;
+}
+
+.table-container.grid-view .col-hazards::before {
+    content: "Hazard Alert:";
+    display: block;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: #ef4444;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 20px;
+}
+
+.col-safety, 
+.col-hazards {
+    min-width: 250px; 
+    white-space: normal;
+}
+
+.modal-content {
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content form {
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.main-content {
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
 @media (min-width: 640px) {
   .modal-content {
     padding: 32px;
@@ -1063,8 +1140,8 @@ input[type="file"]:hover::-webkit-file-upload-button {
   #admin .card {
     margin-bottom: 14px;
   }
-	
-	.modal-content {
+   
+  .modal-content {
         width: 100%;
         height: 100%;
         max-height: 100vh;
