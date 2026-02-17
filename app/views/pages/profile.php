@@ -175,6 +175,7 @@
             </div>
          </div>
 
+<!-- OUTLET -->
         <div id="section-outlet" class="content-section">
             <h3 style="font-weight: 400; margin-bottom: 20px;">Outlet Management</h3>
 
@@ -256,17 +257,15 @@
                     
                     <div class="draggable-list">
                         <?php if (!empty($savedAppliances)): ?>
-                            <?php foreach ($savedAppliances as $row):
-                                $amps = isset($row['amperes']) ? $row['amperes'] : round($row['wattage'] / 220, 2);
-                            ?>
+                            <?php foreach ($savedAppliances as $row): ?>
                                 <div class="draggable-item" 
-                                     draggable="true" 
-                                     ondragstart="drag(event)" 
-                                     data-name="<?= htmlspecialchars($row['type']) ?>" 
-                                     data-brand="<?= htmlspecialchars($row['brand']) ?>"
-                                     data-watts="<?= $row['wattage'] ?>"
-                                     data-amps="<?= $amps ?>"
-                                     id="app-<?= $row['appliance_id'] ?>">
+                                    draggable="true" 
+                                    ondragstart="drag(event)" 
+                                    data-name="<?= htmlspecialchars($row['type']) ?>" 
+                                    data-brand="<?= htmlspecialchars($row['brand']) ?>"
+                                    data-watts="<?= $row['wattage'] ?>"
+                                    data-amps="<?= $row['amperes'] ?>"
+                                    id="app-<?= $row['appliance_id'] ?>">
                                     
                                     <div class="drag-img">
                                         <img src="<?= $row['image'] ?>" alt="icon">
@@ -274,7 +273,9 @@
                                     <div class="drag-info">
                                         <strong><?= htmlspecialchars($row['type']) ?></strong>
                                         <small><?= htmlspecialchars($row['brand']) ?></small>
-                                        <span class="drag-specs"><?= $row['wattage'] ?>W | <?= $amps ?>A</span>
+                                        <span class="drag-specs">
+                                            <?= $row['wattage'] ?>W | <?= $row['amperes'] ?>A
+                                        </span>
                                     </div>
                                 </div>
                             <?php endforeach; ?>

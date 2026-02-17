@@ -15,4 +15,12 @@ class Appliance {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function calculateAmperes($watts, $voltage = 220) {
+        if (!$watts || $voltage <= 0) {
+            return 0;
+        }
+
+        return round($watts / $voltage, 2);
+    }
 }

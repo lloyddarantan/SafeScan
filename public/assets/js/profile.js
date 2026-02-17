@@ -164,7 +164,7 @@ let outletState = {
     "socket-3": null
 };
 
-const MAX_AMPS = 10; 
+const MAX_AMPS = 15; 
 
 function allowDrop(ev) {
     ev.preventDefault();
@@ -302,14 +302,14 @@ function calculateTotals() {
     updateStatusBar(totalAmps);
 }
 
+
 function updateStatusBar(total) {
     let bar = document.getElementById("status-bar");
     let text = document.getElementById("status-text");
     
-// Reset classes
     bar.className = "status-bar";
 
-    if (total === 0) {
+    if (total <= 0) {
         bar.classList.add("safe");
         text.innerText = "System Idle";
     } else if (total > MAX_AMPS) {
