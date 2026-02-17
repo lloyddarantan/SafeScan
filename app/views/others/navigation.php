@@ -35,13 +35,7 @@ if ($page === '') {
             <ul class="nav-links" id="nav-links">
                 <li><a href="/home" class="<?= ($page ?? '') == 'home' ? 'active' : '' ?>">Home</a></li>
                 <li><a href="/about" class="<?= ($page ?? '') == 'about' ? 'active' : '' ?>">About</a></li>
-                <li>
-					<?php if ($isLoggedIn): ?>
-						<a href="/appliances" class="<?= ($page ?? '') == 'appliances' ? 'active' : '' ?>">Appliances</a>
-					<?php else: ?>
-						<a href="#" class="loginTrigger">Appliances</a>
-					<?php endif; ?>
-				</li>
+                <li><a href="/appliances" class="<?= ($page ?? '') == 'appliances' ? 'active' : '' ?>">Appliances</a></li>
                 <li>
                     <?php if ($isLoggedIn): ?>
                         <a href="/profile" class="<?= ($page ?? '') == 'profile' ? 'active' : '' ?>">Profile</a>
