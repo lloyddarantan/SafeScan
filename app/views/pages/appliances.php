@@ -107,7 +107,9 @@ require __DIR__ . '/../others/navigation.php';
                                          data-wattage="<?= $a['wattage'] ?>"
                                          data-energy="<?= $a['energy_consumption'] ?>"
                                          data-img="<?= $a['image'] ?>"
-                                         data-display-name="<?= htmlspecialchars($a['type']) ?>">
+                                         data-display-name="<?= htmlspecialchars($a['type']) ?>"
+										data-safety="<?= htmlspecialchars($a['safety_reminder'] ?? 'General safety precautions apply.') ?>"
+    							 		data-hazards="<?= htmlspecialchars($a['hazards'] ?? 'None reported.') ?>">
 
                                         <?php if (isset($isLoggedIn) && $isLoggedIn): ?>
 										<form method="POST" action="/favorite/toggle" style="display:inline;" onclick="event.stopPropagation()">
@@ -211,15 +213,15 @@ require __DIR__ . '/../others/navigation.php';
                     </div>
 
                     <div class="spec-item">
-                        <i class="fa-solid fa-layer-group"></i>
-                        <span class="label">Category</span>
-                        <span class="value" id="detailGroup">Room</span>
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span class="label">Safety Reminder</span>
+                        <span class="value" id="detailSafety">Reminder text</span>
                     </div>
 
                     <div class="spec-item">
-                        <i class="fa-regular fa-circle-check"></i>
-                        <span class="label">Status</span>
-                        <span class="value">Available</span>
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <span class="label">Hazards</span>
+                        <span class="value" id="detailHazards">Hazard text</span>
                     </div>
                 </div>
             </div>
