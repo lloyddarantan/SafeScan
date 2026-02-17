@@ -151,7 +151,7 @@
                             <div class="card-image">
                                 <img src="<?= $row['image'] ?>" alt="<?= htmlspecialchars($row['type']) ?>">
                             </div>
-                            <form method="POST" action="/favorite/toggle">
+                            <form method="POST" action="/favorite/toggle" onsubmit="return removeSavedAppliance(event, this)">
                                 <input type="hidden" name="appliance_id" value="<?= $row['appliance_id'] ?>">
                                 <button type="submit" class="fav-btn active">
                                     <i class="fa-solid fa-heart"></i>

@@ -238,6 +238,29 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+function handleLike(event, form) {
+    event.preventDefault(); 
+
+    const btn = form.querySelector('.fav-btn');
+    const icon = form.querySelector('i');
+
+    btn.classList.toggle('active');
+    if (btn.classList.contains('active')) {
+        icon.classList.remove('fa-regular');
+        icon.classList.add('fa-solid');
+    } else {
+        icon.classList.remove('fa-solid');
+        icon.classList.add('fa-regular');
+    }
+
+    fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form)
+    }).catch(error => {
+        console.error('Error saving favorite:', error);
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const modalBox = document.querySelector('.detail-modal-box');
     

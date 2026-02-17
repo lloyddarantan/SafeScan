@@ -156,6 +156,103 @@
 		}
 	}
 
+
+function removeSavedAppliance(event, form) {
+    // 1. Prevent page reload
+    event.preventDefault();
+
+    // 2. Get the elements we need
+    const btn = form.querySelector('.fav-btn');
+    const card = form.closest('.product-card');
+    
+    // Grab the appliance ID from the hidden input in the form
+    const applianceId = form.querySelector('input[name="appliance_id"]').value; 
+    
+    // Change icon to a loading spinner
+    const originalIcon = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+    btn.disabled = true;
+
+    // 3. Send the background request
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            // --- SECTION 1: Remove from "My Saved Appliances" Tab ---
+            card.style.transition = 'all 0.3s ease';
+            card.style.opacity = '0';
+            card.style.transform = 'scale(0.9)';
+            
+            setTimeout(() => {
+                card.remove();
+                checkIfGridEmpty();
+            }, 300);
+
+            // --- SECTION 2: Remove from "Outlet Management" Sidebar ---
+            const draggableItem = document.getElementById('app-' + applianceId);
+            if (draggableItem) {
+                // If the item exists in the sidebar, remove it too
+                draggableItem.remove();
+                checkIfDraggableListEmpty();
+                
+                // Optional: If this appliance was CURRENTLY plugged into a socket, 
+                // you might also want to trigger your function to unplug it here!
+            }
+            
+            // showToast("Appliance removed");
+        } else {
+            alert("Failed to remove appliance. Please try again.");
+            btn.innerHTML = originalIcon;
+            btn.disabled = false;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert("An error occurred.");
+        btn.innerHTML = originalIcon;
+        btn.disabled = false;
+    });
+
+    return false;
+}
+
+// Checks if "My Saved Appliances" is empty
+function checkIfGridEmpty() {
+    const grid = document.querySelector('#section-members .product-grid');
+    const cards = grid.querySelectorAll('.product-card');
+    
+    if (cards.length === 0) {
+        grid.innerHTML = "<p style='color: #666;'>You haven't saved any appliances yet.</p>";
+    }
+}
+
+// Checks if the "Outlet Management" sidebar is empty
+function checkIfDraggableListEmpty() {
+    const list = document.querySelector('.draggable-list');
+    const items = list.querySelectorAll('.draggable-item');
+    
+    if (items.length === 0) {
+        list.innerHTML = '<p class="no-items">No saved appliances.</p>';
+    }
+}
+
+// Check if that was the last appliance and show the "empty" message
+function checkIfGridEmpty() {
+    const grid = document.querySelector('#section-members .product-grid');
+    const cards = grid.querySelectorAll('.product-card');
+    
+    if (cards.length === 0) {
+        grid.innerHTML = "<p style='color: #666;'>You haven't saved any appliances yet.</p>";
+    }
+}
+
 /* --- OUTLET MANAGEMENT LOGIC --- */
 
 let outletState = {

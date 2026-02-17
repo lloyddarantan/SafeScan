@@ -112,7 +112,7 @@ require __DIR__ . '/../others/navigation.php';
     							 		data-hazards="<?= htmlspecialchars($a['hazards'] ?? 'None reported.') ?>">
 
                                         <?php if (isset($isLoggedIn) && $isLoggedIn): ?>
-										<form method="POST" action="/favorite/toggle" style="display:inline;" onclick="event.stopPropagation()">
+										<form method="POST" action="/favorite/toggle" style="display:inline;" onsubmit="handleLike(event, this)" onclick="event.stopPropagation()">
 											<input type="hidden" name="appliance_id" value="<?= $a['appliance_id'] ?>">
 											<button type="submit" class="fav-btn <?= $a['isLiked'] ? 'active' : '' ?>">
 												<i class="<?= $a['isLiked'] ? 'fa-solid' : 'fa-regular' ?> fa-heart"></i>
