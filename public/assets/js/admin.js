@@ -212,3 +212,17 @@ function removePhoto() {
     hint.style.display = 'flex';
     removeBtn.style.display = 'none';
 }
+
+function setApplianceView(viewType, btn) {
+    const buttons = btn.parentElement.querySelectorAll('.btn-view');
+    buttons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const container = document.querySelector('#appliances .table-container');
+    
+    if (viewType === 'grid') {
+        container.classList.add('grid-view');
+    } else {
+        container.classList.remove('grid-view');
+    }
+}
