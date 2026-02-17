@@ -82,8 +82,7 @@ require __DIR__ . '/../others/navigation.php';
                     <?php foreach ($groupedAppliances as $groupName => $items): ?>
                         
                         <?php 
-                        // Generate ID for sidebar navigation (e.g., 'living-room')
-                        $groupID = strtolower(str_replace(' ', '-', $groupName)); 
+                            $groupID = strtolower(str_replace(' ', '-', $groupName)); 
                         ?>
 
                         <div class="group-section" id="<?= $groupID ?>">
@@ -94,11 +93,10 @@ require __DIR__ . '/../others/navigation.php';
                             
                             <div class="product-grid">
                                 <?php 
-                                $limit = 4; // LIMIT: Show 4 items initially
-                                $index = 0;
-                                foreach ($items as $a): 
-                                    // If index is 4 or greater, hide it
-                                    $visibilityClass = ($index >= $limit) ? 'appliance-hidden' : '';
+                                    $limit = 4;
+                                    $index = 0;
+                                    foreach ($items as $a): 
+                                        $visibilityClass = ($index >= $limit) ? 'appliance-hidden' : '';
                                 ?>
                                     <div class="product-card <?= $visibilityClass ?>"
                                          onclick="openApplianceModal(this)"

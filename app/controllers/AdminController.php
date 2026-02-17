@@ -20,10 +20,36 @@ class AdminController {
     public function index() {
         $stats = $this->adminModel->getStats();
         $users = $this->adminModel->getAllUsers();
-        $appliances = $this->adminModel->getAllAppliances();
-        
         $adminProfile = $this->adminModel->getAdminProfile($_SESSION['user_id']);
-        
+        $appliances = $this->adminModel->getAllAppliances();
+            foreach ($appliances as $key => $app) {
+                $webBasePath = '/assets/img/appliances/';
+                $serverBasePath = __DIR__ . '/../../public/assets/img/appliances/';
+                $imageFound = false;
+
+                if (!empty($app['image'])) {
+                    $dbImagePath = $serverBasePath . $app['image'];
+                    if (file_exists($dbImagePath)) {
+                        $appliances[$key]['image_path'] = $webBasePath . $app['image'];
+                        $imageFound = true;
+                    }
+                }
+
+                if (!$imageFound) {
+                    $slugImage = $this->getApplianceImage($app['brand'], $app['type']);
+                    $slugServerPath = __DIR__ . '/../../public' . $slugImage;
+
+                    if (file_exists($slugServerPath)) {
+                        $appliances[$key]['image_path'] = $slugImage;
+                        $imageFound = true;
+                    }
+                }
+
+                if (!$imageFound) {
+                    $appliances[$key]['image_path'] = $webBasePath . 'default.png';
+                }
+            }
+
         $data = [
             'stats' => $stats,
             'users' => $users,
@@ -119,6 +145,23 @@ class AdminController {
             header("Location: /admin");
             exit();
         }
+    }
+
+     private function getApplianceImage($brand, $type) {
+        $slug = strtolower($brand . '_' . $type);
+        $slug = preg_replace('/[^a-z0-9\.]+/', '_', $slug);
+        $slug = trim($slug, '_');
+
+        $serverPath = __DIR__ . '/../../public/assets/img/appliances/';
+        $webPath    = '/assets/img/appliances/';
+
+        foreach (['png', 'jpg', 'jpeg'] as $ext) {
+            if (file_exists($serverPath . $slug . '.' . $ext)) {
+                return $webPath . $slug . '.' . $ext;
+            }
+        }
+
+        return $webPath . 'default.png';
     }
 }
 ?>

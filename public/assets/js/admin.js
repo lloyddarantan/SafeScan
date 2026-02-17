@@ -214,12 +214,16 @@ function removePhoto() {
 }
 
 function setApplianceView(viewType, btn) {
+    // Toggle active button
     const buttons = btn.parentElement.querySelectorAll('.btn-view');
     buttons.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
 
+    // Get appliance table container
     const container = document.querySelector('#appliances .table-container');
-    
+
+    if (!container) return;
+
     if (viewType === 'grid') {
         container.classList.add('grid-view');
     } else {

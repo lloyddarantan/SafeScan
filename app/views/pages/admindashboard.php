@@ -162,6 +162,7 @@
         </div>
     </div>
 
+<!-- appliances -->
     <div id="appliances" class="view-section">
         <div class="card appliance-card">
             <div class="card-header">
@@ -197,34 +198,41 @@
             <div class="table-container">
                 <table>
                     <thead>
-                    <tr>
-                        <th>Category</th>
-                        <th>Brand</th>
-                        <th>Group</th>
-                        <th>Model</th>
-                        <th>Watts</th>
-                        <th>Cons (kWh)</th>
-                    </tr>
+                        <tr>
+                            <th>Brand</th>
+                            <th>Model</th>
+                            <th>Group</th>
+                            <th>Category</th>
+                            <th>Watts</th>
+                            <th>Energy Consumption (kWh)</th>
+                        </tr>
                     </thead>
-					  <tbody>
+					<tbody>
                         <?php foreach($data['appliances'] as $app): ?>
-                            <tr class="app-row" 
-                                data-brand="<?= $app['brand'] ?>" 
+                            <tr class="app-row"
+                                data-brand="<?= $app['brand'] ?>"
                                 data-group="<?= $app['group'] ?>"
                                 data-category="<?= $app['category'] ?>"
                                 data-search="<?= strtolower($app['brand'] . ' ' . $app['group'] . ' ' . $app['type'] . ' ' . $app['category']) ?>">
-                                
-                                <td><?= $app['category'] ?></td>
-                                <td><strong><?= $app['brand'] ?></strong></td>
-                                <td><?= $app['group'] ?></td>
+
+                                <td class="tile-image">
+                                    <img src="<?= $app['image_path'] ?>" alt="<?= $app['brand'] ?>" />
+                                </td>
+                                <td class="brand-hover-cell">
+                                    <strong><?= $app['brand'] ?></strong>
+                                    <img src="<?= $app['image_path'] ?>" class="brand-hover-img" alt="<?= $app['brand'] ?>" />
+                                </td>
                                 <td><?= $app['type'] ?></td>
+                                <td><?= $app['group'] ?></td>
+                                <td><?= $app['category'] ?></td>
                                 <td><?= $app['watt'] ?>W</td>
-                                <td><?= $app['cons'] ?></td>
+                                <td><?= $app['cons'] ?>kWh</td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
+
         </div>
     </div>
 
