@@ -122,14 +122,12 @@
             }
         }
 
-// If any validation failed, stop the form submission
 			if (!isValid) {
 				e.preventDefault(); 
 			}
 		});
 	}
 
-// Show Error Message
 	function showError(input, message) {
 		const formGroup = input.parentElement;
 		input.style.borderColor = '#ff4d4d';
@@ -145,7 +143,6 @@
 		formGroup.appendChild(errorMsg);
 	}
 
-//Clear Error Messages
 	function clearErrors() {
 		if (form) {
 			const inputs = form.querySelectorAll('input');
@@ -155,103 +152,6 @@
 			errors.forEach(error => error.remove());
 		}
 	}
-
-
-function removeSavedAppliance(event, form) {
-    // 1. Prevent page reload
-    event.preventDefault();
-
-    // 2. Get the elements we need
-    const btn = form.querySelector('.fav-btn');
-    const card = form.closest('.product-card');
-    
-    // Grab the appliance ID from the hidden input in the form
-    const applianceId = form.querySelector('input[name="appliance_id"]').value; 
-    
-    // Change icon to a loading spinner
-    const originalIcon = btn.innerHTML;
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-    btn.disabled = true;
-
-    // 3. Send the background request
-    const formData = new FormData(form);
-
-    fetch(form.action, {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-    .then(response => {
-        if (response.ok) {
-            // --- SECTION 1: Remove from "My Saved Appliances" Tab ---
-            card.style.transition = 'all 0.3s ease';
-            card.style.opacity = '0';
-            card.style.transform = 'scale(0.9)';
-            
-            setTimeout(() => {
-                card.remove();
-                checkIfGridEmpty();
-            }, 300);
-
-            // --- SECTION 2: Remove from "Outlet Management" Sidebar ---
-            const draggableItem = document.getElementById('app-' + applianceId);
-            if (draggableItem) {
-                // If the item exists in the sidebar, remove it too
-                draggableItem.remove();
-                checkIfDraggableListEmpty();
-                
-                // Optional: If this appliance was CURRENTLY plugged into a socket, 
-                // you might also want to trigger your function to unplug it here!
-            }
-            
-            // showToast("Appliance removed");
-        } else {
-            alert("Failed to remove appliance. Please try again.");
-            btn.innerHTML = originalIcon;
-            btn.disabled = false;
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert("An error occurred.");
-        btn.innerHTML = originalIcon;
-        btn.disabled = false;
-    });
-
-    return false;
-}
-
-// Checks if "My Saved Appliances" is empty
-function checkIfGridEmpty() {
-    const grid = document.querySelector('#section-members .product-grid');
-    const cards = grid.querySelectorAll('.product-card');
-    
-    if (cards.length === 0) {
-        grid.innerHTML = "<p style='color: #666;'>You haven't saved any appliances yet.</p>";
-    }
-}
-
-// Checks if the "Outlet Management" sidebar is empty
-function checkIfDraggableListEmpty() {
-    const list = document.querySelector('.draggable-list');
-    const items = list.querySelectorAll('.draggable-item');
-    
-    if (items.length === 0) {
-        list.innerHTML = '<p class="no-items">No saved appliances.</p>';
-    }
-}
-
-// Check if that was the last appliance and show the "empty" message
-function checkIfGridEmpty() {
-    const grid = document.querySelector('#section-members .product-grid');
-    const cards = grid.querySelectorAll('.product-card');
-    
-    if (cards.length === 0) {
-        grid.innerHTML = "<p style='color: #666;'>You haven't saved any appliances yet.</p>";
-    }
-}
 
 /* --- OUTLET MANAGEMENT LOGIC --- */
 
@@ -263,12 +163,79 @@ let outletState = {
 
 const MAX_AMPS = 15; 
 
+let mobileSelectedData = null;
+
+function isMobileView() {
+    return window.innerWidth <= 768; 
+}
+
+function handleApplianceClick(element) {
+    if (!isMobileView()) return; 
+
+    document.querySelectorAll('.draggable-item').forEach(el => el.classList.remove('mobile-selected'));
+
+    if (mobileSelectedData && mobileSelectedData.elementId === element.id) {
+        mobileSelectedData = null;
+        return;
+    }
+
+    element.classList.add('mobile-selected');
+    
+    mobileSelectedData = {
+        elementId: element.id,
+        id: element.id,
+        name: element.dataset.name,
+        amps: parseFloat(element.dataset.amps),
+        img: element.querySelector('img').src
+    };
+    
+    showToast(`Selected: ${mobileSelectedData.name}. Tap a socket to plug in.`);
+}
+
+function handleSocketClick(socketElement) {
+    if (!isMobileView()) return;
+
+    const socketId = socketElement.id;
+
+    if (mobileSelectedData) {
+        
+        if (outletState[socketId] !== null) {
+            showToast("This socket is already occupied!", "error");
+            return;
+        }
+
+        outletState[socketId] = { 
+            id: mobileSelectedData.id, 
+            name: mobileSelectedData.name, 
+            amps: mobileSelectedData.amps 
+        };
+
+        updateSocketVisual(socketElement, mobileSelectedData.img, mobileSelectedData.name);
+        calculateTotals();
+
+        mobileSelectedData = null;
+        document.querySelectorAll('.draggable-item').forEach(el => el.classList.remove('mobile-selected'));
+        showToast("Device Connected", "success");
+    } 
+    
+    else if (outletState[socketId] !== null) {
+        clearSocket(socketId);
+        calculateTotals();
+        showToast("Device Unplugged", "info");
+    }
+}
+
 function allowDrop(ev) {
     ev.preventDefault();
 }
 
-// 1. Dragging from the Sidebar
 function drag(ev) {
+	
+	if (isMobileView()) {
+        ev.preventDefault();
+        return;
+    }
+	
     ev.dataTransfer.setData("source", "sidebar");
     ev.dataTransfer.setData("id", ev.target.id);
     ev.dataTransfer.setData("name", ev.target.dataset.name);
@@ -276,15 +243,18 @@ function drag(ev) {
     ev.dataTransfer.setData("img", ev.target.querySelector('img').src);
 }
 
-// 2. Dragging from a Socket (New Function)
 function dragFromSocket(ev) {
-    let socketId = ev.target.parentNode.id; // Get the parent socket ID
+    let socketId = ev.target.parentNode.id;
     let data = outletState[socketId];
+	
+	if (isMobileView()) {
+        ev.preventDefault();
+        return;
+    }
 
     ev.dataTransfer.setData("source", "socket");
     ev.dataTransfer.setData("fromSocketId", socketId);
     
-    // Pass existing data so we can move it to another socket if desired
     ev.dataTransfer.setData("name", data.name);
     ev.dataTransfer.setData("amps", data.amps);
     ev.dataTransfer.setData("img", ev.target.src);
@@ -322,7 +292,6 @@ function drop(ev) {
 function removeAppliance(ev) {
     ev.preventDefault();
     
-    // Only act if the item came from a socket
     let source = ev.dataTransfer.getData("source");
     
     if (source === "socket") {
@@ -332,7 +301,6 @@ function removeAppliance(ev) {
     }
 }
 
-// Helper to clear a specific socket
 function clearSocket(socketId) {
     // Clear Data
     outletState[socketId] = null;
@@ -352,19 +320,24 @@ function updateSocketVisual(socketElement, imgSrc, name) {
     let img = document.createElement("img");
     img.src = imgSrc;
     img.className = "plugged-icon";
-    img.title = name; // Tooltip
+    img.title = name;
     
-    // MAKE THE PLUGGED ITEM DRAGGABLE
-    img.draggable = true;
-    img.ondragstart = dragFromSocket;
+    if (isMobileView()) {
+        img.draggable = false; 
+        
+        img.style.pointerEvents = "none"; 
+    } else {
+        img.draggable = true;
+        img.ondragstart = dragFromSocket;
+    }
     
     let oldImg = socketElement.querySelector('.plugged-icon');
     if(oldImg) oldImg.remove();
     
     socketElement.appendChild(img);
 }
+
 function clearOutlets() {
-    // Reset State
     outletState = { "socket-1": null, "socket-2": null, "socket-3": null };
     
     document.querySelectorAll('.socket-dropzone').forEach(socket => {
@@ -379,7 +352,6 @@ function clearOutlets() {
 function calculateTotals() {
     let totalAmps = 0;
     
-// Loop through state to update list and sum amps
     for (let i = 1; i <= 3; i++) {
         let key = "socket-" + i;
         let data = outletState[key];
@@ -513,5 +485,21 @@ window.addEventListener('load', () => {
         }
     }
 });
+
+function optimizeForMobile() {
+    if (isMobileView()) {
+        const items = document.querySelectorAll('.draggable-item');
+        
+        items.forEach(item => {
+            item.setAttribute('draggable', 'false');
+            
+            item.style.userSelect = "none"; 
+        });
+    }
+}
+
+window.addEventListener('load', optimizeForMobile);
+
+window.addEventListener('resize', optimizeForMobile);
 
 
