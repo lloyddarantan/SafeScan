@@ -540,8 +540,8 @@ body {
 }
 
 .status-bar.safe { 
-    background-color: #ebf8ff; /* The light blue background */
-    color: #2c5282;            /* The dark blue text */
+    background-color: #ebf8ff;
+    color: #2c5282;
 }
 .status-bar.warning { background-color: #fff3e0; color: #ef6c00; }
 .status-bar.danger { 
@@ -701,7 +701,17 @@ body {
 .drag-info small { font-size: 0.75rem; color: #888; }
 .drag-specs { font-size: 0.7rem; color: var(--primary-orange); font-weight: 500; }
 
+.draggable-item, .socket-dropzone {
+    touch-action: manipulation;
+    cursor: pointer;
+}
 
+.desktop-text {
+    display: inline;
+}
+.mobile-text {
+    display: none;
+}
 
 @media (max-width: 800px) {
     .dashboard-container { flex-direction: column; height: auto; }
@@ -733,6 +743,13 @@ body {
     .appliance-sidebar-panel { border-left: none; border-top: 1px solid #eee; padding-left: 0; padding-top: 20px; }
     .draggable-list { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; }
     .draggable-item { min-width: 200px; }
+	
+	.desktop-text {
+        display: none;
+    }
+    .mobile-text {
+        display: inline;
+    }
 }
 
 .control-header {
@@ -860,7 +877,17 @@ body {
     to { opacity: 0; transform: translateX(20px); }
 }
 
+.draggable-item.mobile-selected {
+    border: 2px solid #007bff;
+    background-color: #e7f1ff;
+    transform: scale(0.98);
+}
+
 @media (max-width: 600px) {
+	
+	.socket-dropzone {
+        cursor: pointer;
+    }
     
     .modal-overlay.show {
         display: block;
