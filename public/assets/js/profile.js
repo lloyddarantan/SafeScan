@@ -243,6 +243,84 @@ function drag(ev) {
     ev.dataTransfer.setData("img", ev.target.querySelector('img').src);
 }
 
+//important
+function removeSavedAppliance(event, form) {
+    event.preventDefault();
+
+    const btn = form.querySelector('.fav-btn');
+    const card = form.closest('.product-card');
+
+    const applianceId = form.querySelector('input[name="appliance_id"]').value; 
+    
+
+    const originalIcon = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+    btn.disabled = true;
+
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            card.style.transition = 'all 0.3s ease';
+            card.style.opacity = '0';
+            card.style.transform = 'scale(0.9)';
+            
+            setTimeout(() => {
+                card.remove();
+                checkIfGridEmpty();
+            }, 300);
+
+            const draggableItem = document.getElementById('app-' + applianceId);
+            if (draggableItem) {
+
+                draggableItem.remove();
+                checkIfDraggableListEmpty();
+                
+            }
+            
+        } else {
+            alert("Failed to remove appliance. Please try again.");
+            btn.innerHTML = originalIcon;
+            btn.disabled = false;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert("An error occurred.");
+        btn.innerHTML = originalIcon;
+        btn.disabled = false;
+    });
+
+    return false;
+}
+
+// Checks if "My Saved Appliances" is empty
+function checkIfGridEmpty() {
+    const grid = document.querySelector('#section-members .product-grid');
+    const cards = grid.querySelectorAll('.product-card');
+    
+    if (cards.length === 0) {
+        grid.innerHTML = "<p style='color: #666;'>You haven't saved any appliances yet.</p>";
+    }
+}
+
+// Checks if the "Outlet Management" sidebar is empty
+function checkIfDraggableListEmpty() {
+    const list = document.querySelector('.draggable-list');
+    const items = list.querySelectorAll('.draggable-item');
+    
+    if (items.length === 0) {
+        list.innerHTML = '<p class="no-items">No saved appliances.</p>';
+    }
+}
+
 function dragFromSocket(ev) {
     let socketId = ev.target.parentNode.id;
     let data = outletState[socketId];
