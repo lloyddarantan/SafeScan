@@ -213,17 +213,17 @@
 
                     <div class="outlet-plate-container">
                         <div class="wall-plate">
-                            <div class="socket-dropzone" ondrop="drop(event)" ondragover="allowDrop(event)" id="socket-1">
+                            <div class="socket-dropzone" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="handleSocketClick(this)" id="socket-1">
                                 <div class="socket-holes">
                                     <span></span><span></span><span></span>
                                 </div>
                             </div>
-                            <div class="socket-dropzone" ondrop="drop(event)" ondragover="allowDrop(event)" id="socket-2">
+                            <div class="socket-dropzone" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="handleSocketClick(this)" id="socket-2">
                                 <div class="socket-holes">
                                     <span></span><span></span><span></span>
                                 </div>
                             </div>
-                            <div class="socket-dropzone" ondrop="drop(event)" ondragover="allowDrop(event)" id="socket-3">
+                            <div class="socket-dropzone" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="handleSocketClick(this)" id="socket-3">
                                 <div class="socket-holes">
                                     <span></span><span></span><span></span>
                                 </div>
@@ -249,10 +249,14 @@
                     </div>
                 </div>
 
-                <div class="appliance-sidebar-panel">
+                <div class="appliance-sidebar-panel" onclick="handleSidebarClick(this)">
                     <div class="sidebar-header">
                         <h4>My Saved Appliances</h4>
-                        <p>Drag items to the outlet</p>
+                        <p>
+							<span class="desktop-text">Drag items to the outlet</span>
+
+							<span class="mobile-text">Tap item, then tap outlet to plug</span>
+						</p>
                     </div>
                     
                     <div class="draggable-list">
@@ -260,7 +264,8 @@
                             <?php foreach ($savedAppliances as $row): ?>
                                 <div class="draggable-item" 
                                     draggable="true" 
-                                    ondragstart="drag(event)" 
+                                    ondragstart="drag(event)"
+									 onclick="handleApplianceClick(this)"
                                     data-name="<?= htmlspecialchars($row['type']) ?>" 
                                     data-brand="<?= htmlspecialchars($row['brand']) ?>"
                                     data-watts="<?= $row['wattage'] ?>"
@@ -436,5 +441,6 @@
 </div>
 
 <?php require __DIR__ . '/../others/footer.php'; ?>
+<script src="https://bernardo-castilho.github.io/DragDropTouch/DragDropTouch.js"></script>
 <script src="/assets/js/profile.js"></script>
 <div id="toast-container"></div>
