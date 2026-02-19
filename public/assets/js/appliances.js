@@ -238,6 +238,23 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+window.addEventListener("load", () =>{
+    const hash = window.location.hash.slice(1)
+        if (hash){
+            const navItem = Array.from(document.querySelectorAll('.sidebar .nav-item'))
+                .find(el => el.getAttribute('onclick')?.includes(hash));
+
+            if (navItem){
+                const onclickAttr = navItem.getAttribute('onclick');
+                const match = /switchTab\('(.+?)'/.exec(onclickAttr);
+                if (match) {
+                const room = match[1];
+                switchTab(room, navItem);
+            }
+        }
+            }
+
+})
 function handleLike(event, form) {
     event.preventDefault(); 
 

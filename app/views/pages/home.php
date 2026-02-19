@@ -28,14 +28,25 @@
 
     <div class="bottom-section-wrapper">
         <section class="ai-section">
-            <a href="/profile#outlet" class="ai-image-link">
-                <div class="ai-image-card">
-                    <img src="/assets/img/api-appliances.jpg" alt="AI Detection" class="ai-img">
-                    <div class="image-overlay">
-                        <span class="hover-btn">Go to Outlet Management <i class="fa-solid fa-arrow-right"></i></span>
+            <?php if (isset($isLoggedIn) && $isLoggedIn): ?>
+                <a href="/profile#outlet" class="ai-image-link">
+                    <div class="ai-image-card">
+                        <img src="/assets/img/api-appliances.jpg" alt="AI Detection" class="ai-img">
+                        <div class="image-overlay">
+                            <span class="hover-btn">Go to Outlet Management <i class="fa-solid fa-arrow-right"></i></span>
+                        </div>
                     </div>
-                </div>
-            </a>
+                </a>
+            <?php else: ?>
+                <a href="#" class="ai-image-link login-trigger">
+                    <div class="ai-image-card">
+                        <img src="/assets/img/api-appliances.jpg" alt="AI Detection" class="ai-img">
+                        <div class="image-overlay">
+                            <span class="hover-btn">Go to Outlet Management <i class="fa-solid fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+                </a>
+            <?php endif; ?>
 
             <div class="ai-content">
                 <h2>
@@ -45,7 +56,11 @@
                 <p>
                     Track the total amperage connected to each socket and prevent electrical overloads before they happen. Visual indicators help you manage appliance connections safely and efficiently.
                 </p>
-                <a href="/profile#outlet" class="action-btn">Try it now <i class="fa-solid fa-arrow-right"></i></a>
+                <?php if (isset($isLoggedIn) && $isLoggedIn): ?>
+                    <a href="/profile#outlet" class="action-btn">Try it now <i class="fa-solid fa-arrow-right"></i></a>
+                <?php else: ?>
+                    <a href="#" class="action-btn login-trigger">Try it now <i class="fa-solid fa-arrow-right"></i></a>
+                <?php endif; ?>
             </div>
         </section>
     </div>
@@ -63,11 +78,7 @@
                 <div class="card-content">
                     <h3>Kitchen</h3>
                     <p>Appliances used for cooking, food preparation, and food storage. These usually consume high electricity because they produce heat or keep items cold.</p>
-                    <?php if (isset($isLoggedIn) && $isLoggedIn): ?>
                         <a href="/appliances#kitchen" class="btn-view">View</a>
-                    <?php else: ?>
-                        <a href="#" class="btn-view login-trigger">View</a>
-                    <?php endif; ?>
                 </div>
             </div>
 
@@ -78,11 +89,7 @@
                 <div class="card-content">
                     <h3>Living Room</h3>
                     <p>Appliances used for comfort, entertainment, and daily activities where people usually gather. These are often used for long hours.</p>
-                    <?php if (isset($isLoggedIn) && $isLoggedIn): ?>
                         <a href="/appliances#living-room" class="btn-view">View</a>
-                    <?php else: ?>
-                        <a href="#" class="btn-view login-trigger">View</a>
-                    <?php endif; ?>
                 </div>
             </div>
 
@@ -93,11 +100,7 @@
                 <div class="card-content">
                     <h3>Bedroom</h3>
                     <p>Appliances used for rest, relaxation, and personal comfort. These are commonly used at night or for extended periods.</p>
-                    <?php if (isset($isLoggedIn) && $isLoggedIn): ?>
                         <a href="/appliances#bedroom" class="btn-view">View</a>
-                    <?php else: ?>
-                        <a href="#" class="btn-view login-trigger">View</a>
-                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -105,14 +108,14 @@
 
 <!-- login and signup modal -->
 
-<div id="authModal" class="modal-overlay">
+    <div id="authModal" class="modal-overlay">
         <div class="modal-box">
             <span class="close-modal">&times;</span>
             
             <div class="modal-content">
                 <i class="fa-solid fa-lock" style="font-size: 3rem; color: orange; margin-bottom: 15px;"></i>
                 <h3>Login Required</h3>
-                <p>You need to sign in to view your profile, use the chat, or upload appliances.</p>
+                <p>You need to sign in to view your profile, manage your outlets or use the chat.</p>
                 
                 <div class="modal-actions">
                     <a href="/login" class="btn-login">Log In</a>
@@ -121,5 +124,4 @@
             </div>
         </div>
     </div>
-
     <?php require __DIR__ . '/../others/footer.php'; ?>
