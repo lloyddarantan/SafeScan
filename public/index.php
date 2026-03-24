@@ -112,6 +112,14 @@ $router->get('logout', function() {
     (new AuthController())->logout();
 });
 
+//handles otp
+$router->post('send-otp', function() {
+    (new AuthController())->sendOTP();
+});
+
+$router->post('reset-password', function() {
+    (new AuthController())->resetPassword();
+});
 
 // Handle the request
 $router->resolve();

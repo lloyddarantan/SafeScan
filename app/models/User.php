@@ -87,12 +87,46 @@ class User {
 
    public function getSavedAppliances($userId) {
     
-    $sql = "SELECT a.* FROM appliance a 
-            JOIN favorites f ON a.appliance_id = f.appliance_id 
-            WHERE f.user_id = ?";
-            
-    $stmt = $this->conn->prepare($sql); 
-    $stmt->execute([$userId]);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        $sql = "SELECT a.* FROM appliance a 
+                JOIN favorites f ON a.appliance_id = f.appliance_id 
+                WHERE f.user_id = ?";
+                
+        $stmt = $this->conn->prepare($sql); 
+        $stmt->execute([$userId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+// otp
+    public function saveOTP($email, $otp) {
+        $expiry = date("Y-m-d H:i:s", strtotime("+5 minutes"));
+
+        $stmt = $this->conn->prepare("
+            UPDATE users 
+            SET otp_code = ?, otp_expiry = ? 
+            WHERE email = ?
+        ");
+        return $stmt->execute([$otp, $expiry, $email]);
+    }
+
+    public function verifyOTP($email, $otp) {
+        $stmt = $this->conn->prepare("
+            SELECT * FROM users 
+            WHERE email = ? 
+            AND otp_code = ? 
+            AND otp_expiry > NOW()
+        ");
+        $stmt->execute([$email, $otp]);
+        return $stmt->fetch();
+    }
+
+    public function updatePassword($email, $password) {
+        $hashed = password_hash($password, PASSWORD_DEFAULT);
+
+        $stmt = $this->conn->prepare("
+            UPDATE users 
+            SET password = ?, otp_code = NULL, otp_expiry = NULL
+            WHERE email = ?
+        ");
+        return $stmt->execute([$hashed, $email]);
+    }
 }

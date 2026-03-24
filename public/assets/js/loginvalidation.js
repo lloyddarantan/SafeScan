@@ -190,4 +190,36 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!isValid) event.preventDefault();
         });
     }
+
+function openForgotModal() {
+    document.getElementById('forgotModal').classList.add('show');
+}
+
+function closeModal() {
+    document.getElementById('forgotModal').classList.remove('show');
+}
+
+function sendOTP() {
+    fetch('/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'email=' + document.getElementById('fp-email').value
+    })
+    .then(res => res.json())
+    .then(data => alert(data.status));
+}
+
+function resetPassword() {
+    const email = document.getElementById('fp-email').value;
+    const otp = document.getElementById('fp-otp').value;
+    const password = document.getElementById('fp-password').value;
+
+    fetch('/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `email=${email}&otp=${otp}&password=${password}`
+    })
+    .then(res => res.json())
+    .then(data => alert(data.status));
+}
 });

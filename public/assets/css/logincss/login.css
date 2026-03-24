@@ -215,7 +215,31 @@ form label {
     color: #F89b42;
     font-weight: 500;
 }
+/* otp */
+.forgot-modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+}
 
+.forgot-modal.show {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.forgot-modal-content {
+    background: #1a1a1a;
+    padding: 25px;
+    border-radius: 10px;
+    width: 300px;
+    color: white;
+}
 /* Login Button */
 .btn-login {
     width: 100%;

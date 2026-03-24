@@ -90,7 +90,7 @@
                     </div>
                     
                     <div class="forgot-link">
-                        <a href="#">Forgot password?</a>
+                       <a href="#" onclick="openForgotModal(); return false;">Forgot password?</a>
                     </div>
 
                     <button type="submit" class="btn-login">Log In</button>
@@ -99,11 +99,30 @@
                         <p>Have no account? <a href="/signup">Create <span class="role-admin">ACCOUNT</span>.</a></p>
                     </div>
                 </form>
-                <script src="/assets/js/loginvalidation.js"></script>
+                
             </div>
         </div>
-
     </div>
 
+    <div id="forgotModal" class="forgot-modal">
+        <div class="forgot-modal-content">
+
+            <h3>Forgot Password</h3>
+
+            <input type="email" id="fp-email" placeholder="Enter your email">
+
+            <button onclick="sendOTP()">Send OTP</button>
+
+            <input type="text" id="fp-otp" placeholder="Enter OTP">
+            <input type="password" id="fp-password" placeholder="New Password">
+
+            <button onclick="resetPassword()">Reset Password</button>
+
+            <button onclick="closeModal()">Close</button>
+
+        </div>
+    </div>
+
+    <script src="/assets/js/loginvalidation.js"></script>    
 </body>
 </html>

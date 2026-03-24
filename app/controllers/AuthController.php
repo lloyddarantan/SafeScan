@@ -100,5 +100,66 @@ class AuthController {
         header("Location: /login");
         exit;
     }
+
+// otp
+    public function sendOTP() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $email = $_POST['email'];
+            $user = $this->userModel->findByEmail($email);
+
+            if (!$user) {
+                echo json_encode(['status' => 'error', 'message' => 'Email not found']);
+                return;
+            }
+
+            $phone = '63' . ltrim($user['phone'], '0');
+            $otp = rand(100000, 999999);
+
+            $this->userModel->saveOTP($email, $otp);
+
+            // 🔥 PhilSMS API
+            $apiKey = "2083|gg8c4xZq5rM5tdpDjGLzPBchiRiAb0ka5gfQ3RQb49c996f1";
+            $message = "Your SafeScan OTP is: $otp";
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, "https://app.philsms.com/api/v3/sms/send");
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+                "recipient" => $phone,
+                "sender_id" => "SafeScan",
+                "type" => "plain",
+                "message" => $message
+            ]));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                "Content-Type: application/json",
+                "Authorization: Bearer $apiKey"
+            ]);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            $response = curl_exec($ch);
+            curl_close($ch);
+
+            echo json_encode(['status' => 'success']);
+        }
+    }
+
+    public function resetPassword() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $email = $_POST['email'];
+            $otp = $_POST['otp'];
+            $newPassword = $_POST['password'];
+
+            $valid = $this->userModel->verifyOTP($email, $otp);
+
+            if ($valid) {
+                $this->userModel->updatePassword($email, $newPassword);
+                echo json_encode(['status' => 'success']);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Invalid or expired OTP']);
+            }
+        }
+    }
 }
 ?>

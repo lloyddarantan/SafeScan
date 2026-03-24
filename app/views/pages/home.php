@@ -6,26 +6,25 @@
 <title>SafeScan</title>
 <link rel="stylesheet" href="/assets/css/index.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<!-- hero -->
     <section class="hero-section">
         <div class="hero-content">
-            <h1>
-                Track appliance <br> 
-                energy in <span class="highlight">real time.</span>
-            </h1>
-            <p>Upload your appliance now</p>
+			<h1> <span class = "highlight"> Monitor </span> 
+					<span class = "highlight-2"> Appliance <br> Energy </span>
+			</h1>
+            <p>Track socket amperage, detect connected appliances, and prevent overloads with visual indicators.</p>
             <?php if (isset($isLoggedIn) && $isLoggedIn): ?>
-                <a href="/upload" class="btn-upload">Upload</a>
+                <a href="/upload" class="btn-upload">Try it Now</a>
             <?php else: ?>
-                <a href="#" class="btn-upload login-trigger">Upload</a>
+                <a href="#" class="btn-upload login-trigger">Try it Now</a>
             <?php endif; ?>
         </div>
         
         <div class="hero-image-container">
-            <img src="/assets/img/appliances.png" alt="Appliances" class="hero-img">
+            <img src="/assets/img/hero_page.png" alt="Appliances" class="hero-img">
         </div>
     </section>
-
+<!-- iinfo sec -->
     <div class="bottom-section-wrapper">
         <section class="ai-section">
             <?php if (isset($isLoggedIn) && $isLoggedIn): ?>
@@ -56,15 +55,31 @@
                 <p>
                     Track the total amperage connected to each socket and prevent electrical overloads before they happen. Visual indicators help you manage appliance connections safely and efficiently.
                 </p>
-                <?php if (isset($isLoggedIn) && $isLoggedIn): ?>
-                    <a href="/profile#outlet" class="action-btn">Try it now <i class="fa-solid fa-arrow-right"></i></a>
-                <?php else: ?>
-                    <a href="#" class="action-btn login-trigger">Try it now <i class="fa-solid fa-arrow-right"></i></a>
-                <?php endif; ?>
             </div>
         </section>
     </div>
-
+<!-- new feature -->
+    <section class="how-it-works">
+        <h2 class="how-title">How it <span class="highlight">Works</span></h2>
+        <p class="how-subtitle">Monitor and manage your appliances in three simple steps.</p>
+            <div class="how-container">
+                <div class="how-step">
+                    <div class="step-circle">1</div>
+                    <h3>View Appliances</h3>
+                    <p>See common appliances found in your home and understand their typical energy usage.</p>
+                </div>
+                <div class="how-step">
+                    <div class="step-circle">2</div>
+                    <h3>Save Appliances</h3>
+                    <p>Save appliances to your list to monitor their power consumption and track usage.</p>
+                </div>
+                <div class="how-step">
+                    <div class="step-circle">3</div>
+                    <h3>Outlet Management</h3>
+                    <p>Monitor total amperage connected to outlets and prevent electrical overloads.</p>
+                </div>
+            </div>
+    </section>
 
 	<section class="category-section">
         <h2 class="section-title">Know more about your appliances</h2>
