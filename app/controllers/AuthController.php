@@ -103,46 +103,83 @@ class AuthController {
 
 // otp
     public function sendOTP() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-            $email = $_POST['email'];
-            $user = $this->userModel->findByEmail($email);
+        header('Content-Type: application/json');
 
-            if (!$user) {
-                echo json_encode(['status' => 'error', 'message' => 'Email not found']);
-                return;
-            }
+        $email = $_POST['email'] ?? '';
+        $user = $this->userModel->findByEmail($email);
 
-            $phone = '63' . ltrim($user['phone'], '0');
-            $otp = rand(100000, 999999);
-
-            $this->userModel->saveOTP($email, $otp);
-
-            // 🔥 PhilSMS API
-            $apiKey = "2083|gg8c4xZq5rM5tdpDjGLzPBchiRiAb0ka5gfQ3RQb49c996f1";
-            $message = "Your SafeScan OTP is: $otp";
-
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, "https://app.philsms.com/api/v3/sms/send");
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
-                "recipient" => $phone,
-                "sender_id" => "SafeScan",
-                "type" => "plain",
-                "message" => $message
-            ]));
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                "Content-Type: application/json",
-                "Authorization: Bearer $apiKey"
+        if (!$user) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Email not found'
             ]);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            return;
+        }
 
-            $response = curl_exec($ch);
+        // ✅ FIXED: Proper phone formatting
+        $phone = $user['phone'];
+        if (strpos($phone, '63') !== 0) {
+            $phone = '63' . ltrim($phone, '0');
+        }
+
+        $otp = rand(100000, 999999);
+
+        // Save OTP to DB
+        $this->userModel->saveOTP($email, $otp);
+
+        // 🔥 PhilSMS API
+        $apiKey = "2083|gg8c4xZq5rM5tdpDjGLzPBchiRiAb0ka5gfQ3RQb49c996f1";
+        $message = "Your SafeScan OTP is: $otp";
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://dashboard.philsms.com/api/v3/sms/send");
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+            "recipient" => $phone,
+            "sender_id" => "PhilSMS",
+            "type" => "plain",
+            "message" => $message
+        ]));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Content-Type: application/json",
+            "Authorization: Bearer $apiKey"
+        ]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $response = curl_exec($ch);
+
+        // ❗ Handle cURL errors
+        if (curl_errno($ch)) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => curl_error($ch)
+            ]);
             curl_close($ch);
+            return;
+        }
 
-            echo json_encode(['status' => 'success']);
+        curl_close($ch);
+
+        // ✅ Decode API response
+        $result = json_decode($response, true);
+
+        // 🔍 Check if SMS was actually sent
+        if (isset($result['status']) && $result['status'] === 'success') {
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'OTP sent successfully'
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'SMS failed',
+                'api_response' => $result
+            ]);
         }
     }
+}
 
     public function resetPassword() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {

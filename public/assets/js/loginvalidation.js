@@ -190,14 +190,28 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!isValid) event.preventDefault();
         });
     }
+	
+	});
 
-function openForgotModal() {
-    document.getElementById('forgotModal').classList.add('show');
-}
+document.addEventListener('DOMContentLoaded', function() {
 
-function closeModal() {
-    document.getElementById('forgotModal').classList.remove('show');
-}
+    const closeBtn = document.getElementById('close-modal-btn');
+    const sendOtpBtn = document.getElementById('send-otp-btn');
+    const resetPassBtn = document.getElementById('reset-pass-btn');
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeModal);
+    }
+
+    if (sendOtpBtn) {
+        sendOtpBtn.addEventListener('click', sendOTP);
+    }
+
+    if (resetPassBtn) {
+        resetPassBtn.addEventListener('click', resetPassword);
+    }
+
+});
 
 function sendOTP() {
     fetch('/send-otp', {
@@ -222,4 +236,20 @@ function resetPassword() {
     .then(res => res.json())
     .then(data => alert(data.status));
 }
+	
+document.addEventListener('DOMContentLoaded', function() {
+    
+    const forgotLink = document.getElementById('forgot-password-link');
+    const modal = document.getElementById('forgotModal');
+
+    if (forgotLink && modal) {
+        forgotLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            modal.classList.add('show');
+        });
+    }
 });
+
+window.closeModal = function() {
+    document.getElementById('forgotModal').classList.remove('show');
+};

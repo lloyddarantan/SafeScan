@@ -215,30 +215,131 @@ form label {
     color: #F89b42;
     font-weight: 500;
 }
+
 /* otp */
 .forgot-modal {
     display: none;
     position: fixed;
-    z-index: 999;
+    z-index: 1000; 
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
 }
 
 .forgot-modal.show {
     display: flex;
     justify-content: center;
     align-items: center;
+    animation: fadeInModal 0.3s ease-in-out;
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
 }
 
 .forgot-modal-content {
-    background: #1a1a1a;
-    padding: 25px;
-    border-radius: 10px;
-    width: 300px;
+    background: #ffffff;
+    padding: 35px 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    position: relative;
+}
+
+.forgot-modal-content h3 {
+    color: #1a1a1a;
+    font-size: 1.6rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.forgot-modal-content input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.2s;
+    margin-bottom: 15px;
+    font-family: 'Kanit', sans-serif;
+}
+
+.forgot-modal-content input:focus {
+    border-color: #F89b42;
+    background-color: #fff;
+}
+
+.forgot-modal-content button {
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Kanit', sans-serif;
+}
+
+.forgot-modal-content .btn-send-otp {
+    background: #1A2238;
     color: white;
+    padding: 6px 16px;
+    font-size: 0.85rem;
+    font-weight: 400;
+    display: block;
+    margin-left: auto;
+    margin-top: -5px;
+    margin-bottom: 20px;
+}
+
+.forgot-modal-content .btn-send-otp:hover {
+    background: #2a3655;
+}
+
+.forgot-modal-content .btn-reset-pass {
+    width: 100%;
+    background: #F89b42;
+    color: white;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.forgot-modal-content .btn-reset-pass:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(248, 155, 66, 0.4);
+}
+
+.forgot-modal-content .modal-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    color: #888;
+    width: 35px;
+    height: 35px;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    padding: 0;
+    margin: 0;
+    z-index: 10;
+}
+
+.forgot-modal-content .modal-close-btn:hover {
+    color: #F89b42;
+    background: rgba(0, 0, 0, 0.05);
+    transform: rotate(90deg);
+    box-shadow: none;
 }
 /* Login Button */
 .btn-login {

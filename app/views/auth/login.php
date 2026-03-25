@@ -90,7 +90,7 @@
                     </div>
                     
                     <div class="forgot-link">
-                       <a href="#" onclick="openForgotModal(); return false;">Forgot password?</a>
+                       <a href="#" id="forgot-password-link">Forgot password?</a>
                     </div>
 
                     <button type="submit" class="btn-login">Log In</button>
@@ -105,23 +105,24 @@
     </div>
 
     <div id="forgotModal" class="forgot-modal">
-        <div class="forgot-modal-content">
+    <div class="forgot-modal-content">
+        
+        <button id="close-modal-btn" class="modal-close-btn">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
 
-            <h3>Forgot Password</h3>
+        <h3>Forgot Password</h3>
 
-            <input type="email" id="fp-email" placeholder="Enter your email">
+        <input type="email" id="fp-email" placeholder="Enter your email">
+            <button id="send-otp-btn" class="btn-send-otp">Send OTP</button>
 
-            <button onclick="sendOTP()">Send OTP</button>
+        <input type="text" id="fp-otp" placeholder="Enter OTP">
+        <input type="password" id="fp-password" placeholder="New Password">
 
-            <input type="text" id="fp-otp" placeholder="Enter OTP">
-            <input type="password" id="fp-password" placeholder="New Password">
+         <button id="reset-pass-btn" class="btn-reset-pass">Reset Password</button>
 
-            <button onclick="resetPassword()">Reset Password</button>
-
-            <button onclick="closeModal()">Close</button>
-
-        </div>
     </div>
+</div>
 
     <script src="/assets/js/loginvalidation.js"></script>    
 </body>
