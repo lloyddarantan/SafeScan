@@ -647,6 +647,30 @@ tr:hover td {
     color: #ef4444; /* Makes the word 'cannot' red like the picture */
 }
 
+/* pdf */
+.btn-pdf {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.2s;
+}
+
+.btn-pdf:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+}
+
+.btn-pdf i {
+  font-size: 0.9rem;
+}
 .modal-footer {
     display: flex;
     gap: 16px;

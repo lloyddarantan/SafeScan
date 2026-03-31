@@ -95,12 +95,19 @@
         </div>
     </div>
 
+<!-- users -->
     <div id="users" class="view-section">
         <div class="card user-card">
             <div class="card-header">
                 <h2 class="card-title">User Management</h2>
+                
+
 
                 <div class="header-controls">
+                    <a href="admin/users-pdf" class="btn-pdf">
+                        <i class="fa-solid fa-file-pdf"></i> Generate PDF
+                    </a>
+
                     <select id="userRoleFilter" class="filter-select" onchange="filterUsers()">
                         <option value="">All Roles</option>
                         <option value="Admin">Admin</option>
@@ -168,6 +175,11 @@
             <div class="card-header">
                 <h2 class="card-title">Appliances Database</h2>
                 <div class="header-controls">
+                    
+                    <a href="admin/appliances-pdf" class="btn-pdf">
+                        <i class="fa-solid fa-file-pdf"></i> Generate PDF
+                    </a>
+
 					<div class="view-toggles">
 						<button class="btn-view active" onclick="setApplianceView('list', this)" title="List View">
 							<i class="fa-solid fa-list"></i>

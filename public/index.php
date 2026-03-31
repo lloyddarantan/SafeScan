@@ -62,7 +62,6 @@ $router->post('favorite/toggle', function() {
 $router->get('outletmanagement', function() {
     (new OutletManagementController())->index();
 });
-$router
 // ADMIN ROUTES
 
 $router->get('admin', function() {
@@ -127,5 +126,13 @@ $router->post('reset-password', function() {
     (new AuthController())->resetPassword();
 });
 
+// handles pdf
+$router->get('admin/users-pdf', function() {
+    (new AdminController())->generateUsersPDF();
+});
+
+$router->get('admin/appliances-pdf', function() {
+    (new AdminController())->generateAppliancesPDF();
+});
 // Handle the request
 $router->resolve();

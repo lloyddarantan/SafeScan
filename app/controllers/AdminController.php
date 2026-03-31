@@ -200,6 +200,38 @@ class AdminController {
             exit();
         }
     }
+
+    public function generateUsersPDF() {
+        require_once __DIR__ . '/../services/PDFService.php';
+
+        $users = $this->adminModel->getAllUsers();
+
+        $pdf = new PDFService();
+        $pdf->AddPage();
+        $pdf->SetFont('Arial','B',12);
+        $pdf->Cell(0,10,'User Report',0,1,'C');
+        $pdf->Ln(5);
+
+        $pdf->usersTable($users);
+
+        $pdf->Output('D', 'users_report.pdf');
+    }
+
+    public function generateAppliancesPDF() {
+       require_once __DIR__ . '/../services/PDFService.php';
+
+        $apps = $this->adminModel->getAllAppliances();
+
+        $pdf = new PDFService();
+        $pdf->AddPage();
+        $pdf->SetFont('Arial','B',12);
+        $pdf->Cell(0,10,'Appliances Report',0,1,'C');
+        $pdf->Ln(5);
+
+        $pdf->appliancesTable($apps);
+
+        $pdf->Output('D', 'appliances_report.pdf');
+    }
 }
 
 ?>
