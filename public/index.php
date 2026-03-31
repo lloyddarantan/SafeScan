@@ -62,7 +62,7 @@ $router->post('favorite/toggle', function() {
 $router->get('outletmanagement', function() {
     (new OutletManagementController())->index();
 });
-$router
+
 // ADMIN ROUTES
 
 $router->get('admin', function() {
