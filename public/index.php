@@ -13,6 +13,8 @@ require_once __DIR__ . '/../app/controllers/AppliancesController.php';
 require_once __DIR__ . '/../app/controllers/ChatController.php';
 require_once __DIR__ . '/../app/controllers/UploadController.php';
 require_once __DIR__ . '/../app/controllers/AdminController.php';
+require_once __DIR__ . '/../app/controllers/OutletManagement.php';
+
 
 $router = new Router();
 
@@ -57,6 +59,10 @@ $router->post('favorite/toggle', function() {
     (new AppliancesController())->toggleFavorite();
 });
 
+$router->get('outletmanagement', function() {
+    (new OutletManagementController())->index();
+});
+$router
 // ADMIN ROUTES
 
 $router->get('admin', function() {

@@ -37,7 +37,8 @@
     </aside>
 
     <main class="main-content">
-
+        
+<!-- profile -->
         <div id="section-profile" class="content-section active">
             <div class="header-row">
                 <span class="page-title">My Profile</span>
@@ -292,6 +293,7 @@
             </div>
         </div>
 
+<!-- history -->
         <div id="section-history" class="content-section">
             <div class="table-header-row">
                 <span class="section-heading">History</span>

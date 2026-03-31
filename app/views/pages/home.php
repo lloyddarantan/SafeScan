@@ -14,7 +14,7 @@
 			</h1>
             <p>Track socket amperage, detect connected appliances, and prevent overloads with visual indicators.</p>
             <?php if (isset($isLoggedIn) && $isLoggedIn): ?>
-                <a href="/upload" class="btn-upload">Try it Now</a>
+                <a href="/outletmanagement" class="btn-upload">Try it Now</a>
             <?php else: ?>
                 <a href="#" class="btn-upload login-trigger">Try it Now</a>
             <?php endif; ?>
@@ -28,7 +28,7 @@
     <div class="bottom-section-wrapper">
         <section class="ai-section">
             <?php if (isset($isLoggedIn) && $isLoggedIn): ?>
-                <a href="/profile#outlet" class="ai-image-link">
+                <a href="/outletmanagement" class="ai-image-link">
                     <div class="ai-image-card">
                         <img src="/assets/img/api-appliances.jpg" alt="AI Detection" class="ai-img">
                         <div class="image-overlay">

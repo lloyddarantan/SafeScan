@@ -46,9 +46,9 @@ if ($page === '') {
             </ul>
 
             <?php if ($isLoggedIn): ?>
-                <a href="/chat" class="btn-chat-desktop">Coming Soon!</a>
+                <a href="/outletmanagement" class="btn-chat-desktop">Manage</a>
             <?php else: ?>
-                <a href="#" class="btn-chat-desktop login-trigger">Coming Soon!</a>
+                <a href="#" class="btn-chat-desktop login-trigger">Manage</a>
             <?php endif; ?>
         </nav>
     </div>
