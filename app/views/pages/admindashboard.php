@@ -95,12 +95,19 @@
         </div>
     </div>
 
-    <div id="users" class="view-section">
+<!-- users -->
+<div id="users" class="view-section">
+    <div class="dashboard-grid">
+        
         <div class="card user-card">
             <div class="card-header">
                 <h2 class="card-title">User Management</h2>
-
+                
                 <div class="header-controls">
+                    <a href="admin/users-pdf" class="btn-pdf">
+                        <i class="fa-solid fa-file-pdf"></i> Generate PDF
+                    </a>
+
                     <select id="userRoleFilter" class="filter-select" onchange="filterUsers()">
                         <option value="">All Roles</option>
                         <option value="Admin">Admin</option>
@@ -119,7 +126,7 @@
                         <input type="text" id="userSearch" class="search-box" placeholder="Search users..." onkeyup="filterUsers()">
                     </div>
                 </div>
-                </div>
+            </div>
 
             <div class="table-container">
                 <table id="usersTable">
@@ -160,22 +167,59 @@
                 </table>
             </div>
         </div>
-    </div>
 
-<!-- appliances -->
-    <div id="appliances" class="view-section">
-        <div class="card appliance-card">
+        <div class="card analytics-card">
+            <div class="card-header">
+                <h2 class="card-title"><i class="fa-solid fa-chart-pie"></i>User Distribution by Location</h2>
+            </div>
+            
+            <div class="card-body">
+                <?php 
+                    $locationCounts = [];
+                    if (!empty($data['users'])) {
+                        foreach ($data['users'] as $u) {
+                            $loc = $u['loc'];
+                            $locationCounts[$loc] = ($locationCounts[$loc] ?? 0) + 1;
+                        }
+                    }
+                    $chartLabels = json_encode(array_keys($locationCounts));
+                    $chartData = json_encode(array_values($locationCounts));
+                ?>
+                
+                <div class="chart-container">
+                    <canvas id="locationPieChart" 
+                            data-labels='<?= htmlspecialchars($chartLabels, ENT_QUOTES, 'UTF-8') ?>' 
+                            data-counts='<?= htmlspecialchars($chartData, ENT_QUOTES, 'UTF-8') ?>'>
+                    </canvas>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+	
+<!-- appliances -->	
+<div id="appliances" class="view-section">
+    <div class="dashboard-grid">
+
+        <div class="card appliance-card user-card">
             <div class="card-header">
                 <h2 class="card-title">Appliances Database</h2>
                 <div class="header-controls">
-					<div class="view-toggles">
-						<button class="btn-view active" onclick="setApplianceView('list', this)" title="List View">
-							<i class="fa-solid fa-list"></i>
-						</button>
-						<button class="btn-view" onclick="setApplianceView('grid', this)" title="Tile View">
-							<i class="fa-solid fa-border-all"></i>
-						</button>
-					</div>
+                    <div class="left-header">
+                    <a href="admin/appliances-pdf" class="btn-pdf">
+                        <i class="fa-solid fa-file-pdf"></i> Generate PDF
+                    </a>
+
+                    <div class="view-toggles">
+                        <button class="btn-view active" onclick="setApplianceView('list', this)" title="List View">
+                            <i class="fa-solid fa-list"></i>
+                        </button>
+                        <button class="btn-view" onclick="setApplianceView('grid', this)" title="Tile View">
+                            <i class="fa-solid fa-border-all"></i>
+                        </button>
+                    </div>
                     <select id="filterCategory" class="filter-select" onchange="filterApps()">
                         <option value="">All Categories</option>
                     </select>
@@ -192,6 +236,7 @@
                     <button class="btn-add" onclick="openModal('modalAppliance')">
                         <i class="fa-solid fa-plus"></i> New
                     </button>
+					</div>
                 </div>
             </div>
 
@@ -208,52 +253,101 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-					<tbody>
-						<?php foreach($data['appliances'] as $app): ?>
-							<tr class="app-row" 
-								data-brand="<?= $app['brand'] ?>" 
-								data-group="<?= $app['group'] ?>" 
-								data-category="<?= $app['category'] ?>"
+                    <tbody>
+                        <?php foreach($data['appliances'] as $app): ?>
+                            <tr class="app-row" 
+                                data-brand="<?= $app['brand'] ?>" 
+                                data-group="<?= $app['group'] ?>" 
+                                data-category="<?= $app['category'] ?>"
                                 data-search="<?= strtolower($app['brand'] . ' ' . $app['group'] . ' ' . $app['type'] . ' ' . $app['category']) ?>">
 
-								<td class="tile-image">
-									<img src="<?= $app['image_path'] ?>" alt="<?= $app['brand'] ?>" />
-								</td>
-								<td class="brand-hover-cell">
+                                <td class="tile-image">
+                                    <img src="<?= $app['image_path'] ?>" alt="<?= $app['brand'] ?>" />
+                                </td>
+                                <td class="brand-hover-cell">
                                     <strong><?= $app['brand'] ?></strong>
                                     <img src="<?= $app['image_path'] ?>" class="brand-hover-img" alt="<?= $app['brand'] ?>" />
                                 </td>
-								<td><?= $app['type'] ?></td>
-								<td><?= $app['group'] ?></td>
-								<td><?= $app['category'] ?></td>
-								<td><?= $app['watt'] ?>W</td>
-								<td><?= $app['cons'] ?>kWh</td>
-								<td class="col-safety"><?= htmlspecialchars($app['safety_reminder']) ?></td>
-								<td class="col-hazards"><?= htmlspecialchars($app['hazards']) ?></td>
+                                <td><?= $app['type'] ?></td>
+                                <td><?= $app['group'] ?></td>
+                                <td><?= $app['category'] ?></td>
+                                <td><?= $app['watt'] ?>W</td>
+                                <td><?= $app['cons'] ?>kWh</td>
+                                <td class="col-safety"><?= htmlspecialchars($app['safety_reminder']) ?></td>
+                                <td class="col-hazards"><?= htmlspecialchars($app['hazards']) ?></td>
 
-								<td class="actions-cell">
-									<button class="btn-action edit-btn" 
-										title="Edit"
-										onclick='openEditAppliance(<?php echo json_encode($app); ?>)'>
-										<i class="fa-solid fa-pen-to-square"></i>
-									</button>
-
-									<a href="javascript:void(0);" 
-                                        class="btn-action delete-btn" 
-                                        title="Delete"
-                                        onclick="openDeleteModal(<?= $app['appliance_id'] ?>)">
-                                            <i class="fa-solid fa-trash"></i>
+                                <td class="actions-cell">
+                                    <button class="btn-action edit-btn" title="Edit" onclick='openEditAppliance(<?php echo json_encode($app); ?>)'>
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+                                    <a href="javascript:void(0);" class="btn-action delete-btn" title="Delete" onclick="openDeleteModal(<?= $app['appliance_id'] ?>)">
+                                        <i class="fa-solid fa-trash"></i>
                                     </a>
-
-								</td>
-							</tr>
-						<?php endforeach; ?>
-					</tbody>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
                 </table>
             </div>
-
         </div>
+
+        <div class="card analytics-card">
+            <div class="card-header">
+                <h2 class="card-title"><i class="fa-solid fa-plug" style="color: #F89b42;"></i>Power Analytics (Avg)</h2>
+            </div>
+            
+            <div class="card-body">
+                <?php 
+                    $appStats = [
+                        'group_watts' => [], 'group_cons' => [],
+                        'cat_watts' => [], 'cat_cons' => [],
+                        'group_counts' => [], 'cat_counts' => []
+                    ];
+
+                    if (!empty($data['appliances'])) {
+                        foreach ($data['appliances'] as $app) {
+                            $g = !empty($app['group']) ? $app['group'] : 'Uncategorized';
+                            $c = !empty($app['category']) ? $app['category'] : 'Uncategorized';
+                            
+                            $w = (float)preg_replace('/[^0-9.]/', '', $app['watt']);
+                            $cons = (float)preg_replace('/[^0-9.]/', '', $app['cons']);
+
+                            $appStats['group_watts'][$g] = ($appStats['group_watts'][$g] ?? 0) + $w;
+                            $appStats['group_cons'][$g] = ($appStats['group_cons'][$g] ?? 0) + $cons;
+                            $appStats['group_counts'][$g] = ($appStats['group_counts'][$g] ?? 0) + 1;
+
+                            $appStats['cat_watts'][$c] = ($appStats['cat_watts'][$c] ?? 0) + $w;
+                            $appStats['cat_cons'][$c] = ($appStats['cat_cons'][$c] ?? 0) + $cons;
+                            $appStats['cat_counts'][$c] = ($appStats['cat_counts'][$c] ?? 0) + 1;
+                        }
+
+                        foreach ($appStats['group_counts'] as $k => $count) {
+                            $appStats['group_watts'][$k] = round($appStats['group_watts'][$k] / $count, 2);
+                            $appStats['group_cons'][$k] = round($appStats['group_cons'][$k] / $count, 2);
+                        }
+                        foreach ($appStats['cat_counts'] as $k => $count) {
+                            $appStats['cat_watts'][$k] = round($appStats['cat_watts'][$k] / $count, 2);
+                            $appStats['cat_cons'][$k] = round($appStats['cat_cons'][$k] / $count, 2);
+                        }
+                    }
+                    $chartDataJson = json_encode($appStats);
+                ?>
+                
+                <div class="chart-toggles">
+                    <button class="btn-chart-toggle active" onclick="updateAppChart('group_watts', 'Average Watts per Group', this)">Watts/Group</button>
+                    <button class="btn-chart-toggle" onclick="updateAppChart('cat_watts', 'Average Watts per Category', this)">Watts/Category</button>
+                    <button class="btn-chart-toggle" onclick="updateAppChart('group_cons', 'Average kWh per Group', this)">kWh/Group</button>
+                    <button class="btn-chart-toggle" onclick="updateAppChart('cat_cons', 'Average kWh per Category', this)">kWh/Category</button>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="applianceChart" data-stats='<?= htmlspecialchars($chartDataJson, ENT_QUOTES, 'UTF-8') ?>'></canvas>
+                </div>
+            </div>
+        </div>
+
     </div>
+</div>
 
     <div id="modalProfile" class="modal-overlay">
         <div class="modal-content">
@@ -489,6 +583,6 @@
     </div>
 </div>
 
-
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="/assets/js/admin.js"></script>
 </body>
