@@ -259,39 +259,30 @@ function handleEditFileSelect(event) {
     }
 }
 
-// Store the ID of the appliance we want to delete
 let currentDeleteId = null;
 
-// Open the modal and save the ID
 function openDeleteModal(applianceId) {
     currentDeleteId = applianceId;
     openModal('deleteModal'); 
 }
 
-// Close the modal and reset the ID
 function closeDeleteModal() {
     currentDeleteId = null;
     closeModal('deleteModal'); 
 }
 
-// 1. Helper function to remember we were on the Appliances tab
 function keepApplianceTabOpen() {
     sessionStorage.setItem('reopenSection', 'appliances');
 }
 
-// 2. Updated confirmDelete function
 function confirmDelete() {
     if (currentDeleteId) {
-        keepApplianceTabOpen(); // Save state before redirect
+        keepApplianceTabOpen();
         window.location.href = '/admin/delete_appliance?id=' + currentDeleteId;
     }
 }
 
-// 3. Handle page reloads and form submissions
 document.addEventListener("DOMContentLoaded", function() {
-    
-    // --- PART A: Attach memory to Add and Edit Forms ---
-    // This ensures that when you add or edit, it stays on the appliances tab too
     const addForm = document.querySelector('form[action="/admin/add_appliance"]');
     const editForm = document.querySelector('form[action="/admin/edit_appliance"]');
     
@@ -299,20 +290,131 @@ document.addEventListener("DOMContentLoaded", function() {
     if (editForm) editForm.addEventListener('submit', keepApplianceTabOpen);
 
 
-    // --- PART B: Auto-switch back to Appliances tab if memory exists ---
     let sectionToReopen = sessionStorage.getItem('reopenSection');
     
     if (sectionToReopen === 'appliances') {
-        // Find the Appliances tab element by looking for the word "Appliances"
         let applianceTabBtn = Array.from(document.querySelectorAll('.tab-link'))
                                    .find(tab => tab.textContent.includes('Appliances'));
         
         if (applianceTabBtn) {
-            // Use your existing switchTab function to change the view instantly
             switchTab('appliances', applianceTabBtn);
         }
         
-        // Clear the memory so it behaves normally next time you visit the page
         sessionStorage.removeItem('reopenSection'); 
     }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const canvas = document.getElementById('locationPieChart');
+    
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        
+        const locationLabels = JSON.parse(canvas.getAttribute('data-labels'));
+        const locationData = JSON.parse(canvas.getAttribute('data-counts'));
+
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: locationLabels,
+                datasets: [{
+					label: 'Users by Location',
+                    data: locationData,
+                    backgroundColor: [
+                        '#F89b42',
+                        '#1a2238',
+                        '#ff4d4d',
+                        '#e08b3b',
+                        '#888888',
+                        '#555555'
+                    ],
+                    borderColor: '#ffffff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+    responsive: true,
+    maintainAspectRatio: false, // Essential for the 300px height to work
+    plugins: {
+        title: {
+            display: false // Hide Chart.js title since the HTML card header has it
+        },
+        legend: {
+            position: 'bottom', // Moving the legend to the bottom looks cleaner for pie charts
+            labels: {
+                padding: 20,
+                usePointStyle: true // Makes the legend indicators circles instead of boxes
+            }
+        }
+    }
+}
+        });
+    }
+});
+
+let applianceChartInstance = null;
+let parsedAppStats = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+    const canvas = document.getElementById('applianceChart');
+    
+    if (canvas) {
+        parsedAppStats = JSON.parse(canvas.getAttribute('data-stats'));
+        
+        const ctx = canvas.getContext('2d');
+        const defaultLabels = Object.keys(parsedAppStats['group_watts']);
+        const defaultData = Object.values(parsedAppStats['group_watts']);
+
+        applianceChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: defaultLabels,
+                datasets: [{
+                    label: 'Average Watts',
+                    data: defaultData,
+                    backgroundColor: '#F89b42',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Average Watts per Group',
+                        color: '#1a2238'
+                    },
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+});
+
+function updateAppChart(dataKey, chartTitle, btnElement) {
+    if (!applianceChartInstance || !parsedAppStats) return;
+
+    document.querySelectorAll('.btn-chart-toggle').forEach(btn => btn.classList.remove('active'));
+    btnElement.classList.add('active');
+
+    const newLabels = Object.keys(parsedAppStats[dataKey]);
+    const newData = Object.values(parsedAppStats[dataKey]);
+    
+    const isWatts = dataKey.includes('watts');
+    const color = isWatts ? '#F89b42' : '#ff4d4d';
+    const label = isWatts ? 'Average Watts' : 'Average kWh';
+
+    applianceChartInstance.data.labels = newLabels;
+    applianceChartInstance.data.datasets[0].data = newData;
+    applianceChartInstance.data.datasets[0].label = label;
+    applianceChartInstance.data.datasets[0].backgroundColor = color;
+    applianceChartInstance.options.plugins.title.text = chartTitle;
+    
+    applianceChartInstance.update();
+}
