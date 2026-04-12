@@ -23,9 +23,10 @@
  ?>
 
 <title>SafeScan</title>
-    <link rel="stylesheet" href="/assets/css/profile.css">
+    <link rel="stylesheet" href="/assets/css/outletmanagement.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<div class="dashboard-container">
    <main class="main-content"> 
         <div id="section-outlet" class="content-section">
             <h3 style="font-weight: 400; margin-bottom: 20px;">Outlet Management</h3>
@@ -143,8 +144,9 @@
             </div>
         </div>
     </main>
+</div>
 
 <?php require __DIR__ . '/../others/footer.php'; ?>
 <script src="https://bernardo-castilho.github.io/DragDropTouch/DragDropTouch.js"></script>
-<script src="/assets/js/profile.js"></script>
+<script src="/assets/js/outletmanagement.js"></script>
 <div id="toast-container"></div>
