@@ -23,8 +23,6 @@ class AdminController {
         $adminProfile = $this->adminModel->getAdminProfile($_SESSION['user_id']);
         $locationCounts = $this->getLocationCounts($users);
 
-        $data['chartLabels'] = array_keys($locationCounts);
-        $data['chartData'] = array_values($locationCounts);
         $appliances = $this->adminModel->getAllAppliances();
             foreach ($appliances as $key => $app) {
                 $webBasePath = '/assets/img/appliances/';
@@ -54,15 +52,15 @@ class AdminController {
                 }
             }
 
-        $data = [
-            'stats' => $stats,
-            'users' => $users,
-            'recentUsers' => array_slice($users, 0, 3),
-            'appliances' => $appliances,
-            'admin' => $adminProfile
-            'chartLabels' => array_keys($locationCounts),
-            'chartData' => array_values($locationCounts)
-        ];
+$data = [
+    'stats' => $stats,
+    'users' => $users,
+    'recentUsers' => array_slice($users, 0, 3),
+    'appliances' => $appliances,
+    'admin' => $adminProfile,
+    'chartLabels' => array_keys($locationCounts),
+    'chartData' => array_values($locationCounts)
+];
 
         require __DIR__ . '/../views/pages/admindashboard.php';
     }
