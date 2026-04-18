@@ -130,7 +130,7 @@ class AuthController {
         $this->userModel->saveOTP($email, $otp);
 
         // 🔥 PhilSMS API
-        $apiKey = "2083|gg8c4xZq5rM5tdpDjGLzPBchiRiAb0ka5gfQ3RQb49c996f1";
+        $apiKey = "2577|6gIPiRXsHnPYLDYQPW4qfzAcMStzzKGmkEry7rDOd9f05df6";
         $message = "Your SafeScan OTP is: $otp";
 
         $ch = curl_init();
