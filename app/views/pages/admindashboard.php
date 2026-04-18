@@ -30,70 +30,85 @@
     </nav>
 
     <div id="admin" class="view-section active">
-        <div class="dashboard-grid">
-            <div class="main-content">
-                
-                <div class="card profile-card">
-                    <div class="profile-left">
-                        <img src="https://api.dicebear.com/9.x/initials/svg?seed=<?php echo $data['admin']['first_name']; ?>" class="avatar">
-                        <div class="profile-details">
-                            <div class="data-group">
-                                <label>Name</label>
-                                <span><?php echo $data['admin']['first_name'] . ' ' . $data['admin']['last_name']; ?></span>
-                            </div>
-                            <div class="data-group">
-                                <label>Email</label>
-                                <span><?php echo $data['admin']['email']; ?></span>
-                            </div>
-                            <div class="data-group">
-                                <label>Phone</label>
-                                <span><?php echo $data['admin']['phone'] ?? 'Not Set'; ?></span>
-                            </div>
+    <div class="dashboard-grid">
+        <div class="main-content">
+            
+            <div class="card profile-card">
+                <div class="profile-left">
+                    <img src="https://api.dicebear.com/9.x/initials/svg?seed=<?php echo htmlspecialchars($data['admin']['first_name']); ?>" class="avatar" alt="User Avatar">
+                    <div class="profile-details">
+                        <div class="data-group">
+                            <label>Name</label>
+                            <span><?php echo htmlspecialchars($data['admin']['first_name'] . ' ' . $data['admin']['last_name']); ?></span>
+                        </div>
+                        <div class="data-group">
+                            <label>Email</label>
+                            <span><?php echo htmlspecialchars($data['admin']['email']); ?></span>
+                        </div>
+                        <div class="data-group">
+                            <label>Phone</label>
+                            <span><?php echo htmlspecialchars($data['admin']['phone'] ?? 'Not Set'); ?></span>
                         </div>
                     </div>
-                    <button class="btn-edit" onclick="openModal('modalProfile')">Edit Profile</button>
                 </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">Recent Registrations</h2>
-                        <a href="#" class="btn-text" onclick="switchTab('users', document.querySelectorAll('.tab-link')[1])">
-                            View All Users <i class="fa-solid fa-arrow-right"></i>
-                        </a>
-                    </div>
-                    <div class="table-container">
-                        <table>
-                            <thead><tr><th>User Name</th><th>Location</th><th>Date Joined</th></tr></thead>
-                            <tbody>
-                                <?php if(!empty($data['recentUsers'])): ?>
-                                    <?php foreach($data['recentUsers'] as $user): ?>
-                                    <tr>
-                                        <td><strong><?php echo $user['name']; ?></strong></td>
-                                        <td><?php echo $user['loc']; ?></td>
-                                        <td><?php echo $user['joined']; ?></td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <tr><td colspan="3" style="text-align:center; color:#94a3b8;">No recent registrations.</td></tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                <button class="btn-edit" onclick="openModal('modalProfile')">Edit Profile</button>
             </div>
 
-            <div class="sidebar">
-                <div class="card stat-card">
-                    <h3>Total Users</h3>
-                    <div class="stat-val"><?php echo $data['stats']['users'] ?? 0; ?></div>
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Recent Registrations</h2>
+                    <a href="#" class="btn-text" onclick="switchTab('users', document.querySelectorAll('.tab-link')[1])">
+                        View All Users <i class="fa-solid fa-arrow-right"></i>
+                    </a>
                 </div>
-                <div class="card stat-card">
-                    <h3>Appliances Logged</h3>
-                    <div class="stat-val"><?php echo $data['stats']['appliances'] ?? 0; ?></div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>User Name</th>
+                                <th>Location</th>
+                                <th>Date Joined</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if(!empty($data['recentUsers'])): ?>
+                                <?php foreach($data['recentUsers'] as $user): ?>
+                                <tr>
+                                    <td><strong><?php echo htmlspecialchars($user['name']); ?></strong></td>
+                                    <td><?php echo htmlspecialchars($user['loc']); ?></td>
+                                    <td><?php echo htmlspecialchars($user['joined']); ?></td>
+                                </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="3" style="text-align:center; color:#94a3b8;">No recent registrations.</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+
+        <div class="sidebar">
+            <div class="card stat-card">
+                <h3>Total Users</h3>
+                <div class="stat-val"><?php echo htmlspecialchars($data['stats']['users'] ?? 0); ?></div>
+            </div>
+            <div class="card stat-card">
+                <h3>Appliances Logged</h3>
+                <div class="stat-val"><?php echo htmlspecialchars($data['stats']['appliances'] ?? 0); ?></div>
+            </div>
+			<div class="card tip-card">
+				<div class="tip-header">
+					<i class="fa-regular fa-lightbulb"></i>
+					<h3 class="card-title">Pro Tip</h3>
+				</div>
+				<p class="tip-text">Keep your dashboard organized by periodically reviewing and archiving inactive user accounts. A clean system runs faster and is easier to manage.</p>
+			</div>
+        </div>
     </div>
+</div>
 
 <!-- users -->
 <div id="users" class="view-section">

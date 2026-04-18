@@ -54,12 +54,12 @@ if ($page === '') {
     </div>
 
     <?php if ($isLoggedIn): ?>
-        <a href="/chat" class="floating-chat-mobile">
-            <i class="fa-solid fa-message"></i>
+        <a href="/outletmanagement" class="floating-chat-mobile">
+            <i class="fa-solid fa-plug"></i>
         </a>
     <?php else: ?>
         <a href="#" class="floating-chat-mobile login-trigger">
-            <i class="fa-solid fa-message"></i>
+            <i class="fa-solid fa-plug"></i>
         </a>
     <?php endif; ?>
 
