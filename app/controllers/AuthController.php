@@ -118,7 +118,6 @@ class AuthController {
             return;
         }
 
-        // ✅ FIXED: Proper phone formatting
         $phone = $user['phone'];
         if (strpos($phone, '63') !== 0) {
             $phone = '63' . ltrim($phone, '0');
@@ -126,10 +125,8 @@ class AuthController {
 
         $otp = rand(100000, 999999);
 
-        // Save OTP to DB
         $this->userModel->saveOTP($email, $otp);
 
-        // 🔥 PhilSMS API
         $apiKey = "2577|6gIPiRXsHnPYLDYQPW4qfzAcMStzzKGmkEry7rDOd9f05df6";
         $message = "Your SafeScan OTP is: $otp";
 
@@ -150,7 +147,6 @@ class AuthController {
 
         $response = curl_exec($ch);
 
-        // ❗ Handle cURL errors
         if (curl_errno($ch)) {
             echo json_encode([
                 'status' => 'error',
@@ -162,10 +158,8 @@ class AuthController {
 
         curl_close($ch);
 
-        // ✅ Decode API response
         $result = json_decode($response, true);
 
-        // 🔍 Check if SMS was actually sent
         if (isset($result['status']) && $result['status'] === 'success') {
             echo json_encode([
                 'status' => 'success',

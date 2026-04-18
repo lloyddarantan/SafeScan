@@ -112,16 +112,16 @@ require __DIR__ . '/../others/navigation.php';
     							 		data-hazards="<?= htmlspecialchars($a['hazards'] ?? 'None reported.') ?>">
 
                                         <?php if (isset($isLoggedIn) && $isLoggedIn): ?>
-										<form method="POST" action="/favorite/toggle" style="display:inline;" onsubmit="handleLike(event, this)" onclick="event.stopPropagation()">
-											<input type="hidden" name="appliance_id" value="<?= $a['appliance_id'] ?>">
-											<button type="submit" class="fav-btn <?= $a['isLiked'] ? 'active' : '' ?>">
-												<i class="<?= $a['isLiked'] ? 'fa-solid' : 'fa-regular' ?> fa-heart"></i>
-											</button>
-										</form>
+                                            <form method="POST" action="/favorite/toggle" style="display:inline;" onsubmit="handleLike(event, this)" onclick="event.stopPropagation()">
+                                                <input type="hidden" name="appliance_id" value="<?= $a['appliance_id'] ?>">
+                                                <button type="submit" class="fav-btn <?= $a['isLiked'] ? 'active' : '' ?>">
+                                                    <i class="<?= $a['isLiked'] ? 'fa-solid' : 'fa-regular' ?> fa-bookmark"></i>
+                                                </button>
+                                            </form>
                                         <?php else: ?>
-                                            <button type="button" class="fav-btn login-trigger" onclick="event.stopPropagation()">
-                                                <i class="fa-regular fa-heart"></i>
-                                            </button>
+                                                <button type="button" class="fav-btn login-trigger" onclick="event.stopPropagation()">
+                                                    <i class="fa-regular fa-bookmark"></i>
+                                                </button>
                                         <?php endif; ?>
 
                                         <div class="card-image">
