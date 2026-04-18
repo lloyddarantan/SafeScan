@@ -1,20 +1,21 @@
-/* --- OUTLET MANAGEMENT LOGIC --- */
+let outlets = JSON.parse(localStorage.getItem('outlets')) || [
+    {
+        "socket-1": null,
+        "socket-2": null,
+        "socket-3": null
+    }
+];
 
-let outletState = {
-    "socket-1": null,
-    "socket-2": null,
-    "socket-3": null
-};
+let currentOutletIndex = parseInt(localStorage.getItem('currentOutletIndex')) || 0;
 
 const MAX_AMPS = 15;
 let mobileSelectedData = null;
 
-/* --- MOBILE DETECTION --- */
 function isMobileView() {
     return window.innerWidth <= 768;
 }
 
-/* --- MOBILE SELECT + TAP --- */
+//for mobile view
 function handleApplianceClick(element) {
     if (!isMobileView()) return;
 
@@ -39,18 +40,26 @@ function handleApplianceClick(element) {
     showToast(`Selected: ${mobileSelectedData.name}`);
 }
 
+function optimizeForMobile() {
+    if (isMobileView()) {
+        document.querySelectorAll('.draggable-item').forEach(item => {
+            item.setAttribute('draggable', 'false');
+        });
+    }
+}
+
 function handleSocketClick(socketElement) {
     if (!isMobileView()) return;
 
     const socketId = socketElement.id;
 
     if (mobileSelectedData) {
-        if (outletState[socketId] !== null) {
+        if (outlets[currentOutletIndex][socketId] !== null) {
             showToast("Socket occupied", "error");
             return;
         }
 
-        outletState[socketId] = {
+        outlets[currentOutletIndex][socketId] = {
             id: mobileSelectedData.id,
             name: mobileSelectedData.name,
             amps: mobileSelectedData.amps
@@ -58,6 +67,7 @@ function handleSocketClick(socketElement) {
 
         updateSocketVisual(socketElement, mobileSelectedData.img, mobileSelectedData.name);
         calculateTotals();
+        saveState();
 
         mobileSelectedData = null;
         document.querySelectorAll('.draggable-item')
@@ -65,14 +75,14 @@ function handleSocketClick(socketElement) {
 
         showToast("Connected", "success");
     } 
-    else if (outletState[socketId] !== null) {
+    else if (outlets[currentOutletIndex][socketId] !== null) {
         clearSocket(socketId);
         calculateTotals();
         showToast("Unplugged");
     }
 }
 
-/* --- DRAG & DROP --- */
+// drag drop
 function allowDrop(ev) {
     ev.preventDefault();
 }
@@ -97,7 +107,7 @@ function dragFromSocket(ev) {
     }
 
     let socketId = ev.target.parentNode.id;
-    let data = outletState[socketId];
+    let data = outlets[currentOutletIndex][socketId];
 
     ev.dataTransfer.setData("source", "socket");
     ev.dataTransfer.setData("fromSocketId", socketId);
@@ -113,7 +123,9 @@ function drop(ev) {
     let targetSocket = ev.target.closest('.socket-dropzone');
     if (!targetSocket) return;
 
-    if (outletState[targetSocket.id] !== null) {
+    const current = outlets[currentOutletIndex];
+
+    if (current[targetSocket.id] !== null) {
         showToast("Socket occupied", "error");
         return;
     }
@@ -129,9 +141,11 @@ function drop(ev) {
         clearSocket(oldSocketId);
     }
 
-    outletState[targetSocket.id] = { id, name, amps };
+    current[targetSocket.id] = { id, name, amps, img: imgSrc };
+
     updateSocketVisual(targetSocket, imgSrc, name);
     calculateTotals();
+    saveState();
 }
 
 function removeAppliance(ev) {
@@ -146,9 +160,9 @@ function removeAppliance(ev) {
     }
 }
 
-/* --- SOCKET UI --- */
 function clearSocket(socketId) {
-    outletState[socketId] = null;
+    outlets[currentOutletIndex][socketId] = null;
+    saveState();
 
     let socketEl = document.getElementById(socketId);
     if (socketEl) {
@@ -178,37 +192,42 @@ function updateSocketVisual(socketElement, imgSrc, name) {
 }
 
 function clearOutlets() {
-    outletState = {
-        "socket-1": null,
-        "socket-2": null,
-        "socket-3": null
-    };
+    const current = outlets[currentOutletIndex];
 
-    document.querySelectorAll('.socket-dropzone').forEach(socket => {
-        socket.classList.remove("has-item");
-        let img = socket.querySelector('.plugged-icon');
-        if (img) img.remove();
+    Object.keys(current).forEach(key => {
+        current[key] = null;
+
+        let socketEl = document.getElementById(key);
+        if (socketEl) {
+            socketEl.classList.remove("has-item");
+            let img = socketEl.querySelector('.plugged-icon');
+            if (img) img.remove();
+        }
     });
 
     calculateTotals();
+    saveState();
 }
 
-/* --- CALCULATIONS --- */
 function calculateTotals() {
     let totalAmps = 0;
 
-    for (let i = 1; i <= 3; i++) {
-        let key = "socket-" + i;
-        let data = outletState[key];
-        let listText = document.querySelector(`#connection-list li:nth-child(${i})`);
+    const current = outlets[currentOutletIndex];
+    const socketKeys = Object.keys(current);
+
+    socketKeys.forEach((key, index) => {
+        const data = current[key];
+        const listItem = document.querySelector(`#connection-list li:nth-child(${index + 1})`);
+
+        if (!listItem) return;
 
         if (data) {
             totalAmps += data.amps;
-            listText.innerHTML = `Socket ${i}: <strong>${data.name}</strong> (${data.amps}A)`;
+            listItem.innerHTML = `Socket ${index + 1}: <strong>${data.name}</strong> (${data.amps}A)`;
         } else {
-            listText.innerHTML = `Socket ${i}: <span class="empty-slot">-</span>`;
+            listItem.innerHTML = `Socket ${index + 1}: <span class="empty-slot">-</span>`;
         }
-    }
+    });
 
     document.getElementById("total-amps").innerText = totalAmps.toFixed(2);
     updateStatusBar(totalAmps);
@@ -235,7 +254,6 @@ function updateStatusBar(total) {
     }
 }
 
-/* --- DROPDOWN --- */
 function toggleDropdown() {
     document.getElementById("outletDropdown").classList.toggle("show");
 }
@@ -247,18 +265,18 @@ window.onclick = function(event) {
     }
 };
 
-/* --- MODE (2 or 3 SOCKETS) --- */
 function setOutletMode(count) {
     const wallPlate = document.querySelector('.wall-plate');
     const socket3 = document.getElementById('socket-3');
     const listSocket3 = document.querySelector('#connection-list li:nth-child(3)');
+    const current = outlets[currentOutletIndex];
 
     if (count === 2) {
         socket3.classList.add('hidden');
         wallPlate.classList.add('mode-2');
         if (listSocket3) listSocket3.style.display = 'none';
 
-        outletState['socket-3'] = null;
+        current['socket-3'] = null;
         clearSocket('socket-3');
         calculateTotals();
     } else {
@@ -270,7 +288,7 @@ function setOutletMode(count) {
     document.getElementById("outletDropdown").classList.remove("show");
 }
 
-/* --- TOAST --- */
+// cute msg pop
 function showToast(message, type = 'info') {
     const container = document.getElementById('toast-container');
 
@@ -283,14 +301,75 @@ function showToast(message, type = 'info') {
     setTimeout(() => toast.remove(), 3000);
 }
 
-/* --- MOBILE OPTIMIZATION --- */
-function optimizeForMobile() {
-    if (isMobileView()) {
-        document.querySelectorAll('.draggable-item').forEach(item => {
-            item.setAttribute('draggable', 'false');
-        });
+
+
+function addOutlet() {
+    outlets.push({
+        "socket-1": null,
+        "socket-2": null,
+        "socket-3": null
+    });
+
+    currentOutletIndex = outlets.length - 1;
+
+    renderOutlet();
+    showToast("New outlet created"); saveState();
+}
+
+function nextOutlet() {
+    if (currentOutletIndex < outlets.length - 1) {
+        currentOutletIndex++;
+        renderOutlet();
+        saveState();
+    } else {
+        showToast("No next outlet");
     }
 }
+
+function prevOutlet() {
+    if (currentOutletIndex > 0) {
+        currentOutletIndex--;
+        renderOutlet();
+        saveState();
+    } else {
+        showToast("No previous outlet");
+    }
+}
+
+function renderOutlet() {
+    const current = outlets[currentOutletIndex];
+
+    document.getElementById("outlet-page").innerText = currentOutletIndex + 1;
+
+    Object.keys(current).forEach((socketId) => {
+        const socketEl = document.getElementById(socketId);
+        if (!socketEl) return;
+
+        // CLEAR UI ONLY (NOT DATA)
+        socketEl.classList.remove("has-item");
+        let oldImg = socketEl.querySelector('.plugged-icon');
+        if (oldImg) oldImg.remove();
+
+        const data = current[socketId];
+
+        if (data) {
+            updateSocketVisual(socketEl, data.img, data.name);
+        }
+    });
+
+    calculateTotals();
+}
+
+// SAVE Function, IMPORTANT!!
+function saveState() {
+    localStorage.setItem('outlets', JSON.stringify(outlets));
+    localStorage.setItem('currentOutletIndex', currentOutletIndex);
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+    renderOutlet();
+    optimizeForMobile();
+});
 
 window.addEventListener('load', optimizeForMobile);
 window.addEventListener('resize', optimizeForMobile);

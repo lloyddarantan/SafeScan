@@ -55,7 +55,15 @@
                                     </a>
                                 </div>
                             </div>
+                        </div>
 
+                        <div style="margin-top:10px; font-size:14px;">
+                            Outlet Page: <span id="outlet-page">1</span>
+                        </div>
+                        <div style="margin-top:10px; display:flex; gap:10px;">
+                            <button onclick="prevOutlet()" class="control-btn">Prev</button>
+                            <button onclick="nextOutlet()" class="control-btn">Next</button>
+                            <button onclick="addOutlet()" class="control-btn">+ New Outlet</button>
                         </div>
 
                         <div id="status-bar" class="status-bar safe">
@@ -63,8 +71,9 @@
                         </div>
                     </div>
 
+                    <!-- outlet -->
                     <div class="outlet-plate-container">
-                        <div class="wall-plate">
+                        <div class="wall-plate" id ="socket-container">
                             <div class="socket-dropzone" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="handleSocketClick(this)" id="socket-1">
                                 <div class="socket-holes">
                                     <span></span><span></span><span></span>
