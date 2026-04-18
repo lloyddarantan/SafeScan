@@ -21,6 +21,10 @@ class AdminController {
         $stats = $this->adminModel->getStats();
         $users = $this->adminModel->getAllUsers();
         $adminProfile = $this->adminModel->getAdminProfile($_SESSION['user_id']);
+        $locationCounts = $this->getLocationCounts($users);
+
+        $data['chartLabels'] = array_keys($locationCounts);
+        $data['chartData'] = array_values($locationCounts);
         $appliances = $this->adminModel->getAllAppliances();
             foreach ($appliances as $key => $app) {
                 $webBasePath = '/assets/img/appliances/';
@@ -56,6 +60,8 @@ class AdminController {
             'recentUsers' => array_slice($users, 0, 3),
             'appliances' => $appliances,
             'admin' => $adminProfile
+            'chartLabels' => array_keys($locationCounts),
+            'chartData' => array_values($locationCounts)
         ];
 
         require __DIR__ . '/../views/pages/admindashboard.php';
@@ -231,6 +237,36 @@ class AdminController {
         $pdf->appliancesTable($apps);
 
         $pdf->Output('D', 'appliances_report.pdf');
+    }
+
+    private function normalizeLocation($loc) {
+        $loc = strtolower(trim($loc));
+
+        // remove "city"
+        $loc = str_replace(' city', '', $loc);
+
+        // optional: remove extra spaces
+        $loc = preg_replace('/\s+/', ' ', $loc);
+
+        return ucfirst($loc); // Bacolod instead of bacolod
+    }
+
+    private function getLocationCounts($users) {
+        $counts = [];
+
+        foreach ($users as $u) {
+            if (empty($u['loc'])) continue;
+
+            $normalized = $this->normalizeLocation($u['loc']);
+
+            if (!isset($counts[$normalized])) {
+                $counts[$normalized] = 0;
+            }
+
+            $counts[$normalized]++;
+        }
+
+        return $counts;
     }
 }
 

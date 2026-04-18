@@ -31,7 +31,6 @@
     <aside class="sidebar">
         <a class="nav-item active" onclick="switchTab('profile', this)">My Profile</a>
         <a class="nav-item" onclick="switchTab('members', this)">My Saved Appliances</a>
-        <a class="nav-item" onclick="switchTab('outlet', this)">Outlet Management</a>
         <a class="nav-item" onclick="switchTab('history', this)">History</a>
         <a class="nav-item danger" onclick="switchTab('delete', this)">Delete Account</a>
     </aside>
@@ -155,7 +154,7 @@
                             <form method="POST" action="/favorite/toggle" onsubmit="return removeSavedAppliance(event, this)">
                                 <input type="hidden" name="appliance_id" value="<?= $row['appliance_id'] ?>">
                                 <button type="submit" class="fav-btn active">
-                                    <i class="fa-solid fa-heart"></i>
+                                    <i class="fa-regular fa-bookmark"></i>
                                 </button>
                             </form>
 
@@ -177,121 +176,6 @@
          </div>
 
 <!-- OUTLET -->
-        <div id="section-outlet" class="content-section">
-            <h3 style="font-weight: 400; margin-bottom: 20px;">Outlet Management</h3>
-
-            <div class="outlet-dashboard-grid" ondrop="removeAppliance(event)" ondragover="allowDrop(event)">
-
-    			<div class="outlet-work-area">
-                    
-                    <div class="outlet-controls">
-                        <div class="control-header">
-                            
-                            <div class="dropdown">
-                                <button onclick="toggleDropdown()" class="control-btn dropbtn">
-                                    <i class="fa-solid fa-gear"></i> Options <i class="fa-solid fa-caret-down"></i>
-                                </button>
-                                <div id="outletDropdown" class="dropdown-content">
-                                    <a href="javascript:void(0)" onclick="setOutletMode(2)">
-                                        <i class="fa-solid fa-plug"></i> 2 Sockets
-                                    </a>
-                                    <a href="javascript:void(0)" onclick="setOutletMode(3)">
-                                        <i class="fa-solid fa-plug"></i> 3 Sockets
-                                    </a>
-                                    <div class="divider"></div>
-                                    <a href="javascript:void(0)" onclick="clearOutlets()" class="danger-text">
-                                        <i class="fa-solid fa-trash"></i> Clear All
-                                    </a>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div id="status-bar" class="status-bar safe">
-                            <span id="status-text">System Normal</span>
-                        </div>
-                    </div>
-
-                    <div class="outlet-plate-container">
-                        <div class="wall-plate">
-                            <div class="socket-dropzone" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="handleSocketClick(this)" id="socket-1">
-                                <div class="socket-holes">
-                                    <span></span><span></span><span></span>
-                                </div>
-                            </div>
-                            <div class="socket-dropzone" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="handleSocketClick(this)" id="socket-2">
-                                <div class="socket-holes">
-                                    <span></span><span></span><span></span>
-                                </div>
-                            </div>
-                            <div class="socket-dropzone" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="handleSocketClick(this)" id="socket-3">
-                                <div class="socket-holes">
-                                    <span></span><span></span><span></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="outlet-details-row">
-                        <div class="detail-card">
-                            <h4>Connected Devices</h4>
-                            <ul id="connection-list">
-                                <li>Socket 1: <span class="empty-slot">-</span></li>
-                                <li>Socket 2: <span class="empty-slot">-</span></li>
-                                <li>Socket 3: <span class="empty-slot">-</span></li>
-                            </ul>
-                        </div>
-                        <div class="detail-card highlight">
-                            <h4>Total Amperes</h4>
-                            <div class="amp-display">
-                                <span id="total-amps">0.00</span> A
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="appliance-sidebar-panel" onclick="handleSidebarClick(this)">
-                    <div class="sidebar-header">
-                        <h4>My Saved Appliances</h4>
-                        <p>
-							<span class="desktop-text">Drag items to the outlet</span>
-
-							<span class="mobile-text">Tap item, then tap outlet to plug</span>
-						</p>
-                    </div>
-                    
-                    <div class="draggable-list">
-                        <?php if (!empty($savedAppliances)): ?>
-                            <?php foreach ($savedAppliances as $row): ?>
-                                <div class="draggable-item" 
-                                    draggable="true" 
-                                    ondragstart="drag(event)"
-									 onclick="handleApplianceClick(this)"
-                                    data-name="<?= htmlspecialchars($row['type']) ?>" 
-                                    data-brand="<?= htmlspecialchars($row['brand']) ?>"
-                                    data-watts="<?= $row['wattage'] ?>"
-                                    data-amps="<?= $row['amperes'] ?>"
-                                    id="app-<?= $row['appliance_id'] ?>">
-                                    
-                                    <div class="drag-img">
-                                        <img src="<?= $row['image'] ?>" alt="icon">
-                                    </div>
-                                    <div class="drag-info">
-                                        <strong><?= htmlspecialchars($row['type']) ?></strong>
-                                        <small><?= htmlspecialchars($row['brand']) ?></small>
-                                        <span class="drag-specs">
-                                            <?= $row['wattage'] ?>W | <?= $row['amperes'] ?>A
-                                        </span>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <p class="no-items">No saved appliances.</p>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-        </div>
 
 <!-- history -->
         <div id="section-history" class="content-section">

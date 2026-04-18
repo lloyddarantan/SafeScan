@@ -174,16 +174,9 @@
             </div>
             
             <div class="card-body">
-                <?php 
-                    $locationCounts = [];
-                    if (!empty($data['users'])) {
-                        foreach ($data['users'] as $u) {
-                            $loc = $u['loc'];
-                            $locationCounts[$loc] = ($locationCounts[$loc] ?? 0) + 1;
-                        }
-                    }
-                    $chartLabels = json_encode(array_keys($locationCounts));
-                    $chartData = json_encode(array_values($locationCounts));
+                <?php
+                    $chartLabels = json_encode($data['chartLabels'] ?? []);
+                    $chartData = json_encode($data['chartData'] ?? []);
                 ?>
                 
                 <div class="chart-container">
