@@ -1,6 +1,3 @@
-/* =========================================
-   STEP NAVIGATION (Next / Back)
-   ========================================= */
 
 function showNextStep() {
     const step1Div = document.getElementById('step-1');
@@ -16,17 +13,15 @@ function showNextStep() {
         const value = input.value.trim();
         let errorMsg = "";
 
-        // Check if empty
         if (value === "") {
             errorMsg = "This field is required.";
         } 
-        // Check phone format
+
         else if (input.type === "tel" || input.name === "phone") {
             const phonePattern = /^[0-9]+$/;
             if (!phonePattern.test(value)) errorMsg = "Numbers only.";
         }
 
-        // Apply or remove error
         if (errorMsg !== "") {
             allValid = false;
             markError(input, errorMsg);
@@ -35,7 +30,6 @@ function showNextStep() {
         }
     });
 
-    // If no errors, proceed to Step 2
     if (allValid) {
         step1Div.style.display = 'none';
         step2Div.style.display = 'block';
@@ -51,10 +45,6 @@ function showPreviousStep() {
         step1Div.style.display = 'block';
     }
 }
-
-/* =========================================
-   UI INTERACTIONS (Password Toggle)
-   ========================================= */
 
 function togglePassword(inputId) {
     const input = document.getElementById(inputId);
@@ -72,30 +62,23 @@ function togglePassword(inputId) {
     }
 }
 
-/* =========================================
-   ERROR HANDLING (Floating Messages)
-   ========================================= */
-
 function markError(input, message) {
     input.classList.add('input-error');
 
-    // Find the closest parent to append the error message
     const parent = input.closest('.input-group') || input.closest('.address-field') || input.parentElement;
 
-    // Remove existing error if present
     const existingError = parent.querySelector('.error-message');
     if (existingError) {
         existingError.remove();
     }
 
-    // Create the error message div
+
     const errorDisplay = document.createElement('div');
     errorDisplay.className = 'error-message';
     errorDisplay.textContent = message;
     
     parent.appendChild(errorDisplay);
 
-    // Remove error as soon as user types
     input.addEventListener('input', function() {
         removeError(input);
     }, { once: true });
@@ -112,33 +95,26 @@ function removeError(input) {
     }
 }
 
-/* =========================================
-   FORM SUBMISSION VALIDATION
-   ========================================= */
 
 document.addEventListener('DOMContentLoaded', function() {
     
-    // --- 1. LOGIN FORM VALIDATION ---
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
         loginForm.addEventListener('submit', function(event) {
             let isFormValid = true;
 
-            // Email Check
             const emailInput = loginForm.querySelector('input[name="email"]');
             if (emailInput && emailInput.value.trim() === "") {
                 isFormValid = false;
                 markError(emailInput, "Email is required.");
             }
 
-            // Password Check
             const passInput = loginForm.querySelector('input[name="password"]');
             if (passInput && passInput.value.trim() === "") {
                 isFormValid = false;
                 markError(passInput, "Password is required.");
             }
 
-            // OTP Check (if visible)
             const otpInput = document.getElementById('otp-input'); 
             if (otpInput && otpInput.offsetParent !== null && otpInput.value.trim() === "") {
                 isFormValid = false;
@@ -149,13 +125,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- 2. SIGNUP FORM VALIDATION ---
     const signupForm = document.getElementById('signup-form');
     if (signupForm) {
         signupForm.addEventListener('submit', function(event) {
             let isValid = true;
             
-            // Validate Email
             const emailInput = signupForm.querySelector('input[name="email"]');
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -169,7 +143,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
 
-            // Validate Passwords
             const pass1 = document.getElementById('passInput');
             const pass2 = document.getElementById('confirmPassInput');
             
@@ -230,7 +203,7 @@ function sendOTP() {
     .then(res => res.json())
     .then(data => {
 
-        console.log("OTP RESPONSE:", data); // DEBUG
+        console.log("OTP RESPONSE:", data);
 
         if (data.status === "success") {
             showResponseModal("success", data.message || "OTP sent successfully");
@@ -265,7 +238,6 @@ function resetPassword() {
         if (data.status === "success") {
             showResponseModal("success", "Password reset successful!");
 
-            // OPTIONAL: close forgot modal after success
             setTimeout(() => {
                 closeModal();
             }, 2000);
@@ -297,10 +269,10 @@ function showResponseModal(type, message) {
     const title = document.getElementById("responseTitle");
     const msg = document.getElementById("responseMessage");
 
-    // SAFETY CHECK (IMPORTANT)
+
     if (!modal || !title || !msg) {
         console.error("Response modal elements not found in DOM");
-        alert(message); // fallback so user still sees something
+        alert(message);
         return;
     }
 

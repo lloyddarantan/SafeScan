@@ -1,6 +1,4 @@
-//                  //
-// SWITCH WINDOWS
-//                 //
+
     function switchTab(tabId, navElement) {
 		const sections = document.querySelectorAll('.content-section');
 		sections.forEach(sec => sec.classList.remove('active'));
@@ -18,9 +16,7 @@
 		}
 	}
 
-//                               // 
-// EDIT PROFILE MODAL
-//                              //   
+
     const editModal = document.getElementById('editModal');
 
 	function openModal() {
@@ -36,9 +32,7 @@
 		editModal.classList.remove('show');
 	}
 
-//                    //
-// LOGOUT MODAL 
-//                    //
+
     const logoutModal = document.getElementById('logoutModal');
 
 	function openLogoutModal() {
@@ -49,9 +43,7 @@
 		logoutModal.classList.remove('show');
 	}
 
-//                     //
-// DELETE MODAL
-//                    //
+
     const deleteModal = document.getElementById('deleteModal');
 
 	function openDeleteModal() {
@@ -62,9 +54,7 @@
 		deleteModal.classList.remove('show');
 	}
 
-//                               //
-// VALIDATION FOR EDIT PROFILE
-//                              //
+
 
 	const form = document.querySelector('.edit-form');
 
@@ -153,7 +143,6 @@
 		}
 	}
 
-/* --- OUTLET MANAGEMENT LOGIC --- */
 
 let outletState = {
     "socket-1": null,
@@ -301,7 +290,6 @@ function removeSavedAppliance(event, form) {
     return false;
 }
 
-// Checks if "My Saved Appliances" is empty
 function checkIfGridEmpty() {
     const grid = document.querySelector('#section-members .product-grid');
     const cards = grid.querySelectorAll('.product-card');
@@ -311,7 +299,6 @@ function checkIfGridEmpty() {
     }
 }
 
-// Checks if the "Outlet Management" sidebar is empty
 function checkIfDraggableListEmpty() {
     const list = document.querySelector('.draggable-list');
     const items = list.querySelectorAll('.draggable-item');
