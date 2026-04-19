@@ -393,87 +393,100 @@
         </div>
     </div>
 
-    <div id="modalAppliance" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Add Appliance</h3>
-                <i class="fa-solid fa-xmark close-modal" onclick="closeModal('modalAppliance')"></i>
-            </div>
-            
-            <form action="/admin/add_appliance" method="POST" enctype="multipart/form-data">
-                
-                <div class="form-grid">
-                    <div class="form-group"><label>Brand</label><input type="text" name="brand" required></div>
-                    
-                    <div class="form-group">
-                        <label>Category (Room)</label>
-                        <select name="category" required>
-                            <option value="" disabled selected>Select Room</option>
-                            <option value="Living Room">Living Room</option>
-                            <option value="Bedroom">Bedroom</option>
-                            <option value="Kitchen">Kitchen</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group"><label>Group (Type)</label>
-                        <select name="group" required>
-                            <option value="" disabled selected>Select Type</option>
-                            <option value="Air Conditioner">Air Conditioner</option>
-                            <option value="Refrigerator">Refrigerator</option>
-                            <option value="TV">TV</option>
-                            <option value="Fan">Fan</option>
-                            <option value="Small Appliances">Small Appliances</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group"><label>Model</label><input type="text" name="type" required></div>
-                    <div class="form-group"><label>Watts</label><input type="number" name="watt" required></div>
-                    <div class="form-group"><label>Consumption (kWh)</label><input type="text" name="cons" required></div>
-                    
-                    <div class="form-group full-width">
-						<label>Appliance Photo</label>
-
-						<div class="photo-upload-container">
-							<input type="file" 
-								   name="image" 
-								   id="hiddenFileInput" 
-								   accept="image/*" 
-								   onchange="handleFileSelect(event)" 
-								   style="display: none;">
-
-							<div class="preview-card" onclick="document.getElementById('hiddenFileInput').click()">
-								<div class="upload-hint" id="uploadHint">
-									<i class="fa-solid fa-cloud-arrow-up"></i>
-									<span>Click to upload</span>
-								</div>
-								<img id="previewImage" src="" alt="Preview">
-							</div>
-
-							<button type="button" class="btn-remove-photo" id="removePhotoBtn" onclick="removePhoto()">
-								<i class="fa-solid fa-trash"></i> Remove Image
-							</button>
-						</div>
-					</div>
-
-                    <div class="form-group full-width" style="grid-column: span 2;">
-                        <label>Safety Reminder</label>
-                        <textarea name="safety_reminder" rows="3" placeholder="Enter safety reminder details..." style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"></textarea>
-                    </div>
-
-                    <div class="form-group full-width" style="grid-column: span 2;">
-                        <label>Hazards</label>
-                        <textarea name="hazards" rows="3" placeholder="Enter hazard details..." style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"></textarea>
-                    </div>
-
-                </div>
-
-                <div class="modal-actions">
-                    <button type="button" class="btn-cancel" onclick="closeModal('modalAppliance')">Cancel</button>
-                    <button type="submit" class="btn-add">Save</button>
-                </div>
-            </form>
+<div id="modalAppliance" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Add Appliance</h3>
+            <i class="fa-solid fa-xmark close-modal" onclick="closeModal('modalAppliance')"></i>
         </div>
+        
+        <form id="addApplianceForm" action="/admin/add_appliance" method="POST" enctype="multipart/form-data" onsubmit="return validateForm(event)" novalidate>
+            
+            <div id="formErrorMessage" style="display: none; color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-size: 14px;">
+                Please fill in all highlighted fields.
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Brand</label>
+                    <input type="text" name="brand" placeholder="Enter appliance brand" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Category (Room)</label>
+                    <select name="category" required>
+                        <option value="" disabled selected>Select Room</option>
+                        <option value="Living Room">Living Room</option>
+                        <option value="Bedroom">Bedroom</option>
+                        <option value="Kitchen">Kitchen</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Group (Type)</label>
+                    <select name="group" required>
+                        <option value="" disabled selected>Select Type</option>
+                        <option value="Air Conditioner">Air Conditioner</option>
+                        <option value="Refrigerator">Refrigerator</option>
+                        <option value="TV">TV</option>
+                        <option value="Fan">Fan</option>
+                        <option value="Small Appliances">Small Appliances</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Model</label>
+                    <input type="text" name="type" placeholder="Enter model name/number" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Watts</label>
+                    <input type="number" name="watt" placeholder="e.g. 1500" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Consumption (kWh)</label>
+                    <input type="text" name="cons" placeholder="e.g. 1.5" required>
+                </div>
+                
+                <div class="form-group full-width">
+                    <label>Appliance Photo</label>
+
+                    <div class="photo-upload-container">
+                        <input type="file" name="image" id="hiddenFileInput" accept="image/*" onchange="handleFileSelect(event)" style="display: none;">
+
+                        <div class="preview-card" id="imagePreviewCard" onclick="document.getElementById('hiddenFileInput').click()">
+                            <div class="upload-hint" id="uploadHint">
+                                <i class="fa-solid fa-cloud-arrow-up"></i>
+                                <span>Click to upload</span>
+                            </div>
+                            <img id="previewImage" src="" alt="Preview">
+                        </div>
+
+                        <button type="button" class="btn-remove-photo" id="removePhotoBtn" onclick="removePhoto()">
+                            <i class="fa-solid fa-trash"></i> Remove Image
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group full-width" style="grid-column: span 2;">
+					<label>Safety Reminder</label>
+					<textarea name="safety_reminder" rows="3" placeholder="Enter safety reminder details..." style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required></textarea>
+				</div>
+
+				<div class="form-group full-width" style="grid-column: span 2;">
+					<label>Hazards</label>
+					<textarea name="hazards" rows="3" placeholder="Enter hazard details..." style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required></textarea>
+				</div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeModal('modalAppliance')">Cancel</button>
+                <button type="submit" class="btn-add">Save</button>
+            </div>
+        </form>
     </div>
+</div>
 
     <div id="modalRole" class="modal-overlay">
         <div class="modal-content" style="max-width: 450px;">

@@ -334,16 +334,16 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             options: {
     responsive: true,
-    maintainAspectRatio: false, // Essential for the 300px height to work
+    maintainAspectRatio: false,
     plugins: {
         title: {
-            display: false // Hide Chart.js title since the HTML card header has it
+            display: false
         },
         legend: {
-            position: 'bottom', // Moving the legend to the bottom looks cleaner for pie charts
+            position: 'bottom',
             labels: {
                 padding: 20,
-                usePointStyle: true // Makes the legend indicators circles instead of boxes
+                usePointStyle: true
             }
         }
     }
@@ -417,4 +417,54 @@ function updateAppChart(dataKey, chartTitle, btnElement) {
     applianceChartInstance.options.plugins.title.text = chartTitle;
     
     applianceChartInstance.update();
+}
+
+function validateForm(event) {
+    const form = document.getElementById('addApplianceForm');
+    const errorMessage = document.getElementById('formErrorMessage');
+    const imageInput = document.getElementById('hiddenFileInput');
+    const imageCard = document.getElementById('imagePreviewCard');
+    
+    let isValid = true;
+
+    errorMessage.style.display = 'none';
+
+    const requiredFields = form.querySelectorAll('[required]');
+
+    requiredFields.forEach(function(field) {
+        field.classList.remove('input-error');
+
+        if (!field.value || field.value.trim() === '') {
+            field.classList.add('input-error');
+            isValid = false;
+        }
+    });
+
+    imageCard.classList.remove('input-error');
+    if (imageInput.files.length === 0) {
+        imageCard.classList.add('input-error');
+        isValid = false;
+    }
+
+    if (!isValid) {
+        event.preventDefault();
+        errorMessage.style.display = 'block';
+        return false;
+    }
+
+    return true;
+}
+
+document.addEventListener('input', function(e) {
+    if (e.target.hasAttribute('required')) {
+        e.target.classList.remove('input-error');
+    }
+});
+
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+    document.getElementById('formErrorMessage').style.display = 'none';
+    
+    const errors = document.querySelectorAll('.input-error');
+    errors.forEach(el => el.classList.remove('input-error'));
 }

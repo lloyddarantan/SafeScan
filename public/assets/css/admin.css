@@ -1264,6 +1264,11 @@ th.col-hazards, td.col-hazards {
     line-height: 1.6;
 }
 
+.input-error {
+        border: 2px solid #dc3545 !important;
+        background-color: #fff8f8;
+    }
+
 @media (min-width: 640px) {
   .modal-content {
     padding: 32px;
