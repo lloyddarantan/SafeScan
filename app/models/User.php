@@ -98,25 +98,43 @@ class User {
 
 // otp
     public function saveOTP($email, $otp) {
-        $expiry = date("Y-m-d H:i:s", strtotime("+5 minutes"));
+        $expiry = date("Y-m-d H:i:s", strtotime("+1 minute"));
 
         $stmt = $this->conn->prepare("
             UPDATE users 
             SET otp_code = ?, otp_expiry = ? 
             WHERE email = ?
         ");
-        return $stmt->execute([$otp, $expiry, $email]);
+
+        $stmt->execute([$otp, $expiry, $email]);
+
+        return $stmt->rowCount(); // IMPORTANT
     }
 
     public function verifyOTP($email, $otp) {
-        $stmt = $this->conn->prepare("
-            SELECT * FROM users 
-            WHERE email = ? 
-            AND otp_code = ? 
-            AND otp_expiry > NOW()
-        ");
+    $stmt = $this->conn->prepare("
+        SELECT * FROM users 
+        WHERE email = ? 
+        AND otp_code = ? 
+        AND otp_expiry > NOW()
+    ");
+
         $stmt->execute([$email, $otp]);
-        return $stmt->fetch();
+        $user = $stmt->fetch();
+
+        if ($user) {
+            // DELETE OTP after use
+            $clear = $this->conn->prepare("
+                UPDATE users 
+                SET otp_code = NULL, otp_expiry = NULL 
+                WHERE email = ?
+            ");
+            $clear->execute([$email]);
+
+            return true;
+        }
+
+        return false;
     }
 
     public function updatePassword($email, $password) {

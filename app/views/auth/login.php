@@ -114,13 +114,24 @@
         <h3>Forgot Password</h3>
 
         <input type="email" id="fp-email" placeholder="Enter your email">
-            <button id="send-otp-btn" class="btn-send-otp">Send OTP</button>
+            <button type="button" id="send-otp-btn" class="btn-send-otp">Send OTP</button>
 
         <input type="text" id="fp-otp" placeholder="Enter OTP">
         <input type="password" id="fp-password" placeholder="New Password">
 
-         <button id="reset-pass-btn" class="btn-reset-pass">Reset Password</button>
+         <button type="button" id="reset-pass-btn" class="btn-reset-pass">Reset Password</button>
 
+    </div>
+</div>
+
+<div id="responseModal" class="forgot-modal">
+    <div class="forgot-modal-content response-box">
+        <button class="modal-close-btn" onclick="closeResponseModal()">&times;</button>
+
+        <h3 id="responseTitle">Success</h3>
+        <p id="responseMessage">Message here</p>
+
+        <button class="btn-reset-pass" onclick="closeResponseModal()">OK</button>
     </div>
 </div>
 

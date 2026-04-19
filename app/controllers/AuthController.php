@@ -125,9 +125,18 @@ class AuthController {
 
         $otp = rand(100000, 999999);
 
-        $this->userModel->saveOTP($email, $otp);
+        $updated = $this->userModel->saveOTP($email, $otp);
 
-        $apiKey = "2577|6gIPiRXsHnPYLDYQPW4qfzAcMStzzKGmkEry7rDOd9f05df6";
+            if ($updated === 0) {
+                echo json_encode([
+                    'status' => 'error otp',
+                    'message' => 'Failed to save OTP (email mismatch)'
+                ]);
+                return;
+            }
+
+        //token
+        $apiKey = "2585|vs8YhtWMLJSskdrdHdDi5Za0pWUM305A1vZVJlkJe87f9d70";
         $message = "Your SafeScan OTP is: $otp";
 
         $ch = curl_init();

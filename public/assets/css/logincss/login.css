@@ -216,6 +216,31 @@ form label {
     font-weight: 500;
 }
 
+/* RESPONSE MODAL (SUCCESS / ERROR) */
+.response-box {
+    text-align: center;
+}
+
+.response-icon {
+    font-size: 50px;
+    margin-bottom: 10px;
+}
+
+/* success */
+.response-success .response-icon {
+    color: #28a745;
+}
+.response-success h3 {
+    color: #28a745;
+}
+
+/* error */
+.response-error .response-icon {
+    color: #ff3333;
+}
+.response-error h3 {
+    color: #ff3333;
+}
 /* otp */
 .forgot-modal {
     display: none;
