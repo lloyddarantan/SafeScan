@@ -313,6 +313,7 @@ function addOutlet() {
     currentOutletIndex = outlets.length - 1;
 
     renderOutlet();
+    updateDeleteButton();
     showToast("New outlet created"); saveState();
 }
 
@@ -360,6 +361,33 @@ function renderOutlet() {
     calculateTotals();
 }
 
+function deleteOutlet() {
+
+    if (outlets.length === 1) {
+        showToast("You must have at least 1 outlet", "error");
+        return;
+    }
+
+    outlets.splice(currentOutletIndex, 1);
+
+    if (currentOutletIndex >= outlets.length) {
+        currentOutletIndex = outlets.length - 1;
+    }
+
+    renderOutlet();
+    saveState();
+    updateDeleteButton();
+
+    showToast("Outlet deleted", "success");
+}
+
+function updateDeleteButton() {
+    const btn = document.querySelector('[onclick="deleteOutlet()"]');
+    if (!btn) return;
+
+    btn.disabled = outlets.length === 1;
+}
+
 // SAVE Function, IMPORTANT!!
 function saveState() {
     localStorage.setItem('outlets', JSON.stringify(outlets));
@@ -369,6 +397,7 @@ function saveState() {
 window.addEventListener("DOMContentLoaded", () => {
     renderOutlet();
     optimizeForMobile();
+    updateDeleteButton();
 });
 
 window.addEventListener('load', optimizeForMobile);

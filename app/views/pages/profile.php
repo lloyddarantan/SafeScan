@@ -170,7 +170,12 @@
 
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <p style='color: #666;'>You haven't saved any appliances yet.</p>
+                    <div class="no-items-container">
+                        <p class="no-items">No saved appliances.</p>
+                            <a href="/appliances" class="save-appliance-btn">
+                                Save appliances now
+                            </a>
+                    </div>
                 <?php endif; ?>
             </div>
          </div>

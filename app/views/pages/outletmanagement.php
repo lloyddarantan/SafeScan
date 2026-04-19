@@ -56,7 +56,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        
                         <div style="margin-top:10px; font-size:14px;">
                             Outlet Page: <span id="outlet-page">1</span>
                         </div>
@@ -64,6 +64,7 @@
                             <button onclick="prevOutlet()" class="control-btn">Prev</button>
                             <button onclick="nextOutlet()" class="control-btn">Next</button>
                             <button onclick="addOutlet()" class="control-btn">+ New Outlet</button>
+                            <button onclick="deleteOutlet()" class = "control-btn"> Delete Outlet </button>
                         </div>
 
                         <div id="status-bar" class="status-bar safe">
@@ -112,7 +113,11 @@
 
                 <div class="appliance-sidebar-panel" onclick="handleSidebarClick(this)">
                     <div class="sidebar-header">
-                        <h4>My Saved Appliances</h4>
+                        <h4>
+                            <a href="/profile#members" class="sidebar-link" onclick="event.stopPropagation();">
+                                My Saved Appliances
+                            </a>
+                        </h4>
                         <p>
 							<span class="desktop-text">Drag items to the outlet</span>
 
@@ -146,7 +151,12 @@
                                 </div>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <p class="no-items">No saved appliances.</p>
+                            <div class="no-items-container">
+                                <p class="no-items">No saved appliances.</p>
+                                <a href="/appliances" class="save-appliance-btn">
+                                    Save appliances now
+                                </a>
+                            </div>
                         <?php endif; ?>
                     </div>
                 </div>

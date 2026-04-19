@@ -271,6 +271,41 @@ body {
     color: var(--primary-orange);
 }
 
+/* no saved appliances css */
+.no-items-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.save-appliance-btn {
+    padding: 10px 16px;
+    background-color: var(--primary-orange);
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: 0.2s ease;
+}
+
+.save-appliance-btn:hover {
+    background-color: var(--primary-dark);
+}
+
+/* clickable my saved app */
+.sidebar-link {
+    color: var(--primary-orange);
+    text-decoration: none;
+    font-weight: 1200;
+}
+
+.sidebar-link:hover {
+    text-decoration: underline;
+}
+
 /* DROPDOWN */
 .dropdown {
     position: relative;
