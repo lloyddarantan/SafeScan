@@ -20,24 +20,26 @@
     }
 
     require __DIR__ . '/../others/navigation.php';
- ?>
+?>
 
 <title>SafeScan</title>
-    <link rel="stylesheet" href="/assets/css/outletmanagement.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/assets/css/outletmanagement.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <div class="dashboard-container">
-   <main class="main-content"> 
+    <main class="main-content"> 
         <div id="section-outlet" class="content-section">
-            <h3 style="font-weight: 400; margin-bottom: 20px;">Outlet Management</h3>
+            <div class="section-header">
+                <h3>Outlet Management</h3>
+            </div>
 
             <div class="outlet-dashboard-grid" ondrop="removeAppliance(event)" ondragover="allowDrop(event)">
-
-    			<div class="outlet-work-area">
+                
+                <div class="outlet-work-area">
                     
                     <div class="outlet-controls">
                         <div class="control-header">
-                            
                             <div class="dropdown">
                                 <button onclick="toggleDropdown()" class="control-btn dropbtn">
                                     <i class="fa-solid fa-gear"></i> Options <i class="fa-solid fa-caret-down"></i>
@@ -57,24 +59,24 @@
                             </div>
                         </div>
                         
-                        <div style="margin-top:10px; font-size:14px;">
-                            Outlet Page: <span id="outlet-page">1</span>
+                        <div class="pagination-info">
+                            Outlet Page: <span id="outlet-page" class="highlight-text">1</span>
                         </div>
-                        <div style="margin-top:10px; display:flex; gap:10px;">
-                            <button onclick="prevOutlet()" class="control-btn">Prev</button>
-                            <button onclick="nextOutlet()" class="control-btn">Next</button>
-                            <button onclick="addOutlet()" class="control-btn">+ New Outlet</button>
-                            <button onclick="deleteOutlet()" class = "control-btn"> Delete Outlet </button>
+                        
+                        <div class="control-actions">
+                            <button onclick="prevOutlet()" class="control-btn"><i class="fa-solid fa-chevron-left"></i> Prev</button>
+                            <button onclick="nextOutlet()" class="control-btn">Next <i class="fa-solid fa-chevron-right"></i></button>
+                            <button onclick="addOutlet()" class="control-btn btn-primary"><i class="fa-solid fa-plus"></i> New Outlet</button>
+                            <button onclick="deleteOutlet()" class="control-btn btn-danger"><i class="fa-solid fa-trash-can"></i> Delete</button>
                         </div>
 
                         <div id="status-bar" class="status-bar safe">
-                            <span id="status-text">System Normal</span>
+                            <i class="fa-solid fa-circle-check"></i> <span id="status-text">System Normal</span>
                         </div>
                     </div>
 
-                    <!-- outlet -->
                     <div class="outlet-plate-container">
-                        <div class="wall-plate" id ="socket-container">
+                        <div class="wall-plate" id="socket-container">
                             <div class="socket-dropzone" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="handleSocketClick(this)" id="socket-1">
                                 <div class="socket-holes">
                                     <span></span><span></span><span></span>
@@ -95,17 +97,17 @@
 
                     <div class="outlet-details-row">
                         <div class="detail-card">
-                            <h4>Connected Devices</h4>
+                            <h4><i class="fa-solid fa-link"></i> Connected Devices</h4>
                             <ul id="connection-list">
-                                <li>Socket 1: <span class="empty-slot">-</span></li>
-                                <li>Socket 2: <span class="empty-slot">-</span></li>
-                                <li>Socket 3: <span class="empty-slot">-</span></li>
+                                <li><span class="socket-label">Socket 1:</span> <span class="empty-slot">-</span></li>
+                                <li><span class="socket-label">Socket 2:</span> <span class="empty-slot">-</span></li>
+                                <li><span class="socket-label">Socket 3:</span> <span class="empty-slot">-</span></li>
                             </ul>
                         </div>
-                        <div class="detail-card highlight">
-                            <h4>Total Amperes</h4>
+                        <div class="detail-card highlight-card">
+                            <h4><i class="fa-solid fa-bolt"></i> Total Amperes</h4>
                             <div class="amp-display">
-                                <span id="total-amps">0.00</span> A
+                                <span id="total-amps">0.00</span> <span class="unit">A</span>
                             </div>
                         </div>
                     </div>
@@ -115,14 +117,13 @@
                     <div class="sidebar-header">
                         <h4>
                             <a href="/profile#members" class="sidebar-link" onclick="event.stopPropagation();">
-                                My Saved Appliances
+                                <i class="fa-solid fa-bookmark"></i> My Saved Appliances
                             </a>
                         </h4>
-                        <p>
-							<span class="desktop-text">Drag items to the outlet</span>
-
-							<span class="mobile-text">Tap item, then tap outlet to plug</span>
-						</p>
+                        <p class="instruction-text">
+                            <span class="desktop-text"><i class="fa-solid fa-hand-pointer"></i> Drag items to the outlet</span>
+                            <span class="mobile-text"><i class="fa-solid fa-mobile-screen-button"></i> Tap item, then tap outlet to plug</span>
+                        </p>
                     </div>
                     
                     <div class="draggable-list">
@@ -131,7 +132,7 @@
                                 <div class="draggable-item" 
                                     draggable="true" 
                                     ondragstart="drag(event)"
-									 onclick="handleApplianceClick(this)"
+                                    onclick="handleApplianceClick(this)"
                                     data-name="<?= htmlspecialchars($row['type']) ?>" 
                                     data-brand="<?= htmlspecialchars($row['brand']) ?>"
                                     data-watts="<?= $row['wattage'] ?>"
@@ -145,13 +146,14 @@
                                         <strong><?= htmlspecialchars($row['type']) ?></strong>
                                         <small><?= htmlspecialchars($row['brand']) ?></small>
                                         <span class="drag-specs">
-                                            <?= $row['wattage'] ?>W | <?= $row['amperes'] ?>A
+                                            <i class="fa-solid fa-plug-circle-bolt"></i> <?= $row['wattage'] ?>W | <?= $row['amperes'] ?>A
                                         </span>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
                         <?php else: ?>
                             <div class="no-items-container">
+                                <div class="no-items-icon"><i class="fa-solid fa-box-open"></i></div>
                                 <p class="no-items">No saved appliances.</p>
                                 <a href="/appliances" class="save-appliance-btn">
                                     Save appliances now
