@@ -1116,36 +1116,46 @@ th.col-hazards, td.col-hazards {
     justify-content: center;
 }
 
+/* Unified background container */
+/* Container turns into a tight 2-column grid */
 .chart-toggles {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 24px;
-    justify-content: center;
-    width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two equal columns */
+  background-color: var(--bg-body);
+  border-radius: var(--radius);
+  padding: 0.25rem; /* Tighter outer padding */
+  gap: 0.25rem; /* Small gap between grid items */
+  margin: 0 auto 1.5rem auto;
+  border: 1px solid var(--border);
+  width: 100%; 
 }
 
+/* Scaled-down button styling */
 .btn-chart-toggle {
-    background-color: var(--bg-light, #f4f6f9);
-    border: 1px solid var(--border-color, #eee);
-    color: var(--sidebar-text, #555);
-    padding: 6px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: bold;
-    transition: all 0.2s ease;
+  background-color: transparent;
+  color: var(--text-muted);
+  border: none;
+  border-radius: 6px; /* Slightly smaller radius */
+  padding: 0.4rem 0.25rem; /* Reduced top/bottom padding */
+  font-size: 0.75rem; /* Smaller font (approx 12px) */
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  white-space: nowrap; /* Prevents text from breaking into two lines */
 }
 
-.btn-chart-toggle:hover {
-    background-color: var(--border-color, #eee);
+/* Hover and Active states remain the same */
+.btn-chart-toggle:hover:not(.active) {
+  color: var(--text-main);
+  background-color: rgba(0, 0, 0, 0.03);
 }
 
 .btn-chart-toggle.active {
-    background-color: var(--primary-orange, #F89b42);
-    color: #fff;
-    border-color: var(--primary-dark, #e08b3b);
+  background-color: var(--primary);
+  color: #ffffff;
+  box-shadow: var(--shadow-sm); /* Switched to a smaller shadow */
+  font-weight: 600;
 }
 
 .analytics-card {

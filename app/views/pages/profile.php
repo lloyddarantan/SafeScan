@@ -171,11 +171,12 @@
                     <?php endforeach; ?>
                 <?php else: ?>
                     <div class="no-items-container">
-                        <p class="no-items">No saved appliances.</p>
-                            <a href="/appliances" class="save-appliance-btn">
-                                Save appliances now
-                            </a>
-                    </div>
+                        <div class="no-items-icon"><i class="fa-solid fa-box-open"></i></div>
+                            <p class="no-items">No saved appliances.</p>
+                                <a href="/appliances" class="save-appliance-btn">
+                                    Save appliances now
+                                </a>
+                        </div>
                 <?php endif; ?>
             </div>
          </div>

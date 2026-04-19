@@ -50,11 +50,9 @@ function togglePassword(inputId) {
     const input = document.getElementById(inputId);
     if (!input) return;
 
-    // Toggle Input Type
     const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
     input.setAttribute('type', type);
     
-    // Toggle Icon Class
     const icon = input.nextElementSibling;
     if (icon && icon.classList.contains('password-toggle')) {
         icon.classList.toggle('fa-eye');
